@@ -1,0 +1,12 @@
+[package]
+name = "macro_railroad"
+version = "0.1.0"
+authors = ["Lukas Lueg <lukas.lueg@gmail.com>"]
+
+[dependencies]
+syn = { version = "0.14", features = ["full", "extra-traits"] }
+railroad = { git = "https://github.com/lukaslueg/railroad" }
+proc-macro2 = { version = "0.4", default-features=false }
+
+[features]
+visual-debug = ["railroad/visual-debug"]
