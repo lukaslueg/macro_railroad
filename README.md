@@ -1,4 +1,4 @@
-##A library to generate syntax diagrams for Rust macros.
+## A library to generate syntax diagrams for Rust macros.
 
 
 ```rust
@@ -16,7 +16,7 @@ The diagrams are generated as Scalable Vector Graphics, with layout-details cont
 
 **A live (wasm-run) demo can be found [here](https://lukaslueg.github.io/macro_railroad_wasm_demo/).**
 
-##Examples
+## Examples
 
 
 The `vec!`-macro in the standard library:
