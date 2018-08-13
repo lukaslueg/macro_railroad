@@ -47,6 +47,14 @@ pub const CSS: &str = r#"
         fill: turquoise;
     }
 
+    svg.railroad .fragment_vis > rect {
+        fill: gold;
+    }
+
+    svg.railroad .fragment_literal > rect {
+        fill: salmon;
+    }
+
     svg.railroad .fragment_lifetime > rect {
         fill: teal;
     }
@@ -147,6 +155,10 @@ fn create_legend(tree: &mut lowering::MacroRules) -> Option<impl railroad::Railr
             (parser::Fragment::Tt, true) => "are token trees.",
             (parser::Fragment::Ty, false) => "is a type.",
             (parser::Fragment::Ty, true) => "are types.",
+            (parser::Fragment::Vis, false) => "is a visibility annotation.",
+            (parser::Fragment::Vis, true) => "are visibility annotations.",
+            (parser::Fragment::Literal, false) => "is a literal constant.",
+            (parser::Fragment::Literal, true) => "are literal constants.",
         };
         let mut names = names.into_iter().collect::<Vec<_>>();
         names.sort_unstable();
@@ -210,6 +222,8 @@ fn fragment_to_class(f: &parser::Fragment) -> &'static str {
         parser::Fragment::Item => " fragment_item",
         parser::Fragment::Meta => " fragment_meta",
         parser::Fragment::Tt => " fragment_tt",
+        parser::Fragment::Vis => " fragment_vis",
+        parser::Fragment::Literal => " fragment_literal",
         parser::Fragment::Lifetime => " fragment_lifetime"
     }
 }

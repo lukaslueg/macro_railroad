@@ -68,6 +68,8 @@ pub enum Fragment {
     Item,
     Meta,
     Tt,
+    Vis,
+    Literal,
     Lifetime,
 }
 
@@ -168,6 +170,8 @@ impl Synom for Fragment {
         custom_keyword!(item) => { |_| Fragment::Item } |
         custom_keyword!(meta) => { |_| Fragment::Meta } |
         custom_keyword!(tt) => { |_| Fragment::Tt } |
+        custom_keyword!(vis) => { |_| Fragment::Vis } |
+        custom_keyword!(literal) => { |_| Fragment::Literal } |
         custom_keyword!(lifetime) => { |_| Fragment::Lifetime }
     ));
 }
@@ -186,6 +190,22 @@ mod tests {
         // A more or less random collection of macro_rules!()-blocks which should parse
         // successfully.
         let fixture = &[
+r#"macro_rules! a {
+(
+$item:item
+$block:block
+$stmt:stmt
+$pat:pat
+$expr:expr
+$ty:ty
+$ident:ident
+$path:path
+$vis:vis
+$literal:literal
+$meta:meta
+$lifetime:lifetime
+) => {};
+}"#,
 r#"macro_rules! vec {
     ( $ elem : expr ; $ n : expr ) => { ... };
     ( $ ( $ x : expr ) , * ) => { ... };
