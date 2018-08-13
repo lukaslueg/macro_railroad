@@ -24,7 +24,7 @@ pub const CSS: &str = r#"
     }
 
     svg.railroad .fragment_pat > rect {
-        fill: blue;
+        fill: deepskyblue;
     }
 
     svg.railroad .fragment_stmt > rect {
