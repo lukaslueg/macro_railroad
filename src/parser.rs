@@ -113,7 +113,7 @@ impl Synom for Matcher {
     named!(parse -> Self, alt!(
         do_parse!(
             syn!(Dollar) >>
-            name: syn!(Ident) >>
+            name: call!(Ident::parse_any) >>
             punct!(:) >>
             fragment: syn!(Fragment) >>
             (Matcher::Fragment { name, fragment })
@@ -184,6 +184,15 @@ pub fn parse(src: &str) -> Result<MacroRules, syn::synom::ParseError> {
 mod tests {
 
     use super::*;
+
+    #[test]
+    fn issue_5() {
+        // Keywords as fragment-names should parse
+        let src = r#"macro_rules! a {
+    ($self:ident) => { ... };
+}"#;
+        parse(&src).unwrap();
+    }
 
     #[test]
     fn should_parse() {
