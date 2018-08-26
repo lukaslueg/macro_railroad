@@ -1,3 +1,6 @@
+
+[![Build Status](https://travis-ci.org/lukaslueg/macro_railroad.svg?branch=master)](https://travis-ci.org/lukaslueg/macro_railroad)
+
 **[Live demo](https://lukaslueg.github.io/macro_railroad_wasm_demo/)** ([code](https://github.com/lukaslueg/macro_railroad_wasm))
 
 A library to generate syntax ("railroad") diagrams for Rust's `macro_rules!()`.
