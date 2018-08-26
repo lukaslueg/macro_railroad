@@ -235,31 +235,19 @@ fn into_primitive(m: lowering::Matcher) -> Box<railroad::RailroadNode> {
         lowering::Matcher::Empty => Box::new(railroad::Empty),
         lowering::Matcher::Comment(s) => Box::new(railroad::Comment::new(s)),
         lowering::Matcher::Optional(o) => Box::new(railroad::Optional::new(into_primitive(*o))),
-        lowering::Matcher::Choice(mut s) => {
-            if s.len() == 1 {
-                into_primitive(s.remove(0))
-            } else {
-                Box::new(railroad::Choice::new(s.into_iter().map(into_primitive).collect()))
-            }
+        lowering::Matcher::Choice(s) => {
+            Box::new(railroad::Choice::new(s.into_iter().map(into_primitive).collect()))
         },
-        lowering::Matcher::Sequence(mut s) => {
-            if s.len() == 1 {
-                into_primitive(s.remove(0))
-            } else {
-                Box::new(railroad::Sequence::new(s.into_iter().map(into_primitive).collect()))
-            }
+        lowering::Matcher::Sequence(s) => {
+            Box::new(railroad::Sequence::new(s.into_iter().map(into_primitive).collect()))
         },
         lowering::Matcher::Literal(s) => Box::new(railroad::Terminal::new(s)),
-        lowering::Matcher::Repeat { mut content, seperator, repetition } => {
+        lowering::Matcher::Repeat { content, seperator, repetition } => {
             let seperator: Box<railroad::RailroadNode> = match seperator {
                 Some(s) => Box::new(railroad::Terminal::new(s)),
                 None => Box::new(railroad::Empty)
             };
-            let main = if content.len() == 1 {
-                into_primitive(content.remove(0))
-            } else {
-                Box::new(railroad::Sequence::new(content.into_iter().map(into_primitive).collect()))
-            };
+            let main = Box::new(railroad::Sequence::new(content.into_iter().map(into_primitive).collect()));
             match repetition {
                 parser::Repetition::AtMostOnce => {
                     Box::new(railroad::Optional::new(main))

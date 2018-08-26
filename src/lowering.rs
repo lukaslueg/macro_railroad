@@ -33,9 +33,17 @@ impl MacroRules {
         ntc.bag
     }
 
+    pub fn ungroup(&mut self) {
+        self.accept(&mut Ungrouper);
+    }
+
+    pub fn normalize(&mut self) {
+        self.accept(&mut Normalizer);
+    }
+
     /// Walk all rules using the specified visitor.
     fn accept(&mut self, visitor: &mut impl MatcherVisitor) {
-        visitor.visit(&mut self.rules)
+        self.rules.accept(visitor);
     }
 }
 
@@ -78,12 +86,30 @@ pub enum Matcher {
 }
 
 impl Matcher {
+    pub fn accept(&mut self, visitor: &mut impl MatcherVisitor) {
+        visitor.visit(self);
+    }
+
     fn delimiter_to_str(delimiter: proc_macro2::Delimiter) -> Option<(&'static str, &'static str)> {
         match delimiter {
             proc_macro2::Delimiter::None => None,
             proc_macro2::Delimiter::Brace => Some(("{", "}")),
             proc_macro2::Delimiter::Parenthesis => Some(("(", ")")),
             proc_macro2::Delimiter::Bracket => Some(("[", "]")),
+        }
+    }
+
+    pub fn is_empty(&self) -> bool {
+        match self {
+            Matcher::Empty => true,
+            _ => false
+        }
+    }
+
+    pub fn is_sequence(&self) -> bool {
+        match self {
+            Matcher::Sequence(_) => true,
+            _ => false
         }
     }
 }
@@ -109,17 +135,13 @@ impl From<parser::Matcher> for Matcher {
                 //    This means we never tear apart a group while merging common tails.
                 //    While one might consider this correct-ish, it may prevent a *lot*
                 //    of folding if the macro is very large.
-                //  Maybe add a knob? Maybe this is superficial?
+                //  One can use the Ungrouper-Walker to unpack Groups
                 let mut v = content.into_iter().map(|m| m.into()).collect::<Vec<_>>();
                 if let Some((b, e)) = Matcher::delimiter_to_str(delimiter) {
                     v.insert(0, Matcher::Literal(b.to_owned()));
                     v.push(Matcher::Literal(e.to_owned()));
                 }
-                if v.len() == 1 {
-                    Matcher::Group(Box::new(v.remove(0)))
-                } else {
-                    Matcher::Group(Box::new(Matcher::Sequence(v)))
-                }
+                Matcher::Group(Box::new(Matcher::Sequence(v)))
             },
             parser::Matcher::Repeat { content, separator, repetition } =>
                 Matcher::Repeat { content: content.into_iter().map(|m| m.into()).collect(),
@@ -171,6 +193,106 @@ pub trait MatcherVisitor {
         }
     }
 }
+
+/// Unpacks all Groups in a Matcher
+pub struct Ungrouper;
+
+impl MatcherVisitor for Ungrouper {
+    fn visit(&mut self, m: &mut Matcher) {
+        self.visit_children(m);
+        *m = match ::std::mem::replace(m, Matcher::Empty) {
+            // A Group is replaced by the element it contains
+            Matcher::Group(b) => *b,
+            // If we unpacked a Group in a Sequence, we probably end up with
+            // a nested Sequences. Clean this up now, so folding only sees
+            // flat Sequences.
+            Matcher::Sequence(v) => {
+                if v.iter().any(|e| e.is_sequence()) {
+                    let mut new_v = Vec::with_capacity(v.len());
+                    for e in v {
+                        match e {
+                            Matcher::Sequence(ee) => new_v.extend(ee),
+                            other => new_v.push(other)
+                        }
+                    }
+                    Matcher::Sequence(new_v)
+                } else {
+                    Matcher::Sequence(v)
+                }
+            }
+            other => other,
+        }
+    }
+}
+
+/// Simplifies a Matcher-tree
+pub struct Normalizer;
+
+impl MatcherVisitor for Normalizer {
+    fn visit(&mut self, m: &mut Matcher) {
+        self.visit_children(m);
+        let mut changed;
+        // Pound on this element until no more transformations are performed
+        loop {
+            changed = false;
+            // The Matcher::Empty is just temporary, it never actually materializes
+            *m = match ::std::mem::replace(m, Matcher::Empty) {
+                Matcher::Choice(mut b) => {
+                    if b.is_empty() {
+                        // An empty Choice is just the empty element
+                        changed |= true;
+                        Matcher::Empty
+                    } else if b.len() == 1 {
+                        // A Choice of exactly one element is that element
+                        changed |= true;
+                        b.pop().unwrap()
+                    } else {
+                        // A Choice with an Empty in it is an Optional(Choice)
+                        match b.iter()
+                                .enumerate()
+                                .filter_map(|(idx, e)| if e.is_empty() { Some(idx) } else { None })
+                                .next() {
+                            Some(idx) => {
+                                changed |= true;
+                                b.remove(idx);
+                                let mut new_m = Matcher::Optional(Box::new(Matcher::Choice(b)));
+                                new_m.accept(self);
+                                new_m
+                            },
+                            None => Matcher::Choice(b)
+                        }
+                    }
+                },
+                Matcher::Sequence(mut b) => {
+                    if b.is_empty() {
+                        // An empty sequence is the empty element
+                        changed |= true;
+                        Matcher::Empty
+                    } else if b.len() == 1 {
+                        // A Sequence of exactly one element is that element
+                        changed |= true;
+                        b.pop().unwrap()
+                    } else if b.iter().any(|e| e.is_sequence()) {
+                        changed |= true;
+                        let mut new_v = Vec::with_capacity(b.len());
+                        for e in b {
+                            match e {
+                                Matcher::Sequence(ee) => new_v.extend(ee),
+                                other => new_v.push(other)
+                            }
+                        }
+                        Matcher::Sequence(new_v)
+                    } else {
+                        Matcher::Sequence(b)
+                    }
+                },
+                other => other
+            };
+        if !changed { break };
+        }
+    }
+}
+
 
 /// Walks a `Matcher`-tree and collects all NonTerminals as their Name/Fragment-combinations
 #[derive(Clone, Debug)]
@@ -323,31 +445,16 @@ impl FoldCommonTails {
         new_seq.extend_from_slice(group.1);
 
         // The core
-        let mut core = group.0.iter().filter_map(|s| {
+        let mut core = group.0.iter().map(|s| {
             let c = &s[group.1.len()..s.len() - group.2.len()];
-            //println!("{} {} {}: {}", group.1.len(), s.len(), group.2.len(), s.len() - group.2.len() - group.1.len());
-            if c.is_empty() {
-                //println!("ad");
-                // TODO skip this Element and construct an Optional(core)
-                //Some(Matcher::Empty)
-                None
-            } else if c.len() == 1 && false {
-                // TODO Remove the `false`, this causes a panic downstairs
-                Some(c[0].clone())
-            } else {
-                Some(Matcher::Sequence(c.to_vec()))
-            }
+            Matcher::Sequence(c.to_vec())
         }).collect::<Vec<_>>();
         // Recursivly fold this
         Self::mostcommontails(&mut core);
         // The exact order currently depends on the auto-derived implementation, this is only here to
         // have *some* repeatable ordering.
         core.sort();
-        if group.0.iter().any(|s| s.len() - group.2.len() - group.1.len() == 0) {
-            new_seq.push(Matcher::Optional(Box::new(Matcher::Choice(core))));
-        } else {
-            new_seq.push(Matcher::Choice(core));
-        }
+        new_seq.push(Matcher::Choice(core));
 
         // The common suffix
         new_seq.extend_from_slice(group.2);
@@ -361,9 +468,7 @@ impl FoldCommonTails {
                         Matcher::Sequence(t) => {
                             s == t
                         },
-                        // TODO What to do here? After all the panic speaks the truth
-                        _ => false,
-                        //u => panic!("There should be only Sequences here, got {:?}", u),
+                        u => panic!("There should be only Sequences here, got {:?}", u),
                     }
                 })})
             .collect::<Vec<usize>>();
@@ -371,7 +476,13 @@ impl FoldCommonTails {
         // guarantees that .swap_remove() can remove by index without re-arrangement
         indices.sort_by(|a, b| a.cmp(b).reverse());
 
-        Some((indices, Matcher::Sequence(new_seq)))
+        let mut v = Matcher::Sequence(new_seq);
+        // Ensure that we come up with a canonical representation (e.g. no Choice(Sequence(Foobar))
+        // vs. Sequence(Choice(Foobar))), so that folding the next-best candidate won't have
+        // to deal with nested structures it can't look into. This basically covers up the fact
+        // that there is no decent impl of Eq for Matcher
+        Normalizer.visit(&mut v);
+        Some((indices, v))
     }
 
     fn mostcommontails(inp: &mut Vec<Matcher>) {
@@ -398,9 +509,12 @@ mod tests {
 
     use super::*;
 
-    macro_rules! mr { ($r:expr) => { MacroRules { name: "Test".to_owned(), rules: Matcher::Choice($r) } } }
+    macro_rules! rmr { ($r:expr) => { MacroRules { name: "Test".to_owned(), rules: $r } } }
+    macro_rules! mr { ($r:expr) => { rmr!(Matcher::Choice($r)) } }
     macro_rules! opt { ($o:expr) => { Matcher::Optional(Box::new($o)) } }
     macro_rules! lit { ($t:expr) => { Matcher::Literal($t.to_owned()) } }
+    macro_rules! epty { () => { Matcher::Empty } }
+    macro_rules! grp { ($r:expr) => { Matcher::Group(Box::new($r)) } }
     macro_rules! seq { ($($r:expr),*) => { Matcher::Sequence(vec![$($r,)+]) } }
     macro_rules! lseq { ($($r:expr),*) => { seq!($(lit!($r)),+) } }
     macro_rules! cho { ($($r:expr),*) => { Matcher::Choice(vec![$($r,)+]) } }
@@ -425,12 +539,24 @@ mod tests {
         }
     }
 
-    // TODO the seq!(lit!("A")) // "B" should not be a seq but just a lit
     test_fold!(fold_simple,
                vec![ lseq!("A", "X", "C"), lseq!("A", "Y", "C"), ],
-               cho!( seq!(lit!("A"), cho!(seq!(lit!("X")), seq!(lit!("Y"))), lit!("C")) )
+               cho!( seq!(lit!("A"), cho!(lit!("X"), lit!("Y")), lit!("C")) )
                );
 
+    #[test]
+    fn normalize_simple() {
+        let mut mr = mr!(vec!(seq!(cho!(lseq!("A", "B"), epty!()), lit!("C"))));
+        mr.normalize();
+        assert_eq!(mr, rmr!(seq!(opt!(lseq!("A", "B")), lit!("C"))));
+    }
+
+    #[test]
+    fn ungroup_simple() {
+        let mut mr = mr!(vec!(lit!("A"), seq!(lit!("A"), grp!(seq!(lit!("B"), lseq!("C"))), lit!("D"))));
+        mr.ungroup();
+        assert_eq!(mr, mr!(vec!(lit!("A"), lseq!("A", "B", "C", "D"))));
+    }
 
     #[test]
     fn remove_interals() {
@@ -444,7 +570,6 @@ mod tests {
         let mut mr = mr!(rules);
 
         mr.remove_internal();
-        println!("{:#?}", mr);
 
         assert_eq!(mr, mr!(vec![lit!("Not internal!"),
                                 seq!(cmt!("also not internal"),

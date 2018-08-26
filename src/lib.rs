@@ -84,6 +84,7 @@ pub fn to_diagram(src: &str) -> Result<String, syn::synom::ParseError> {
     // Optimize tree
     tree.remove_internal();
     tree.foldcommontails();
+    tree.normalize();
 
     // create a diagram with a legend
     let dia = diagram::into_diagram(tree, true);
