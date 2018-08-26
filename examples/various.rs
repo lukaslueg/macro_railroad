@@ -55,7 +55,9 @@ fn to_diagram(src: &str) -> (String,
 
     let mut optimized_tree = tree.clone();
     optimized_tree.remove_internal();
+    //optimized_tree.ungroup();
     optimized_tree.foldcommontails();
+    optimized_tree.normalize();
 	let name = tree.name.clone();
 
     let dia = macro_railroad::diagram::into_diagram(tree, true);
