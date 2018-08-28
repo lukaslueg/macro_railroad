@@ -3,7 +3,15 @@ rust:
   - stable
   - beta
   - nightly
+script:
+  - cargo test --verbose
+  - cargo test --verbose -- --ignored
+before_install:
+  - sudo apt-get install -y libxml2-utils
 matrix:
   allow_failures:
     - rust: nightly
   fast_finish: true
+addons:
+  apt:
+    update: true
