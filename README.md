@@ -7,26 +7,36 @@ A library to generate syntax ("railroad") diagrams for Rust's `macro_rules!()`.
 
 Diagrams are generated as Scalable Vector Graphics, with layout-details controlled by customizable CSS.
 
-Given the input
+As an example, given the definition of [nom's `method`](https://docs.rs/nom/4.0.0/nom/macro.method.html)
 
 ```rust
-macro_rules! handlebars_helper {
-    ($struct_name:ident: |$($name:ident: $tpe:tt),*| $body:expr ) => { ... };
-    (@as_json_value $x:ident, object) => { ... };
-    (@as_json_value $x:ident, array) => { ... };
-    (@as_json_value $x:ident, str) => { ... };
-    (@as_json_value $x:ident, i64) => { ... };
-    (@as_json_value $x:ident, u64) => { ... };
-    (@as_json_value $x:ident, f64) => { ... };
-    (@as_json_value $x:ident, bool) => { ... };
-    (@as_json_value $x:ident, null) => { ... };
+macro_rules! method {
+    ($name:ident<$a:ty>( $i:ty ) -> $o:ty, $self_:ident, $submac:ident!( $($args:tt)* )) => { ... };
+    ($name:ident<$a:ty,$i:ty,$o:ty,$e:ty>, $self_:ident, $submac:ident!( $($args:tt)* )) => { ... };
+    ($name:ident<$a:ty,$i:ty,$o:ty>, $self_:ident, $submac:ident!( $($args:tt)* )) => { ... };
+    ($name:ident<$a:ty,$o:ty>, $self_:ident, $submac:ident!( $($args:tt)* )) => { ... };
+    ($name:ident<$a:ty>, $self_:ident, $submac:ident!( $($args:tt)* )) => { ... };
+    (pub $name:ident<$a:ty>( $i:ty ) -> $o:ty, $self_:ident, $submac:ident!( $($args:tt)* )) => { ... };
+    (pub $name:ident<$a:ty,$i:ty,$o:ty,$e:ty>, $self_:ident, $submac:ident!( $($args:tt)* )) => { ... };
+    (pub $name:ident<$a:ty,$i:ty,$o:ty>, $self_:ident, $submac:ident!( $($args:tt)* )) => { ... };
+    (pub $name:ident<$a:ty,$o:ty>, $self_:ident, $submac:ident!( $($args:tt)* )) => { ... };
+    (pub $name:ident<$a:ty>, $self_:ident, $submac:ident!( $($args:tt)* )) => { ... };
+    ($name:ident<$a:ty>( $i:ty ) -> $o:ty, mut $self_:ident, $submac:ident!( $($args:tt)* )) => { ... };
+    ($name:ident<$a:ty,$i:ty,$o:ty,$e:ty>, mut $self_:ident, $submac:ident!( $($args:tt)* )) => { ... };
+    ($name:ident<$a:ty,$i:ty,$o:ty>, mut $self_:ident, $submac:ident!( $($args:tt)* )) => { ... };
+    ($name:ident<$a:ty,$o:ty>, mut $self_:ident, $submac:ident!( $($args:tt)* )) => { ... };
+    ($name:ident<$a:ty>, mut $self_:ident, $submac:ident!( $($args:tt)* )) => { ... };
+    (pub $name:ident<$a:ty>( $i:ty ) -> $o:ty, mut $self_:ident, $submac:ident!( $($args:tt)* )) => { ... };
+    (pub $name:ident<$a:ty,$i:ty,$o:ty,$e:ty>, mut $self_:ident, $submac:ident!( $($args:tt)* )) => { ... };
+    (pub $name:ident<$a:ty,$i:ty,$o:ty>, mut $self_:ident, $submac:ident!( $($args:tt)* )) => { ... };
+    (pub $name:ident<$a:ty,$o:ty>, mut $self_:ident, $submac:ident!( $($args:tt)* )) => { ... };
+    (pub $name:ident<$a:ty>, mut $self_:ident, $submac:ident!( $($args:tt)* )) => { ... };
 }
 ```
 
 ... the library generates an SVG which renders (using default CSS) as
 
-![Image output](https://raw.githubusercontent.com/lukaslueg/macro_railroad/master/examples/handlebars_helper.jpg)
-
+![Syntax diagram for nom::method](./examples/nom4_method.svg)
 
 The library is currently mostly a tech-demo. Pull requests are most welcome.
 
