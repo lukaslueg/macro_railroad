@@ -205,7 +205,7 @@ pub fn into_diagram(mut mr: lowering::MacroRules, legend: bool) -> railroad::Dia
 pub fn add_default_css<T: railroad::RailroadNode>(dia: &mut railroad::Diagram<T>) {
     dia.add_element(railroad::svg::Element::new("style")
                         .set("type", "text/css")
-                        .text(CSS));
+                        .raw_text(CSS));
 }
 
 fn fragment_to_class(f: &parser::Fragment) -> &'static str {
