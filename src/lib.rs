@@ -35,7 +35,7 @@
 //!
 //! Diagrams are generated directly from code:
 //!
-//! 0. Parsing the `macro_rules!()`-block.
+//! 1. Parsing the `macro_rules!()`-block.
 //! 0. Converting the parser-tree into an intermediate representation and applying
 //! transformations as desired.
 //! 0. Converting the intermediate representation into a `railroad::Diagram`.
@@ -57,7 +57,10 @@
 //! ir.remove_internal();
 //! // Fold common parts in the macro-syntax, making the diagram easier to understand.
 //! ir.foldcommontails();
+//! // Remove superfluous elements left from parsing and transforming.
+//! ir.normalize();
 //!
+//! // Create a diagram, add a legend
 //! let mut dia = macro_railroad::diagram::into_diagram(ir, true);
 //! dia.add_default_css();
 //!

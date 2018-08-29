@@ -33,10 +33,15 @@ impl MacroRules {
         ntc.bag
     }
 
+    /// Unpack all `Matcher::Group` in the tree
     pub fn ungroup(&mut self) {
         self.accept(&mut Ungrouper);
     }
 
+    /// Transmogrify the tree by removing superfluous elements.
+    ///
+    /// For example, a `Choice([Sequence([Terminal("Foo"), Empty])])` becomes just
+    /// `Terminal("Foo")`.
     pub fn normalize(&mut self) {
         self.accept(&mut Normalizer);
     }
@@ -169,26 +174,12 @@ pub trait MatcherVisitor {
                 | Matcher::Comment(_)
                 | Matcher::Literal(_)
                 | Matcher::NonTerminal { .. } => {},
-            Matcher::Sequence(v) => {
-                for m in v.iter_mut() {
-                    self.visit(m)
-                }
-            },
-            Matcher::Group(m) => {
-                self.visit(m)
-            },
-            Matcher::Choice(v) => {
-                for m in v.iter_mut() {
-                    self.visit(m)
-                }
-            },
-            Matcher::Optional(m) => {
-                self.visit(m)
-            },
+            Matcher::Sequence(v)
+                | Matcher::Choice(v) => v.iter_mut().for_each(|e| self.visit(e)),
+            Matcher::Group(m)
+                | Matcher::Optional(m) => self.visit(m),
             Matcher::Repeat { ref mut content, .. } => {
-                for m in content.iter_mut() {
-                    self.visit(m);
-                }
+                content.iter_mut().for_each(|e| self.visit(e))
             },
         }
     }
@@ -273,6 +264,7 @@ impl MatcherVisitor for Normalizer {
                         changed |= true;
                         b.pop().unwrap()
                     } else if b.iter().any(|e| e.is_sequence()) {
+                        // A Sequence within a Sequence can be unpacked
                         changed |= true;
                         let mut new_v = Vec::with_capacity(b.len());
                         for e in b {
@@ -325,13 +317,13 @@ pub struct InternalMacroRemover;
 impl InternalMacroRemover {
     fn first_literal<'a>(&self, m: &'a Matcher) -> Option<&'a str> {
         match m {
-            Matcher::Choice(_) => None,
-            Matcher::Comment(_) => None,
-            Matcher::Empty => None,
+            Matcher::Choice(_)
+                | Matcher::Comment(_)
+                | Matcher::Empty
+                | Matcher::NonTerminal { .. }
+                | Matcher::Optional(_) => None,
             Matcher::Group(m) => self.first_literal(m),
             Matcher::Literal(s) => Some(s),
-            Matcher::NonTerminal { .. } => None,
-            Matcher::Optional(_) => None,
             Matcher::Repeat { content, .. } => content.first().and_then(|m| self.first_literal(m)),
             Matcher::Sequence(v) => v.first().and_then(|m| self.first_literal(m)),
         }

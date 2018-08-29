@@ -184,11 +184,9 @@ pub fn into_diagram(mut mr: lowering::MacroRules, legend: bool) -> railroad::Dia
         None
     };
 
-    //let s = mr.rules.into_iter().map(into_primitive).collect();
     let seq = railroad::Sequence::new(vec![
         Box::new(railroad::SimpleStart),
         Box::new(into_primitive(mr.rules)),
-        //Box::new(railroad::Choice::new(s)),
         Box::new(railroad::SimpleEnd)
     ]);
 
