@@ -1,0 +1,406 @@
+<svg class="railroad" viewBox="0 0 1300 302" xmlns="http://www.w3.org/2000/svg">
+<style type="text/css">
+
+    svg.railroad {
+        background-color: hsl(30, 20%, 95%);
+        background-size: 15px 15px;
+        background-image: linear-gradient(to right, rgba(30, 30, 30, .05) 1px, transparent 1px),
+                          linear-gradient(to bottom, rgba(30, 30, 30, .05) 1px, transparent 1px);
+    }
+
+    svg.railroad path {
+        stroke-width: 3px;
+        stroke: black;
+        fill: transparent;
+    }
+
+    svg.railroad .debug {
+        stroke-width: 1px;
+        stroke: red;
+    }
+
+    svg.railroad text {
+        font: 14px monospace;
+        text-anchor: middle;
+    }
+
+    svg.railroad .nonterminal text {
+        font-weight: bold;
+    }
+
+    svg.railroad text.comment {
+        font: italic 12px monospace;
+    }
+
+    svg.railroad rect {
+        stroke-width: 3px;
+        stroke: black;
+        fill:hsl(-290, 70%, 90%);
+    }
+
+    svg.railroad g.labeledbox > rect {
+        stroke-width: 1px;
+        stroke: grey;
+        stroke-dasharray: 5px;
+        fill:rgba(90, 90, 150, .1);
+    }</style>
+<style type="text/css">
+
+    svg.railroad .fragment_ty > rect {
+        fill: red;
+    }
+    svg.railroad .fragment_ident > rect {
+        fill: orange;
+    }
+
+    svg.railroad .fragment_path > rect {
+        fill: green;
+    }
+
+    svg.railroad .fragment_expr > rect {
+        fill: yellow;
+    }
+
+    svg.railroad .fragment_pat > rect {
+        fill: deepskyblue;
+    }
+
+    svg.railroad .fragment_stmt > rect {
+        fill: aqua;
+    }
+
+    svg.railroad .fragment_block > rect {
+        fill: aquamarine;
+    }
+
+    svg.railroad .fragment_item > rect {
+        fill: thistle;
+    }
+
+    svg.railroad .fragment_meta > rect {
+        fill: violet;
+    }
+
+    svg.railroad .fragment_tt > rect {
+        fill: turquoise;
+    }
+
+    svg.railroad .fragment_vis > rect {
+        fill: gold;
+    }
+
+    svg.railroad .fragment_literal > rect {
+        fill: salmon;
+    }
+
+    svg.railroad .fragment_lifetime > rect {
+        fill: teal;
+    }
+
+    svg.railroad .legend {
+        transform: scale(0.85);
+        transform-origin: bottom left;
+        /*transform-box: fill-box;*/
+    }
+
+    svg.railroad .legend > rect {
+        stroke: black;
+        stroke-width: 0.5px;
+        stroke-dasharray: 2px;
+        fill: rgba(90, 90, 90, .1)
+    }
+
+    svg.railroad .legend .comment:first-child {
+        text-decoration: underline;
+    }
+</style>
+<g class="verticalgrid">
+<g class="sequence">
+<path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
+<g class="sequence">
+<g class="optional">
+<path d=" M 35 42 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 44 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="44" x="59" y="31"/>
+<text x="81" y="47">
+pub</text>
+</g>
+</g>
+<g class="nonterminal fragment_ident">
+<rect height="22" width="52" x="137" y="31"/>
+<text x="163" y="47">
+name</text>
+</g>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="199" y="31"/>
+<text x="213" y="47">
+&lt;</text>
+</g>
+<g class="nonterminal fragment_ty">
+<rect height="22" width="28" x="237" y="31"/>
+<text x="251" y="47">
+a</text>
+</g>
+<g class="choice">
+<path d=" M 275 42 h 24 m 352 0 h 24"/>
+<g class="sequence">
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="299" y="31"/>
+<text x="313" y="47">
+,</text>
+</g>
+<g class="choice">
+<path d=" M 337 42 h 24 m 228 0 h 24"/>
+<g class="sequence">
+<g class="nonterminal fragment_ty">
+<rect height="22" width="28" x="361" y="31"/>
+<text x="375" y="47">
+i</text>
+</g>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="399" y="31"/>
+<text x="413" y="47">
+,</text>
+</g>
+<g class="nonterminal fragment_ty">
+<rect height="22" width="28" x="437" y="31"/>
+<text x="451" y="47">
+o</text>
+</g>
+<g class="optional">
+<path d=" M 475 42 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 66 m -30 0 l -5 -5 m 0 10 l 5 -5 m 30 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
+<g class="sequence">
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="499" y="31"/>
+<text x="513" y="47">
+,</text>
+</g>
+<g class="nonterminal fragment_ty">
+<rect height="22" width="28" x="537" y="31"/>
+<text x="551" y="47">
+e</text>
+</g>
+<path d=" M 527 42 h 10"/>
+</g>
+</g>
+<path d=" M 389 42 h 10"/>
+<path d=" M 427 42 h 10"/>
+<path d=" M 465 42 h 10"/>
+</g>
+<path d=" M 337 42 a 12 12 0 0 1 12 12 v 9 m 252 0 v -9 a 12 12 0 0 1 12 -12"/>
+<path d=" M 349 63 v 0 a 12 12 0 0 0 12 12 m 28 0 h 200 m -97 0 l -5 -5 m 0 10 l 5 -5 m 97 0 a 12 12 0 0 0 12 -12 v 0"/>
+<g class="nonterminal fragment_ty">
+<rect height="22" width="28" x="361" y="64"/>
+<text x="375" y="80">
+o</text>
+</g>
+</g>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="623" y="31"/>
+<text x="637" y="47">
+&gt;</text>
+</g>
+<path d=" M 327 42 h 10"/>
+<path d=" M 613 42 h 10"/>
+</g>
+<path d=" M 275 42 a 12 12 0 0 1 12 12 v 42 m 376 0 v -42 a 12 12 0 0 1 12 -12"/>
+<path d=" M 287 96 v 19 a 12 12 0 0 0 12 12 m 320 0 h 32 a 12 12 0 0 0 12 -12 v -19"/>
+<g class="sequence">
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="299" y="116"/>
+<text x="313" y="132">
+&gt;</text>
+</g>
+<g class="optional">
+<path d=" M 337 127 h 24 m -24 0 a 12 12 0 0 0 12 -12 v -7 a 12 12 0 0 1 12 -12 h 234 m -114 0 l -5 -5 m 0 10 l 5 -5 m 114 0 a 12 12 0 0 1 12 12 v 7 a 12 12 0 0 0 12 12 h -24"/>
+<g class="sequence">
+<g class="labeledbox">
+<rect height="38" width="120" x="361" y="108"/>
+<path d=" M 361 127 h 8 m 104 0 h 8"/>
+<g/>
+<g class="sequence">
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="369" y="116"/>
+<text x="383" y="132">
+(</text>
+</g>
+<g class="nonterminal fragment_ty">
+<rect height="22" width="28" x="407" y="116"/>
+<text x="421" y="132">
+i</text>
+</g>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="445" y="116"/>
+<text x="459" y="132">
+)</text>
+</g>
+<path d=" M 397 127 h 10"/>
+<path d=" M 435 127 h 10"/>
+</g>
+</g>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="491" y="116"/>
+<text x="505" y="132">
+-</text>
+</g>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="529" y="116"/>
+<text x="543" y="132">
+&gt;</text>
+</g>
+<g class="nonterminal fragment_ty">
+<rect height="22" width="28" x="567" y="116"/>
+<text x="581" y="132">
+o</text>
+</g>
+<path d=" M 481 127 h 10"/>
+<path d=" M 519 127 h 10"/>
+<path d=" M 557 127 h 10"/>
+</g>
+</g>
+<path d=" M 327 127 h 10"/>
+</g>
+</g>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="685" y="31"/>
+<text x="699" y="47">
+,</text>
+</g>
+<g class="optional">
+<path d=" M 723 42 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 44 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="44" x="747" y="31"/>
+<text x="769" y="47">
+mut</text>
+</g>
+</g>
+<g class="nonterminal fragment_ident">
+<rect height="22" width="60" x="825" y="31"/>
+<text x="855" y="47">
+self_</text>
+</g>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="895" y="31"/>
+<text x="909" y="47">
+,</text>
+</g>
+<g class="nonterminal fragment_ident">
+<rect height="22" width="68" x="933" y="31"/>
+<text x="967" y="47">
+submac</text>
+</g>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="1011" y="31"/>
+<text x="1025" y="47">
+!</text>
+</g>
+<g class="labeledbox">
+<rect height="64" width="216" x="1049" y="10"/>
+<path d=" M 1049 42 h 8 m 200 0 h 8"/>
+<g/>
+<g class="sequence">
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="1057" y="31"/>
+<text x="1071" y="47">
+(</text>
+</g>
+<g class="optional">
+<path d=" M 1095 42 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 76 m -35 0 l -5 -5 m 0 10 l 5 -5 m 35 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
+<g class="repeat">
+<path d=" M 1119 42 h 12 m 52 0 h 12 m -12 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 1 -12 12 m 0 0 h -52 m 29 0 l 5 -5 m 0 10 l -5 -5 m -29 0 a 12 12 0 0 1 -12 -12 v 0 a 12 12 0 0 1 12 -12"/>
+<g/>
+<g class="sequence">
+<g class="nonterminal fragment_tt">
+<rect height="22" width="52" x="1131" y="31"/>
+<text x="1157" y="47">
+args</text>
+</g>
+</g>
+</g>
+</g>
+<g class="terminal">
+<rect height="22" rx="10" ry="10" width="28" x="1229" y="31"/>
+<text x="1243" y="47">
+)</text>
+</g>
+<path d=" M 1085 42 h 10"/>
+<path d=" M 1219 42 h 10"/>
+</g>
+</g>
+<path d=" M 127 42 h 10"/>
+<path d=" M 189 42 h 10"/>
+<path d=" M 227 42 h 10"/>
+<path d=" M 265 42 h 10"/>
+<path d=" M 675 42 h 10"/>
+<path d=" M 713 42 h 10"/>
+<path d=" M 815 42 h 10"/>
+<path d=" M 885 42 h 10"/>
+<path d=" M 923 42 h 10"/>
+<path d=" M 1001 42 h 10"/>
+<path d=" M 1039 42 h 10"/>
+</g>
+<path d=" M 1275 42 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
+<path d=" M 25 42 h 10"/>
+<path d=" M 1265 42 h 10"/>
+</g>
+<g class=" legend">
+<rect height="134" width="350" x="10" y="158"/>
+<g class="verticalgrid">
+<text class="comment" x="171" y="179">
+Non-terminal patterns used by this macro:</text>
+<g class="horizontalgrid">
+<g class="nonterminal fragment_ident">
+<rect height="22" width="52" x="16" y="196"/>
+<text x="42" y="212">
+name</text>
+</g>
+<g class="nonterminal fragment_ident">
+<rect height="22" width="60" x="80" y="196"/>
+<text x="110" y="212">
+self_</text>
+</g>
+<g class="nonterminal fragment_ident">
+<rect height="22" width="68" x="152" y="196"/>
+<text x="186" y="212">
+submac</text>
+</g>
+<text class="comment" x="293" y="211">
+are identifiers.</text>
+</g>
+<g class="horizontalgrid">
+<g class="nonterminal fragment_ty">
+<rect height="22" width="28" x="16" y="230"/>
+<text x="30" y="246">
+a</text>
+</g>
+<g class="nonterminal fragment_ty">
+<rect height="22" width="28" x="56" y="230"/>
+<text x="70" y="246">
+e</text>
+</g>
+<g class="nonterminal fragment_ty">
+<rect height="22" width="28" x="96" y="230"/>
+<text x="110" y="246">
+i</text>
+</g>
+<g class="nonterminal fragment_ty">
+<rect height="22" width="28" x="136" y="230"/>
+<text x="150" y="246">
+o</text>
+</g>
+<text class="comment" x="216" y="245">
+are types.</text>
+</g>
+<g class="horizontalgrid">
+<g class="nonterminal fragment_tt">
+<rect height="22" width="52" x="16" y="264"/>
+<text x="42" y="280">
+args</text>
+</g>
+<text class="comment" x="141" y="279">
+is a token tree.</text>
+</g>
+</g>
+</g>
+</g>
+</svg>
