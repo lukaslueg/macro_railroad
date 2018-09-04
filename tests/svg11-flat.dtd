@@ -1,3 +1,8 @@
+<!-- Note that the railroad-specific (debug-) attributes were patched into
+     SVG.External.extra.attrib directly. THIS IS NOT THE STANDARD SVG 1.1 DTD
+-->
+
+
 <!-- ....................................................................... -->
 <!-- SVG 1.1 DTD ........................................................... -->
 <!-- file: svg11.dtd
@@ -1591,7 +1596,14 @@
     "externalResourcesRequired %Boolean.datatype; #IMPLIED"
 >
 
-<!ENTITY % SVG.External.extra.attrib "" >
+<!ENTITY % SVG.External.extra.attrib "xmlns:railroad CDATA #IMPLIED
+                                      railroad:type CDATA #IMPLIED
+                                      railroad:x CDATA #IMPLIED
+                                      railroad:y CDATA #IMPLIED
+                                      railroad:entry_height CDATA #IMPLIED
+                                      railroad:exit_height CDATA #IMPLIED
+                                      railroad:height CDATA #IMPLIED
+                                      railroad:width CDATA #IMPLIED" >
 
 <!ENTITY % SVG.External.attrib
     "%SVG.externalResourcesRequired.attrib;

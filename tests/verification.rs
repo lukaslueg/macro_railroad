@@ -3,6 +3,9 @@
 ///
 /// This calls out to the `xmllint` tool from libxml2, which may not be available.
 /// The test is therefor ignored by default; use `cargo test -- --ignored`
+///
+/// The DTD used here has been patched to verify the `railroad`-debug
+/// attributes, because I don't care to write a proper module...
 
 #[macro_use]
 extern crate lazy_static;
@@ -33,7 +36,6 @@ fn to_diagram(src: &str) -> (String, Vec<(&'static str, String)>) {
     let mut v = Vec::new();
 
     v.push(("vanilla", macro_railroad::diagram::into_diagram(tree.clone(), true).to_string()));
-    v.push(("vanilla-no-legend", macro_railroad::diagram::into_diagram(tree.clone(), false).to_string()));
 
     let mut tree_ungrouped = tree.clone();
     tree_ungrouped.ungroup();

@@ -6,6 +6,7 @@ rust:
 script:
   - cargo test --verbose
   - cargo test --verbose -- --ignored
+  - cargo test --verbose --features visual-debug -- --ignored
 before_install:
   - sudo apt-get install -y libxml2-utils
 matrix:
