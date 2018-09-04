@@ -47,9 +47,7 @@ fn to_diagram(src: &str) -> (String, Vec<(&'static str, String)>) {
     (name, v)
 }
 
-fn verify(name: &str, svg_src: &[u8]) {
-    // Doesnt this deadlock if errors come out from stderr faster than we can write (and block) on
-    // stdin?
+fn verify(name: &str, svg_src: String) {
     let mut child = process::Command::new("xmllint")
                     .arg("--noout")
                     .arg("--dtdvalid")
@@ -60,8 +58,12 @@ fn verify(name: &str, svg_src: &[u8]) {
                     .stderr(process::Stdio::piped())
                     .spawn()
                     .unwrap();
-    child.stdin.take().unwrap().write_all(&svg_src).unwrap();
+    let mut stdin = child.stdin.take().unwrap();
+    let writer = ::std::thread::spawn(move || {
+        stdin.write_all(svg_src.as_bytes()).unwrap();
+    });
     let output = child.wait_with_output().unwrap();
+    writer.join().unwrap();
     if !output.status.success() {
         eprintln!("{}", String::from_utf8_lossy(&output.stderr));
         panic!("Failed to verify `{}`", name);
@@ -78,7 +80,7 @@ macro_rules! verify {
                 eprintln!("Parsed `{}` as macro '{}'", stringify!($testname), name);
                 for (variant, dia) in dias.into_iter() {
                     eprintln!("Verifying variant `{}`", variant);
-                    verify(&name, dia.as_bytes());
+                    verify(&name, dia);
                 }
             }
         )+
