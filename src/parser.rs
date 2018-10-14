@@ -140,8 +140,8 @@ impl Parse for Rule {
         Ok(Rule {
             matcher: {
                 let mut v = Vec::new();
-                while let Ok(m) = matcher.parse() {
-                    v.push(m);
+                while !matcher.is_empty() {
+                    v.push(matcher.parse()?);
                 }
                 v
             },
@@ -169,8 +169,8 @@ fn parse_repeat_matcher(input: ParseStream) -> syn::parse::Result<Matcher> {
     Ok(Matcher::Repeat {
         content: {
             let mut v = Vec::new();
-            while let Ok(matcher) = content.parse() {
-                v.push(matcher);
+            while !content.is_empty() {
+                v.push(content.parse()?);
             }
             v
         },
@@ -186,8 +186,8 @@ fn parse_group_matcher(input: ParseStream) -> syn::parse::Result<Matcher> {
         delimiter,
         content: {
             let mut v = Vec::new();
-            while let Ok(matcher) = content.parse() {
-                v.push(matcher);
+            while !content.is_empty() {
+                v.push(content.parse()?);
             }
             v
         }
