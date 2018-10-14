@@ -76,7 +76,7 @@ pub mod lowering;
 pub mod diagram;
 
 /// Create a syntax diagram as an SVG from the given macro_rules!-source.
-pub fn to_diagram(src: &str) -> Result<String, syn::synom::ParseError> {
+pub fn to_diagram(src: &str) -> Result<String, syn::parse::Error> {
 
     // Parser-tree, basically as rustc sees it
     let macro_rules = parser::parse(&src)?;
