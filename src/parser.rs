@@ -3,6 +3,7 @@
 use syn;
 use proc_macro2::{Delimiter, Ident, Literal, Punct, TokenStream};
 
+use syn::Lifetime;
 use syn::ext::IdentExt;
 use syn::parse::{Parse, ParseStream};
 use syn::token;
@@ -24,6 +25,7 @@ pub enum Matcher {
     Punct(Punct),
     Ident(Ident),
     Literal(Literal),
+    Lifetime(Lifetime),
     Group {
         delimiter: Delimiter,
         content: Vec<Matcher>,
@@ -219,8 +221,8 @@ impl Parse for Matcher {
                 Ok((Matcher::Punct(punct), remaining))
             } else if let Some((ident, remaining)) = cursor.ident() {
                 Ok((Matcher::Ident(ident), remaining))
-            } else if let Some((syn::Lifetime { ident, .. }, remaining)) = cursor.lifetime() {
-                Ok((Matcher::Ident(ident), remaining))
+            } else if let Some((lifetime, remaining)) = cursor.lifetime() {
+                Ok((Matcher::Lifetime(lifetime), remaining))
             } else if let Some((literal, remaining)) = cursor.literal() {
                 Ok((Matcher::Literal(literal), remaining))
             } else {
