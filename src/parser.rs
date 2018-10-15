@@ -5,6 +5,7 @@ use proc_macro2::{Delimiter, Ident, Literal, Punct, TokenStream};
 
 use syn::ext::IdentExt;
 use syn::parse::{Parse, ParseStream};
+use syn::token;
 
 #[derive(Debug)]
 pub struct MacroRules {
@@ -110,14 +111,14 @@ mod kw {
 impl Parse for MacroRules {
     fn parse(input: ParseStream) -> syn::parse::Result<Self> {
         input.parse::<kw::macro_rules>()?;
-        input.parse::<syn::token::Bang>()?;
+        input.parse::<token::Bang>()?;
         let name = input.parse()?;
 
         let content;
         delimited!(content in input);
         let mut rules = vec![content.parse()?];
-        if content.parse::<syn::token::Semi>().is_ok() {
-            rules.extend(content.parse_terminated::<_, syn::token::Semi>(Rule::parse)?);
+        if content.parse::<token::Semi>().is_ok() {
+            rules.extend(content.parse_terminated::<_, token::Semi>(Rule::parse)?);
         }
 
         Ok(MacroRules {
@@ -132,7 +133,7 @@ impl Parse for Rule {
         let matcher;
         delimited!(matcher in input);
 
-        input.parse::<syn::token::FatArrow>()?;
+        input.parse::<token::FatArrow>()?;
 
         let expansion;
         delimited!(expansion in input);
@@ -151,19 +152,24 @@ impl Parse for Rule {
 }
 
 fn parse_fragment_matcher(input: ParseStream) -> syn::parse::Result<Matcher> {
-    input.parse::<syn::token::Dollar>()?;
+    input.parse::<token::Dollar>()?;
     let name = input.call(Ident::parse_any)?;
-    input.parse::<syn::token::Colon>()?;
+    input.parse::<token::Colon>()?;
     let fragment = input.parse()?;
 
     Ok(Matcher::Fragment { name, fragment })
 }
 
 fn parse_repeat_matcher(input: ParseStream) -> syn::parse::Result<Matcher> {
-    input.parse::<syn::token::Dollar>()?;
+    input.parse::<token::Dollar>()?;
     let content;
     parenthesized!(content in input);
-    let separator = input.parse().ok();
+    let separator =
+        if !input.peek(token::Star) && !input.peek(token::Add) && !input.peek(token::Question) {
+            Some(input.parse()?)
+        } else {
+            None
+        };
     let repetition = input.parse()?;
 
     Ok(Matcher::Repeat {
@@ -175,7 +181,7 @@ fn parse_repeat_matcher(input: ParseStream) -> syn::parse::Result<Matcher> {
             v
         },
         separator,
-        repetition
+        repetition,
     })
 }
 
@@ -194,43 +200,43 @@ fn parse_group_matcher(input: ParseStream) -> syn::parse::Result<Matcher> {
     })
 }
 
-fn parse_punct_matcher(input: ParseStream) -> syn::parse::Result<Matcher> {
-    if input.parse::<syn::token::Dollar>().is_ok() {
-        return Err(input.error(""));
-    }
-
-    input.parse().map(Matcher::Punct)
-}
-
 impl Parse for Matcher {
     fn parse(input: ParseStream) -> syn::parse::Result<Self> {
-        if let Ok(fragment) = input.call(parse_fragment_matcher) {
-            Ok(fragment)
-        } else if let Ok(repetition) = input.call(parse_repeat_matcher) {
-            Ok(repetition)
-        } else if let Ok(group) = input.call(parse_group_matcher) {
-            Ok(group)
-        } else if let Ok(punct) = input.call(parse_punct_matcher) {
-            Ok(punct)
-        } else if let Ok(ident) = input.call(Ident::parse_any) {
-            Ok(Matcher::Ident(ident))
-        } else if let Ok(syn::Lifetime { ident, .. }) = input.parse() {
-            Ok(Matcher::Ident(ident))
-        } else if let Ok(literal) = input.parse::<Literal>() {
-            Ok(Matcher::Literal(literal))
-        } else {
-            Err(input.error("expected matcher"))
+        if input.peek(token::Paren) || input.peek(token::Brace) || input.peek(token::Bracket) {
+            return input.call(parse_group_matcher);
         }
+
+        if input.peek(token::Dollar) {
+            if input.peek2(token::Paren) {
+                return input.call(parse_repeat_matcher);
+            } else {
+                return input.call(parse_fragment_matcher);
+            }
+        }
+
+        input.step(|cursor| {
+            if let Some((punct, remaining)) = cursor.punct() {
+                Ok((Matcher::Punct(punct), remaining))
+            } else if let Some((ident, remaining)) = cursor.ident() {
+                Ok((Matcher::Ident(ident), remaining))
+            } else if let Some((syn::Lifetime { ident, .. }, remaining)) = cursor.lifetime() {
+                Ok((Matcher::Ident(ident), remaining))
+            } else if let Some((literal, remaining)) = cursor.literal() {
+                Ok((Matcher::Literal(literal), remaining))
+            } else {
+                Err(cursor.error("expected matcher"))
+            }
+        })
     }
 }
 
 impl Parse for Repetition {
     fn parse(input: ParseStream) -> syn::parse::Result<Self> {
-        if input.parse::<syn::token::Star>().is_ok() {
+        if input.parse::<token::Star>().is_ok() {
             Ok(Repetition::Repeated)
-        } else if input.parse::<syn::token::Add>().is_ok() {
+        } else if input.parse::<token::Add>().is_ok() {
             Ok(Repetition::AtLeastOnce)
-        } else if input.parse::<syn::token::Question>().is_ok() {
+        } else if input.parse::<token::Question>().is_ok() {
             Ok(Repetition::AtMostOnce)
         } else {
             Err(input.error("expected repetition marker"))
@@ -240,20 +246,17 @@ impl Parse for Repetition {
 
 impl Parse for Separator {
     fn parse(input: ParseStream) -> syn::parse::Result<Self> {
-        if let Ok(punct) = input.call(|content| {
-            if content.parse::<Repetition>().is_ok() {
-                return Err(content.error(""));
+        input.step(|cursor| {
+            if let Some((punct, remaining)) = cursor.punct() {
+                Ok((Separator::Punct(punct), remaining))
+            } else if let Some((ident, remaining)) = cursor.ident() {
+                Ok((Separator::Ident(ident), remaining))
+            } else if let Some((literal, remaining)) = cursor.literal() {
+                Ok((Separator::Literal(literal), remaining))
+            } else {
+                Err(cursor.error("expected separator"))
             }
-            content.parse::<Punct>()
-        }) {
-            Ok(Separator::Punct(punct))
-        } else if let Ok(ident) = input.call(Ident::parse_any) {
-            Ok(Separator::Ident(ident))
-        } else if let Ok(lit) = input.parse::<Literal>() {
-            Ok(Separator::Literal(lit))
-        } else {
-            Err(input.error("expected separator"))
-        }
+        })
     }
 }
 
