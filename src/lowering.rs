@@ -130,6 +130,7 @@ impl From<parser::Matcher> for Matcher {
         match m {
             parser::Matcher::Punct(p) => Matcher::Literal(p.to_string()),
             parser::Matcher::Ident(i) => Matcher::Literal(i.to_string()),
+            parser::Matcher::Lifetime(l) => Matcher::Literal(l.to_string()),
             parser::Matcher::Literal(l) => Matcher::Literal(l.to_string()),
             parser::Matcher::Group { delimiter, content } => {
                 // We actually keep Groups as the parser sees them, representing them

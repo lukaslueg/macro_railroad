@@ -1,11 +1,12 @@
 //! Parses a raw `macro_rules!`-string.
 
-use syn;
-use proc_macro2::{Delimiter, Ident, Literal, Punct, TokenStream};
+use proc_macro2::{Delimiter, Ident, Literal, Punct, TokenStream, TokenTree};
 
-use syn::punctuated::Punctuated;
-use syn::synom::Synom;
-use syn::token::Dollar;
+use syn;
+use syn::ext::IdentExt;
+use syn::parse::{Error, Parse, ParseBuffer, ParseStream, Result};
+use syn::token::{Brace, Bracket, Dollar, Paren};
+use syn::Lifetime;
 
 #[derive(Debug)]
 pub struct MacroRules {
@@ -23,6 +24,7 @@ pub struct Rule {
 pub enum Matcher {
     Punct(Punct),
     Ident(Ident),
+    Lifetime(Lifetime),
     Literal(Literal),
     Group {
         delimiter: Delimiter,
@@ -73,110 +75,182 @@ pub enum Fragment {
     Lifetime,
 }
 
-macro_rules! delimited {
-    ($i:expr, $submac:ident!( $($args:tt)* )) => {
-        alt!($i,
-            parens!($submac!($($args)*)) => { |(_, content)| (Delimiter::Parenthesis, content) } |
-            braces!($submac!($($args)*)) => { |(_, content)| (Delimiter::Brace, content) } |
-            brackets!($submac!($($args)*)) => { |(_, content)| (Delimiter::Bracket, content) }
-        )
+fn delimited(input: ParseStream) -> Result<(Delimiter, ParseBuffer)> {
+    let content;
+    let delimiter = if input.peek(Paren) {
+        parenthesized!(content in input);
+        Delimiter::Parenthesis
+    } else if input.peek(Brace) {
+        braced!(content in input);
+        Delimiter::Brace
+    } else if input.peek(Bracket) {
+        bracketed!(content in input);
+        Delimiter::Bracket
+    } else {
+        return Err(input.error("expected delimiter"));
     };
+    Ok((delimiter, content))
 }
 
-impl Synom for MacroRules {
-    named!(parse -> Self, do_parse!(
-        custom_keyword!(macro_rules) >>
-        punct!(!) >>
-        name: syn!(Ident) >>
-        rules: delimited!(call!(Punctuated::<Rule, Token![;]>::parse_terminated_nonempty)) >>
-        cond!(rules.0 == Delimiter::Parenthesis || rules.0 == Delimiter::Bracket, punct!(;)) >>
-        (MacroRules {
-            name,
-            rules: rules.1.into_iter().collect(),
+impl Parse for MacroRules {
+    fn parse(input: ParseStream) -> Result<Self> {
+        // Parse `macro_rules! macro_name`.
+        custom_keyword!(macro_rules);
+        input.parse::<macro_rules>()?;
+        input.parse::<Token![!]>()?;
+        let name: Ident = input.parse()?;
+
+        // Parse the delimited macro rules.
+        let (delimiter, content) = delimited(&input)?;
+        let rules = Rule::parse_many(&content)?;
+
+        // Require trailing semicolon after parens or brackets.
+        match delimiter {
+            Delimiter::Parenthesis | Delimiter::Bracket => {
+                input.parse::<Token![;]>()?;
+            }
+            Delimiter::Brace | Delimiter::None => {}
+        }
+
+        Ok(MacroRules { name, rules })
+    }
+}
+
+impl Rule {
+    fn parse_many(input: ParseStream) -> Result<Vec<Self>> {
+        let rules = input.parse_terminated::<Rule, Token![;]>(Rule::parse)?;
+        if rules.is_empty() {
+            Err(input.error("expected at least one macro rule"))
+        } else {
+            Ok(rules.into_iter().collect())
+        }
+    }
+}
+
+impl Parse for Rule {
+    fn parse(input: ParseStream) -> Result<Self> {
+        // Parse the input pattern.
+        let content = delimited(&input)?.1;
+        let matcher = Matcher::parse_many(&content)?;
+
+        input.parse::<Token![=>]>()?;
+
+        // Parse the expansion tokens.
+        let content = delimited(&input)?.1;
+        let expansion: TokenStream = content.parse()?;
+
+        Ok(Rule { matcher, expansion })
+    }
+}
+
+impl Matcher {
+    fn parse_many(input: ParseStream) -> Result<Vec<Self>> {
+        let mut matchers = Vec::new();
+        while !input.is_empty() {
+            matchers.push(input.parse()?);
+        }
+        Ok(matchers)
+    }
+}
+
+impl Parse for Matcher {
+    fn parse(input: ParseStream) -> Result<Self> {
+        if input.peek(Paren) || input.peek(Bracket) || input.peek(Brace) {
+            let (delimiter, content) = delimited(&input)?;
+            let content = Matcher::parse_many(&content)?;
+            Ok(Matcher::Group { delimiter, content })
+        } else if input.parse::<Option<Dollar>>()?.is_some() {
+            if input.peek(Paren) {
+                let content;
+                parenthesized!(content in input);
+                let content = Matcher::parse_many(&content)?;
+                let separator = Separator::parse_optional(input)?;
+                let repetition: Repetition = input.parse()?;
+                Ok(Matcher::Repeat {
+                    content,
+                    separator,
+                    repetition,
+                })
+            } else {
+                let name = Ident::parse_any(input)?;
+                input.parse::<Token![:]>()?;
+                let fragment: Fragment = input.parse()?;
+                Ok(Matcher::Fragment { name, fragment })
+            }
+        } else if let Some(lifetime) = input.parse()? {
+            Ok(Matcher::Lifetime(lifetime))
+        } else {
+            match input.parse()? {
+                TokenTree::Ident(ident) => Ok(Matcher::Ident(ident)),
+                TokenTree::Punct(punct) => Ok(Matcher::Punct(punct)),
+                TokenTree::Literal(literal) => Ok(Matcher::Literal(literal)),
+                TokenTree::Group(_) => unreachable!(),
+            }
+        }
+    }
+}
+
+impl Separator {
+    fn parse_optional(input: ParseStream) -> Result<Option<Self>> {
+        if input.peek(Token![*]) || input.peek(Token![+]) || input.peek(Token![?]) {
+            Ok(None)
+        } else {
+            input.parse().map(Some)
+        }
+    }
+}
+
+impl Parse for Separator {
+    fn parse(input: ParseStream) -> Result<Self> {
+        Ok(match input.parse()? {
+            TokenTree::Ident(ident) => Separator::Ident(ident),
+            // FIXME: multi-character punctuation
+            TokenTree::Punct(punct) => Separator::Punct(punct),
+            TokenTree::Literal(literal) => Separator::Literal(literal),
+            TokenTree::Group(group) => {
+                return Err(Error::new(group.span(), "unexpected token"));
+            }
         })
-    ));
+    }
 }
 
-impl Synom for Rule {
-    named!(parse -> Self, do_parse!(
-        matcher: delimited!(many0!(syn!(Matcher))) >>
-        punct!(=>) >>
-        expansion: delimited!(syn!(TokenStream)) >>
-        (Rule {
-            matcher: matcher.1,
-            expansion: expansion.1,
-        })
-    ));
+impl Parse for Repetition {
+    fn parse(input: ParseStream) -> Result<Self> {
+        if input.parse::<Option<Token![*]>>()?.is_some() {
+            Ok(Repetition::Repeated)
+        } else if input.parse::<Option<Token![+]>>()?.is_some() {
+            Ok(Repetition::AtLeastOnce)
+        } else if input.parse::<Option<Token![?]>>()?.is_some() {
+            Ok(Repetition::AtMostOnce)
+        } else {
+            Err(input.error("expected `*` or `+` or `?`"))
+        }
+    }
 }
 
-impl Synom for Matcher {
-    named!(parse -> Self, alt!(
-        do_parse!(
-            syn!(Dollar) >>
-            name: call!(Ident::parse_any) >>
-            punct!(:) >>
-            fragment: syn!(Fragment) >>
-            (Matcher::Fragment { name, fragment })
-        ) |
-        do_parse!(
-            syn!(Dollar) >>
-            content: parens!(many0!(syn!(Matcher))) >>
-            separator: option!(syn!(Separator)) >>
-            repetition: syn!(Repetition) >>
-            (Matcher::Repeat { content: content.1, separator, repetition })
-        ) |
-        delimited!(many0!(syn!(Matcher))) => {
-            |(delimiter, content)| Matcher::Group { delimiter, content }
-        } |
-        do_parse!(
-            not!(syn!(Dollar)) >>
-            punct: syn!(Punct) >>
-            (Matcher::Punct(punct))
-        ) |
-        call!(Ident::parse_any) => { Matcher::Ident } |
-        syn!(Literal) => { Matcher::Literal }
-    ));
+impl Parse for Fragment {
+    fn parse(input: ParseStream) -> Result<Self> {
+        let ident: Ident = input.parse()?;
+        match ident.to_string().as_str() {
+            "ident" => Ok(Fragment::Ident),
+            "path" => Ok(Fragment::Path),
+            "expr" => Ok(Fragment::Expr),
+            "ty" => Ok(Fragment::Ty),
+            "pat" => Ok(Fragment::Pat),
+            "stmt" => Ok(Fragment::Stmt),
+            "block" => Ok(Fragment::Block),
+            "item" => Ok(Fragment::Item),
+            "meta" => Ok(Fragment::Meta),
+            "tt" => Ok(Fragment::Tt),
+            "vis" => Ok(Fragment::Vis),
+            "literal" => Ok(Fragment::Literal),
+            "lifetime" => Ok(Fragment::Lifetime),
+            _ => Err(Error::new(ident.span(), "unrecognized fragment specifier")),
+        }
+    }
 }
 
-impl Synom for Repetition {
-    named!(parse -> Self, alt!(
-        punct!(*) => { |_| Repetition::Repeated } |
-        punct!(+) => { |_| Repetition::AtLeastOnce } |
-        punct!(?) => { |_| Repetition::AtMostOnce }
-    ));
-}
-
-impl Synom for Separator {
-    named!(parse -> Self, alt!(
-        do_parse!(
-            not!(syn!(Repetition)) >>
-            punct: syn!(Punct) >>
-            (Separator::Punct(punct))
-        ) |
-        call!(Ident::parse_any) => { Separator::Ident } |
-        syn!(Literal) => { Separator::Literal }
-    ));
-}
-
-impl Synom for Fragment {
-    named!(parse -> Self, alt!(
-        custom_keyword!(ident) => { |_| Fragment::Ident } |
-        custom_keyword!(path) => { |_| Fragment::Path } |
-        custom_keyword!(expr) => { |_| Fragment::Expr } |
-        custom_keyword!(ty) => { |_| Fragment::Ty } |
-        custom_keyword!(pat) => { |_| Fragment::Pat } |
-        custom_keyword!(stmt) => { |_| Fragment::Stmt } |
-        custom_keyword!(block) => { |_| Fragment::Block } |
-        custom_keyword!(item) => { |_| Fragment::Item } |
-        custom_keyword!(meta) => { |_| Fragment::Meta } |
-        custom_keyword!(tt) => { |_| Fragment::Tt } |
-        custom_keyword!(vis) => { |_| Fragment::Vis } |
-        custom_keyword!(literal) => { |_| Fragment::Literal } |
-        custom_keyword!(lifetime) => { |_| Fragment::Lifetime }
-    ));
-}
-
-pub fn parse(src: &str) -> Result<MacroRules, syn::synom::ParseError> {
+pub fn parse(src: &str) -> Result<MacroRules> {
     syn::parse_str::<MacroRules>(src)
 }
 
