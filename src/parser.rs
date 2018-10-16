@@ -77,17 +77,17 @@ pub enum Fragment {
 
 macro_rules! delimited {
     ($content:ident in $cursor:expr) => {
-        if let syn::export::Ok(parens) = syn::group::parse_parens(&$cursor) {
-            $content = parens.content;
+        if $cursor.peek(token::Paren) {
+            parenthesized!($content in $cursor);
             Delimiter::Parenthesis
-        } else if let syn::export::Ok(braces) = syn::group::parse_braces(&$cursor) {
-            $content = braces.content;
+        } else if $cursor.peek(token::Brace) {
+            braced!($content in $cursor);
             Delimiter::Brace
-        } else if let syn::export::Ok(brackets) = syn::group::parse_brackets(&$cursor) {
-            $content = brackets.content;
+        } else if $cursor.peek(token::Bracket) {
+            bracketed!($content in $cursor);
             Delimiter::Bracket
         } else {
-            return syn::export::Err($cursor.error("expected delimiter"));
+            return Err($cursor.error("expected delimiter"));
         }
     };
 }
