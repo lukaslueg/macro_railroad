@@ -4,13 +4,14 @@ version = "0.1.0"
 authors = ["Lukas Lueg <lukas.lueg@gmail.com>"]
 
 [dependencies]
-syn = { version = "0.14", features = ["full", "extra-traits"] }
+syn = { version = "0.15", features = ["full", "extra-traits"] }
 railroad = { git = "https://github.com/lukaslueg/railroad" }
 proc-macro2 = { version = "0.4", default-features=false }
 
 [dev-dependencies]
 tempdir = "0.3"
 lazy_static = "1.1"
+quote = "0.6"
 
 [features]
 visual-debug = ["railroad/visual-debug"]
