@@ -153,6 +153,7 @@ impl From<parser::Matcher> for Matcher {
                 Matcher::Repeat { content: content.into_iter().map(|m| m.into()).collect(),
                                   seperator: separator.map(|s| match s {
                                       parser::Separator::Punct(p) => p.to_string(),
+                                      parser::Separator::PunctGroup(s) => s.to_string(),
                                       parser::Separator::Literal(l) => l.to_string(),
                                       parser::Separator::Ident(i) => i.to_string(),
                                   }),
