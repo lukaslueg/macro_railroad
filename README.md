@@ -3,6 +3,8 @@
 
 **[Live demo](https://lukaslueg.github.io/macro_railroad_wasm_demo/)** ([code](https://github.com/lukaslueg/macro_railroad_wasm))
 
+**[A browser add-on for Firefox and Chrome](https://github.com/lukaslueg/macro_railroad_ext)**
+
 A library to generate syntax ("railroad") diagrams for Rust's `macro_rules!()`.
 
 Diagrams are generated as Scalable Vector Graphics, with layout-details controlled by customizable CSS.
