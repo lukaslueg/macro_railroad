@@ -5,7 +5,7 @@ authors = ["Lukas Lueg <lukas.lueg@gmail.com>"]
 
 [dependencies]
 syn = { version = "0.15", features = ["full", "extra-traits"] }
-railroad = { git = "https://github.com/lukaslueg/railroad" }
+railroad = "0.1"
 proc-macro2 = { version = "0.4", default-features=false }
 
 [dev-dependencies]
