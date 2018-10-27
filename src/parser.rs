@@ -260,11 +260,24 @@ mod tests {
     use super::*;
 
     #[test]
+    fn trailing_semicolon_is_required() {
+        // If the macro is delimited by parens or brackets, there has to be
+        // a trailing semicolon. While this is not a strictly useful requirement,
+        // we test this so the parser does not fall behind.
+        let src = r#"macro_rules! a ( (a) => { $a } );"#;
+        parse(&src).unwrap();
+        let src = r#"macro_rules! a ( (a) => { $a } )"#;
+        parse(&src).expect_err("Expected missing semicolon-error");
+        let src = r#"macro_rules! a [ (a) => { $a } ]"#;
+        parse(&src).expect_err("Expected missing semicolon-error");
+        let src = r#"macro_rules! a { (a) => { $a } }"#;
+        parse(&src).unwrap();
+    }
+
+    #[test]
     fn issue_5() {
         // Keywords as fragment-names should parse
-        let src = r#"macro_rules! a {
-    ($self:ident) => { ... };
-}"#;
+        let src = r#"macro_rules! a { ($self:ident) => { ... }; }"#;
         parse(&src).unwrap();
     }
 
