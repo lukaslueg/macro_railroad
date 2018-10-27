@@ -166,6 +166,11 @@ impl Parse for Matcher {
                 let content = Matcher::parse_many(&content)?;
                 let separator = Separator::parse_optional(input)?;
                 let repetition: Repetition = input.parse()?;
+                if repetition == Repetition::AtMostOnce {
+                    if separator.is_some() {
+                        return Err(input.error("the `?` macro repetition operator does not take a separator"));
+                    }
+                }
                 Ok(Matcher::Repeat {
                     content,
                     separator,
@@ -275,8 +280,16 @@ mod tests {
     }
 
     #[test]
-    fn issue_5() {
-        // Keywords as fragment-names should parse
+    fn qmark_repeat_disallows_separator() {
+        // Issue 21
+        let src = r#"macro_rules! m { ($($tt:tt)-?) => {} }"#;
+        let err = parse(&src).expect_err("Should not have parsed");
+        assert!(err.to_string().contains("does not take a separator"));
+    }
+
+    #[test]
+    fn keywords_as_fragment_names() {
+        // Issue 5
         let src = r#"macro_rules! a { ($self:ident) => { ... }; }"#;
         parse(&src).unwrap();
     }
