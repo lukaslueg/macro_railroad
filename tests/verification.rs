@@ -3,29 +3,15 @@
 ///
 /// This calls out to the `xmllint` tool from libxml2, which may not be available.
 /// The test is therefor ignored by default; use `cargo test -- --ignored`
-///
-/// The DTD used here has been patched to verify the `railroad`-debug
-/// attributes, because I don't care to write a proper module...
 
 #[macro_use]
 extern crate lazy_static;
-extern crate tempdir;
+extern crate railroad_verification;
 extern crate macro_railroad;
 
-use std::process;
-use std::io::Write;
-use std::path;
-use std::fs;
-
-// Each execution of this test suite floods the filesystem with one (but only one)
-// instance of the DTD - too bad!
 lazy_static! {
-    static ref DTD_FILENAME: path::PathBuf = {
-        let tdir = tempdir::TempDir::new("macro_railroad").unwrap();
-        let dtd_filename = tdir.into_path().join("svg11-flat.dtd");
-        let mut dtd_tempfile = fs::File::create(&dtd_filename).unwrap();
-        dtd_tempfile.write_all(include_bytes!("svg11-flat.dtd")).unwrap();
-        dtd_filename
+    static ref VERIFIER: railroad_verification::Verifier = {
+        railroad_verification::Verifier::new().unwrap()
     };
 }
 
@@ -49,29 +35,6 @@ fn to_diagram(src: &str) -> (String, Vec<(&'static str, String)>) {
     (name, v)
 }
 
-fn verify(name: &str, svg_src: String) {
-    let mut child = process::Command::new("xmllint")
-                    .arg("--noout")
-                    .arg("--dtdvalid")
-                    .arg(DTD_FILENAME.as_os_str())
-                    .arg("-")
-                    .stdin(process::Stdio::piped())
-                    .stdout(process::Stdio::null())
-                    .stderr(process::Stdio::piped())
-                    .spawn()
-                    .unwrap();
-    let mut stdin = child.stdin.take().unwrap();
-    let writer = ::std::thread::spawn(move || {
-        stdin.write_all(svg_src.as_bytes()).unwrap();
-    });
-    let output = child.wait_with_output().unwrap();
-    writer.join().unwrap();
-    if !output.status.success() {
-        eprintln!("{}", String::from_utf8_lossy(&output.stderr));
-        panic!("Failed to verify `{}`", name);
-    }
-}
-
 macro_rules! verify {
     ($(($testname:ident, $src:expr)),+) => {
         $(
@@ -82,7 +45,10 @@ macro_rules! verify {
                 eprintln!("Parsed `{}` as macro '{}'", stringify!($testname), name);
                 for (variant, dia) in dias.into_iter() {
                     eprintln!("Verifying variant `{}`", variant);
-                    verify(&name, dia);
+                    if let Err(e) = VERIFIER.verify(dia) {
+                        eprintln!("{:?}", e);
+                        panic!("Failed to verifiy `{}`", name);
+                    }
                 }
             }
         )+
