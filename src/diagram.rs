@@ -103,14 +103,14 @@ impl<T: railroad::RailroadNode> railroad::RailroadNode for Container<T> {
     fn entry_height(&self) -> i64 { self.inner.entry_height() + self.padding }
     fn height(&self) -> i64 { self.inner.height() + self.padding*2 }
     fn width(&self) -> i64 { self.inner.width() + self.padding*2 }
-    fn draw(&self, x: i64, y: i64) -> railroad::svg::Element {
+    fn draw(&self, x: i64, y: i64, hdir: railroad::svg::HDir) -> railroad::svg::Element {
         railroad::svg::Element::new("g")
             .add(railroad::svg::Element::new("rect")
                  .set("x", x)
                  .set("y", y)
                  .set("height", self.height())
                  .set("width", self.width()))
-            .add(self.inner.draw(x + self.padding, y + self.padding))
+            .add(self.inner.draw(x + self.padding, y + self.padding, hdir))
             .set_all(self.attributes.iter())
             .debug("Container", x, y, self)
     }

@@ -11,7 +11,8 @@ proc-macro2 = { version = "0.4", default-features=false }
 [dev-dependencies]
 lazy_static = "1.1"
 quote = "0.6"
-railroad_verification = { git = "https://github.com/lukaslueg/railroad_verification" }
+railroad_verification = "0.1"
+htmlescape = "0.3"
 
 [features]
 visual-debug = ["railroad/visual-debug"]

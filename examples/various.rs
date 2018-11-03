@@ -1,3 +1,4 @@
+extern crate htmlescape;
 extern crate railroad;
 extern crate macro_railroad;
 use std::io;
@@ -77,18 +78,18 @@ pub fn to_example_page(title: &str, examples: &[&str], outp_filename: &str) -> R
     outp.write_all(b"</style>")?;
 	outp.write_all(b"</head><body>")?;
 
-    write!(outp, "<h1>{}</h1>", railroad::svg::encode(title))?;
+    write!(outp, "<h1>{}</h1>", htmlescape::encode_minimal(title))?;
     outp.write_all(b"<div>")?;
     let mut names = Vec::with_capacity(examples.len());
     outp.write_all(b"<div class=\"examples\">")?;
     for src in examples {
         let (name, mut dia, dia_opt) = to_diagram(&src);
         println!(" * `{}`", name);
-        write!(outp, "<div class=\"example\" id=\"{}\">", railroad::svg::encode_attribute(&name))?;
-        write!(outp, "<a href=\"#{}\">", railroad::svg::encode_attribute(&name))?;
-        write!(outp, "<h3>Macro <i>`{}`</i></h3></a>", railroad::svg::encode(&name))?;
+        write!(outp, "<div class=\"example\" id=\"{}\">", htmlescape::encode_attribute(&name))?;
+        write!(outp, "<a href=\"#{}\">", htmlescape::encode_attribute(&name))?;
+        write!(outp, "<h3>Macro <i>`{}`</i></h3></a>", htmlescape::encode_minimal(&name))?;
         names.push(name);
-        write!(outp, "<pre class=\"rust\">{}</pre><br>", railroad::svg::encode(src))?;
+        write!(outp, "<pre class=\"rust\">{}</pre><br>", htmlescape::encode_minimal(src))?;
         let dia_svg = dia.to_string();
         let dia_opt_svg = dia_opt.to_string();
         if dia_svg != dia_opt_svg {
