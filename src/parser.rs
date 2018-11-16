@@ -1,5 +1,7 @@
 //! Parses a raw `macro_rules!`-string.
 
+use std::fmt;
+
 use proc_macro2::{Delimiter, Ident, Literal, Punct, TokenStream, TokenTree};
 
 use syn;
@@ -52,7 +54,17 @@ pub enum Repetition {
 }
 
 #[derive(Debug)]
+pub struct PunctGroup(&'static str);
+
+impl fmt::Display for PunctGroup {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.0)
+    }
+}
+
+#[derive(Debug)]
 pub enum Separator {
+    PunctGroup(PunctGroup),
     Punct(Punct),
     Ident(Ident),
     Literal(Literal),
@@ -195,6 +207,94 @@ impl Parse for Matcher {
     }
 }
 
+impl PunctGroup {
+    fn peek(input: ParseStream) -> bool {
+        input.peek(Token![+=])
+        || input.peek(Token![&&])
+        || input.peek(Token![&=])
+        || input.peek(Token![^=])
+        || input.peek(Token![::])
+        || input.peek(Token![/=])
+        || input.peek(Token![..])
+        || input.peek(Token![...])
+        || input.peek(Token![..=])
+        || input.peek(Token![==])
+        || input.peek(Token![>=])
+        || input.peek(Token![<=])
+        || input.peek(Token![*=])
+        || input.peek(Token![!=])
+        || input.peek(Token![|=])
+        || input.peek(Token![||])
+        || input.peek(Token![->])
+        || input.peek(Token![<-])
+        || input.peek(Token![%=])
+        || input.peek(Token![=>])
+        || input.peek(Token![<<])
+        || input.peek(Token![<<=])
+        || input.peek(Token![>>])
+        || input.peek(Token![>>=])
+        || input.peek(Token![-=])
+    }
+}
+
+impl Parse for PunctGroup {
+    fn parse(input: ParseStream) -> Result<Self> {
+        if input.parse::<Option<Token![+=]>>()?.is_some() {
+            Ok(PunctGroup("+="))
+        } else if input.parse::<Option<Token![&&]>>()?.is_some() {
+            Ok(PunctGroup("&&"))
+        } else if input.parse::<Option<Token![&=]>>()?.is_some() {
+            Ok(PunctGroup("&="))
+        } else if input.parse::<Option<Token![^=]>>()?.is_some() {
+            Ok(PunctGroup("^="))
+        } else if input.parse::<Option<Token![::]>>()?.is_some() {
+            Ok(PunctGroup("::"))
+        } else if input.parse::<Option<Token![/=]>>()?.is_some() {
+            Ok(PunctGroup("/="))
+        } else if input.parse::<Option<Token![..]>>()?.is_some() {
+            Ok(PunctGroup(".."))
+        } else if input.parse::<Option<Token![...]>>()?.is_some() {
+            Ok(PunctGroup("..."))
+        } else if input.parse::<Option<Token![..=]>>()?.is_some() {
+            Ok(PunctGroup("..="))
+        } else if input.parse::<Option<Token![==]>>()?.is_some() {
+            Ok(PunctGroup("=="))
+        } else if input.parse::<Option<Token![>=]>>()?.is_some() {
+            Ok(PunctGroup(">="))
+        } else if input.parse::<Option<Token![<=]>>()?.is_some() {
+            Ok(PunctGroup("<="))
+        } else if input.parse::<Option<Token![*=]>>()?.is_some() {
+            Ok(PunctGroup("*="))
+        } else if input.parse::<Option<Token![!=]>>()?.is_some() {
+            Ok(PunctGroup("!="))
+        } else if input.parse::<Option<Token![|=]>>()?.is_some() {
+            Ok(PunctGroup("|="))
+        } else if input.parse::<Option<Token![||]>>()?.is_some() {
+            Ok(PunctGroup("||"))
+        } else if input.parse::<Option<Token![->]>>()?.is_some() {
+            Ok(PunctGroup("->"))
+        } else if input.parse::<Option<Token![<-]>>()?.is_some() {
+            Ok(PunctGroup("<-"))
+        } else if input.parse::<Option<Token![%=]>>()?.is_some() {
+            Ok(PunctGroup("%="))
+        } else if input.parse::<Option<Token![=>]>>()?.is_some() {
+            Ok(PunctGroup("=>"))
+        } else if input.parse::<Option<Token![<<]>>()?.is_some() {
+            Ok(PunctGroup("<<"))
+        } else if input.parse::<Option<Token![<<=]>>()?.is_some() {
+            Ok(PunctGroup("<<="))
+        } else if input.parse::<Option<Token![>>]>>()?.is_some() {
+            Ok(PunctGroup(">>"))
+        } else if input.parse::<Option<Token![>>=]>>()?.is_some() {
+            Ok(PunctGroup(">>="))
+        } else if input.parse::<Option<Token![-=]>>()?.is_some() {
+            Ok(PunctGroup("-="))
+        } else {
+            Err(input.error("expected punct group"))
+        }
+    }
+}
+
 impl Separator {
     fn parse_optional(input: ParseStream) -> Result<Option<Self>> {
         if input.peek(Token![*]) || input.peek(Token![+]) || input.peek(Token![?]) {
@@ -207,9 +307,12 @@ impl Separator {
 
 impl Parse for Separator {
     fn parse(input: ParseStream) -> Result<Self> {
+        if PunctGroup::peek(input) {
+            return Ok(Separator::PunctGroup(input.parse::<PunctGroup>()?));
+        }
+
         Ok(match input.parse()? {
             TokenTree::Ident(ident) => Separator::Ident(ident),
-            // FIXME: multi-character punctuation
             TokenTree::Punct(punct) => Separator::Punct(punct),
             TokenTree::Literal(literal) => Separator::Literal(literal),
             TokenTree::Group(group) => {
@@ -343,6 +446,9 @@ r#"macro_rules! input_end {
 r#"macro_rules! apply {
     ($i:expr, $fun:expr, $($args:expr),* ) => { ... };
 }"#,
+r#"macro_rules! a {
+    ($($m:ident)::+) => {};
+}"#
         ][..];
         for src in fixture {
             parse(&src).expect(src);
