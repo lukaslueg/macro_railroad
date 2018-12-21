@@ -1,10 +1,8 @@
 //! Transform a `lowering::MacroRules`-tree into a `railroad::Diagram`
 
 use std::collections;
-
-use railroad;
-use lowering;
-use parser;
+use crate::lowering;
+use crate::parser;
 
 /// The default CSS used for macro-diagrams
 pub const CSS: &str = r#"
@@ -233,12 +231,8 @@ fn into_primitive(m: lowering::Matcher) -> Box<railroad::RailroadNode> {
         lowering::Matcher::Empty => Box::new(railroad::Empty),
         lowering::Matcher::Comment(s) => Box::new(railroad::Comment::new(s)),
         lowering::Matcher::Optional(o) => Box::new(railroad::Optional::new(into_primitive(*o))),
-        lowering::Matcher::Choice(s) => {
-            Box::new(railroad::Choice::new(s.into_iter().map(into_primitive).collect()))
-        },
-        lowering::Matcher::Sequence(s) => {
-            Box::new(railroad::Sequence::new(s.into_iter().map(into_primitive).collect()))
-        },
+        lowering::Matcher::Choice(s) => Box::new(railroad::Choice::new(s.into_iter().map(into_primitive).collect())),
+        lowering::Matcher::Sequence(s) => Box::new(railroad::Sequence::new(s.into_iter().map(into_primitive).collect())),
         lowering::Matcher::Literal(s) => Box::new(railroad::Terminal::new(s)),
         lowering::Matcher::Repeat { content, seperator, repetition } => {
             let seperator: Box<railroad::RailroadNode> = match seperator {

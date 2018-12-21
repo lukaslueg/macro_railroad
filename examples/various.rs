@@ -83,7 +83,7 @@ pub fn to_example_page(title: &str, examples: &[&str], outp_filename: &str) -> R
     let mut names = Vec::with_capacity(examples.len());
     outp.write_all(b"<div class=\"examples\">")?;
     for src in examples {
-        let (name, mut dia, dia_opt) = to_diagram(&src);
+        let (name, dia, dia_opt) = to_diagram(&src);
         println!(" * `{}`", name);
         write!(outp, "<div class=\"example\" id=\"{}\">", htmlescape::encode_attribute(&name))?;
         write!(outp, "<a href=\"#{}\">", htmlescape::encode_attribute(&name))?;

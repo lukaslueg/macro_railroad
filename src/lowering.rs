@@ -3,8 +3,7 @@
 //! The representation in this module is more coarse than what the parser provides,
 //! yet has still more information than a diagram-node.
 use std::collections::{HashSet, HashMap};
-use parser;
-use proc_macro2;
+use crate::parser;
 
 /// A more coarse representation of `parser::MacroRules`.
 #[derive(Clone, Debug, PartialEq)]
@@ -167,7 +166,7 @@ impl From<parser::Matcher> for Matcher {
 
 /// A simple Visitor to walk `Matcher`.
 pub trait MatcherVisitor {
-    fn visit(&mut self, &mut Matcher);
+    fn visit(&mut self, m: &mut Matcher);
 
     fn visit_children(&mut self, m: &mut Matcher) {
         match m {

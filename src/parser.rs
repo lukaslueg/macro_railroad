@@ -166,10 +166,8 @@ impl Parse for Matcher {
                 let content = Matcher::parse_many(&content)?;
                 let separator = Separator::parse_optional(input)?;
                 let repetition: Repetition = input.parse()?;
-                if repetition == Repetition::AtMostOnce {
-                    if separator.is_some() {
-                        return Err(input.error("the `?` macro repetition operator does not take a separator"));
-                    }
+                if repetition == Repetition::AtMostOnce && separator.is_some() {
+                    return Err(input.error("the `?` macro repetition operator does not take a separator"));
                 }
                 Ok(Matcher::Repeat {
                     content,
