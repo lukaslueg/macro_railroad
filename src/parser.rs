@@ -167,7 +167,9 @@ impl Parse for Matcher {
                 let separator = Separator::parse_optional(input)?;
                 let repetition: Repetition = input.parse()?;
                 if repetition == Repetition::AtMostOnce && separator.is_some() {
-                    return Err(input.error("the `?` macro repetition operator does not take a separator"));
+                    return Err(
+                        input.error("the `?` macro repetition operator does not take a separator")
+                    );
                 }
                 Ok(Matcher::Repeat {
                     content,
@@ -297,7 +299,7 @@ mod tests {
         // A more or less random collection of macro_rules!()-blocks which should parse
         // successfully.
         let fixture = &[
-r#"macro_rules! a {
+            r#"macro_rules! a {
 (
 $item:item
 $block:block
@@ -313,32 +315,32 @@ $meta:meta
 $lifetime:lifetime
 ) => {};
 }"#,
-r#"macro_rules! vec {
+            r#"macro_rules! vec {
     ( $ elem : expr ; $ n : expr ) => { ... };
     ( $ ( $ x : expr ) , * ) => { ... };
     ( $ ( $ x : expr , ) * ) => { ... };
 }"#,
-r#"macro_rules! println {
+            r#"macro_rules! println {
     () => { ... };
     ($fmt:expr) => { ... };
     ($fmt:expr, $($arg:tt)*) => { ... };
 }"#,
-r#"macro_rules! assert_eq {
+            r#"macro_rules! assert_eq {
     ( $ left : expr , $ right : expr ) => { ... };
     ( $ left : expr , $ right : expr , ) => { ... };
     (
 $ left : expr , $ right : expr , $ ( $ arg : tt ) + ) => { ... };
 }"#,
-r#"macro_rules! panic {
+            r#"macro_rules! panic {
     () => { ... };
     ($msg:expr) => { ... };
     ($msg:expr,) => { ... };
     ($fmt:expr, $($arg:tt)+) => { ... };
 }"#,
-r#"macro_rules! input_end {
+            r#"macro_rules! input_end {
     ($i:expr,) => { ... };
 }"#,
-r#"macro_rules! apply {
+            r#"macro_rules! apply {
     ($i:expr, $fun:expr, $($args:expr),* ) => { ... };
 }"#,
         ][..];

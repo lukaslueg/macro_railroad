@@ -2,8 +2,8 @@
 //!
 //! The representation in this module is more coarse than what the parser provides,
 //! yet has still more information than a diagram-node.
-use std::collections::{HashSet, HashMap};
 use crate::parser;
+use std::collections::{HashMap, HashSet};
 
 /// A more coarse representation of `parser::MacroRules`.
 #[derive(Clone, Debug, PartialEq)]
@@ -11,7 +11,7 @@ pub struct MacroRules {
     /// This macro's name.
     pub name: String,
     /// The set of rules in this macro. Starts out as a `Choice` (one for every pattern)
-    pub rules: Matcher
+    pub rules: Matcher,
 }
 
 impl MacroRules {
@@ -55,7 +55,7 @@ impl From<parser::MacroRules> for MacroRules {
     fn from(m: parser::MacroRules) -> MacroRules {
         MacroRules {
             name: m.name.to_string(),
-            rules: Matcher::Choice(m.rules.into_iter().map(|r| r.into()).collect())
+            rules: Matcher::Choice(m.rules.into_iter().map(|r| r.into()).collect()),
         }
     }
 }
@@ -106,14 +106,14 @@ impl Matcher {
     pub fn is_empty(&self) -> bool {
         match self {
             Matcher::Empty => true,
-            _ => false
+            _ => false,
         }
     }
 
     pub fn is_sequence(&self) -> bool {
         match self {
             Matcher::Sequence(_) => true,
-            _ => false
+            _ => false,
         }
     }
 }
@@ -147,19 +147,24 @@ impl From<parser::Matcher> for Matcher {
                     v.push(Matcher::Literal(e.to_owned()));
                 }
                 Matcher::Group(Box::new(Matcher::Sequence(v)))
+            }
+            parser::Matcher::Repeat {
+                content,
+                separator,
+                repetition,
+            } => Matcher::Repeat {
+                content: content.into_iter().map(|m| m.into()).collect(),
+                seperator: separator.map(|s| match s {
+                    parser::Separator::Punct(p) => p.to_string(),
+                    parser::Separator::Literal(l) => l.to_string(),
+                    parser::Separator::Ident(i) => i.to_string(),
+                }),
+                repetition,
             },
-            parser::Matcher::Repeat { content, separator, repetition } =>
-                Matcher::Repeat { content: content.into_iter().map(|m| m.into()).collect(),
-                                  seperator: separator.map(|s| match s {
-                                      parser::Separator::Punct(p) => p.to_string(),
-                                      parser::Separator::Literal(l) => l.to_string(),
-                                      parser::Separator::Ident(i) => i.to_string(),
-                                  }),
-                                  repetition
-                                  },
-            parser::Matcher::Fragment { name, fragment } =>
-                Matcher::NonTerminal { name: name.to_string(),
-                                       fragment }
+            parser::Matcher::Fragment { name, fragment } => Matcher::NonTerminal {
+                name: name.to_string(),
+                fragment,
+            },
         }
     }
 }
@@ -171,16 +176,14 @@ pub trait MatcherVisitor {
     fn visit_children(&mut self, m: &mut Matcher) {
         match m {
             Matcher::Empty
-                | Matcher::Comment(_)
-                | Matcher::Literal(_)
-                | Matcher::NonTerminal { .. } => {},
-            Matcher::Sequence(v)
-                | Matcher::Choice(v) => v.iter_mut().for_each(|e| self.visit(e)),
-            Matcher::Group(m)
-                | Matcher::Optional(m) => self.visit(m),
-            Matcher::Repeat { ref mut content, .. } => {
-                content.iter_mut().for_each(|e| self.visit(e))
-            },
+            | Matcher::Comment(_)
+            | Matcher::Literal(_)
+            | Matcher::NonTerminal { .. } => {}
+            Matcher::Sequence(v) | Matcher::Choice(v) => v.iter_mut().for_each(|e| self.visit(e)),
+            Matcher::Group(m) | Matcher::Optional(m) => self.visit(m),
+            Matcher::Repeat {
+                ref mut content, ..
+            } => content.iter_mut().for_each(|e| self.visit(e)),
         }
     }
 }
@@ -203,7 +206,7 @@ impl MatcherVisitor for Ungrouper {
                     for e in v {
                         match e {
                             Matcher::Sequence(ee) => new_v.extend(ee),
-                            other => new_v.push(other)
+                            other => new_v.push(other),
                         }
                     }
                     Matcher::Sequence(new_v)
@@ -239,21 +242,23 @@ impl MatcherVisitor for Normalizer {
                         b.pop().unwrap()
                     } else {
                         // A Choice with an Empty in it is an Optional(Choice)
-                        match b.iter()
-                                .enumerate()
-                                .filter_map(|(idx, e)| if e.is_empty() { Some(idx) } else { None })
-                                .next() {
+                        match b
+                            .iter()
+                            .enumerate()
+                            .filter_map(|(idx, e)| if e.is_empty() { Some(idx) } else { None })
+                            .next()
+                        {
                             Some(idx) => {
                                 changed |= true;
                                 b.remove(idx);
                                 let mut new_m = Matcher::Optional(Box::new(Matcher::Choice(b)));
                                 new_m.accept(self);
                                 new_m
-                            },
-                            None => Matcher::Choice(b)
+                            }
+                            None => Matcher::Choice(b),
                         }
                     }
-                },
+                }
                 Matcher::Sequence(mut b) => {
                     if b.is_empty() {
                         // An empty sequence is the empty element
@@ -270,31 +275,34 @@ impl MatcherVisitor for Normalizer {
                         for e in b {
                             match e {
                                 Matcher::Sequence(ee) => new_v.extend(ee),
-                                other => new_v.push(other)
+                                other => new_v.push(other),
                             }
                         }
                         Matcher::Sequence(new_v)
                     } else {
                         Matcher::Sequence(b)
                     }
-                },
-                other => other
+                }
+                other => other,
             };
-        if !changed { break };
+            if !changed {
+                break;
+            };
         }
     }
 }
 
-
 /// Walks a `Matcher`-tree and collects all NonTerminals as their Name/Fragment-combinations
 #[derive(Clone, Debug)]
 pub struct NonTerminalCollector {
-    pub bag: HashMap<parser::Fragment, HashSet<String>>
+    pub bag: HashMap<parser::Fragment, HashSet<String>>,
 }
 
 impl Default for NonTerminalCollector {
     fn default() -> Self {
-        NonTerminalCollector { bag: HashMap::new() }
+        NonTerminalCollector {
+            bag: HashMap::new(),
+        }
     }
 }
 
@@ -302,11 +310,12 @@ impl MatcherVisitor for NonTerminalCollector {
     fn visit(&mut self, m: &mut Matcher) {
         match m {
             Matcher::NonTerminal { name, fragment } => {
-                self.bag.entry(fragment.clone())
+                self.bag
+                    .entry(fragment.clone())
                     .or_insert_with(Default::default)
                     .insert(name.clone());
-            },
-            other => { self.visit_children(other) }
+            }
+            other => self.visit_children(other),
         }
     }
 }
@@ -318,10 +327,10 @@ impl InternalMacroRemover {
     fn first_literal<'a>(&self, m: &'a Matcher) -> Option<&'a str> {
         match m {
             Matcher::Choice(_)
-                | Matcher::Comment(_)
-                | Matcher::Empty
-                | Matcher::NonTerminal { .. }
-                | Matcher::Optional(_) => None,
+            | Matcher::Comment(_)
+            | Matcher::Empty
+            | Matcher::NonTerminal { .. }
+            | Matcher::Optional(_) => None,
             Matcher::Group(m) => self.first_literal(m),
             Matcher::Literal(s) => Some(s),
             Matcher::Repeat { content, .. } => content.first().and_then(|m| self.first_literal(m)),
@@ -332,14 +341,20 @@ impl InternalMacroRemover {
     fn is_internal(&self, literal: &str) -> bool {
         // Maybe more ?! Maybe none at all? This is effectivly a #[doc(hidden)] by convention,
         // which may be bad...
-        ["__", "@"][..].iter().any(|dunder| literal.starts_with(dunder))
+        ["__", "@"][..]
+            .iter()
+            .any(|dunder| literal.starts_with(dunder))
     }
 }
 
 impl MatcherVisitor for InternalMacroRemover {
     fn visit(&mut self, m: &mut Matcher) {
         if let Matcher::Choice(rules) = m {
-            if rules.iter().filter_map(|e| self.first_literal(e)).any(|l| self.is_internal(l)) {
+            if rules
+                .iter()
+                .filter_map(|e| self.first_literal(e))
+                .any(|l| self.is_internal(l))
+            {
                 rules.retain(|e| self.first_literal(e).map_or(true, |l| !self.is_internal(l)));
                 rules.push(Matcher::Comment("Macro-internal rules omitted".to_owned()));
             }
@@ -370,40 +385,59 @@ impl FoldCommonTails {
     // 6. Remove those rules from the original `Choice`, which are now represented by the above.
     // 7. Select the next best candidate and repeat until there are no more common tails.
     /// Determine the longest common prefix/suffix and the rules which share these.
-    fn mostcommongroups<'a>(tails: HashMap<&Matcher, Vec<&'a Vec<Matcher>>>) -> Option<(Vec<&'a Vec<Matcher>>, &'a [Matcher], &'a [Matcher])>{
-        let max_size = tails.values()
-            .map(|g| g.len())
-            .max()
-            .unwrap_or_default();
+    fn mostcommongroups<'a>(
+        tails: HashMap<&Matcher, Vec<&'a Vec<Matcher>>>,
+    ) -> Option<(Vec<&'a Vec<Matcher>>, &'a [Matcher], &'a [Matcher])> {
+        let max_size = tails.values().map(|g| g.len()).max().unwrap_or_default();
         if max_size <= 1 {
-            return None
+            return None;
         }
 
-        tails.into_iter().filter_map(|(_k, v)| if v.len() == max_size { Some(v) } else { None }).map(|group| {
-            // Figure out the longest prefix common to all
-            let mut lcp = &group[0][0..group[0].iter().zip(group[1]).take_while(|(a, b)| a == b).count()];
-            for s in group.iter().skip(2) {
-                if lcp.is_empty() {
-                    break;
+        tails
+            .into_iter()
+            .filter_map(|(_k, v)| if v.len() == max_size { Some(v) } else { None })
+            .map(|group| {
+                // Figure out the longest prefix common to all
+                let mut lcp = &group[0][0..group[0]
+                    .iter()
+                    .zip(group[1])
+                    .take_while(|(a, b)| a == b)
+                    .count()];
+                for s in group.iter().skip(2) {
+                    if lcp.is_empty() {
+                        break;
+                    }
+                    lcp = &lcp[0..lcp.iter().zip(s.iter()).take_while(|(a, b)| a == b).count()];
                 }
-                lcp = &lcp[0..lcp.iter().zip(s.iter()).take_while(|(a, b)| a == b).count()];
-            }
-            // Figure out the longest suffix common to all
-            // Take care never to overlap the prefix, which we favor implicitly
-            let mut lcs = &group[0][group[0].len() - group[0].iter().skip(lcp.len()).rev().zip(group[1].iter().skip(lcp.len()).rev()).take_while(|(a, b)| a == b).count()..];
-            for s in group.iter().skip(2) {
-                if lcs.is_empty() {
-                    break;
+                // Figure out the longest suffix common to all
+                // Take care never to overlap the prefix, which we favor implicitly
+                let mut lcs = &group[0][group[0].len()
+                    - group[0]
+                        .iter()
+                        .skip(lcp.len())
+                        .rev()
+                        .zip(group[1].iter().skip(lcp.len()).rev())
+                        .take_while(|(a, b)| a == b)
+                        .count()..];
+                for s in group.iter().skip(2) {
+                    if lcs.is_empty() {
+                        break;
+                    }
+                    lcs = &lcs[lcs.len()
+                        - lcs
+                            .iter()
+                            .rev()
+                            .zip(s.iter().rev())
+                            .take_while(|(a, b)| a == b)
+                            .count()..];
                 }
-                lcs = &lcs[lcs.len() - lcs.iter().rev().zip(s.iter().rev()).take_while(|(a, b)| a == b).count()..];
-            }
-            (group, lcp, lcs)
-        }).max_by_key(|(_group, lcp, lcs)| lcp.len() + lcs.len())
+                (group, lcp, lcs)
+            })
+            .max_by_key(|(_group, lcp, lcs)| lcp.len() + lcs.len())
     }
 
     /// Perform one step in folding a `Matcher::Choice`.
     fn mostcommontails_core(inp: &[Matcher]) -> Option<(Vec<usize>, Matcher)> {
-
         // Determine rules with at lest one common prefix/suffix
         let mut prefixes = HashMap::new();
         let mut suffixes = HashMap::new();
@@ -420,14 +454,23 @@ impl FoldCommonTails {
 
         // If there is a common prefix but no common suffix at all, chose the prefix; vice versa
         // applies. If both are there, chose the one with the longest common tails, favoring the prefix
-        let group = match (Self::mostcommongroups(prefixes), Self::mostcommongroups(suffixes)) {
+        let group = match (
+            Self::mostcommongroups(prefixes),
+            Self::mostcommongroups(suffixes),
+        ) {
             (None, None) => {
                 // Neither the most common prefix or suffix yield any more groups. We are done
                 return None;
-            },
+            }
             (Some(p), None) => p,
             (None, Some(s)) => s,
-            (Some(p), Some(s)) => if p.0.len() >= s.0.len() { p } else { s },
+            (Some(p), Some(s)) => {
+                if p.0.len() >= s.0.len() {
+                    p
+                } else {
+                    s
+                }
+            }
         };
 
         // The merged sequence is made from the common prefix, the uncommon core and the common suffix
@@ -437,10 +480,14 @@ impl FoldCommonTails {
         new_seq.extend_from_slice(group.1);
 
         // The core
-        let mut core = group.0.iter().map(|s| {
-            let c = &s[group.1.len()..s.len() - group.2.len()];
-            Matcher::Sequence(c.to_vec())
-        }).collect::<Vec<_>>();
+        let mut core = group
+            .0
+            .iter()
+            .map(|s| {
+                let c = &s[group.1.len()..s.len() - group.2.len()];
+                Matcher::Sequence(c.to_vec())
+            })
+            .collect::<Vec<_>>();
         // Recursivly fold this
         Self::mostcommontails(&mut core);
         // The exact order currently depends on the auto-derived implementation, this is only here to
@@ -453,16 +500,15 @@ impl FoldCommonTails {
 
         // We need to let go of the borrows into the groups, so lets collect their indexes
         // There is some better way to arrange things than that...
-        let mut indices = group.0.into_iter()
+        let mut indices = group
+            .0
+            .into_iter()
             .filter_map(|s| {
-                inp.iter().position(|n| {
-                    match n {
-                        Matcher::Sequence(t) => {
-                            s == t
-                        },
-                        u => panic!("There should be only Sequences here, got {:?}", u),
-                    }
-                })})
+                inp.iter().position(|n| match n {
+                    Matcher::Sequence(t) => s == t,
+                    u => panic!("There should be only Sequences here, got {:?}", u),
+                })
+            })
             .collect::<Vec<usize>>();
 
         // guarantees that .swap_remove() can remove by index without re-arrangement
@@ -481,7 +527,9 @@ impl FoldCommonTails {
         // With every iteration, the best available candidate gets folded.
         // Repeat until there is nothing we can do at all.
         while let Some((indices, new_seq)) = Self::mostcommontails_core(&inp) {
-            indices.into_iter().for_each(|idx| drop(inp.swap_remove(idx)));
+            indices
+                .into_iter()
+                .for_each(|idx| drop(inp.swap_remove(idx)));
             inp.push(new_seq);
         }
     }
@@ -501,24 +549,61 @@ mod tests {
 
     use super::*;
 
-    macro_rules! rmr { ($r:expr) => { MacroRules { name: "Test".to_owned(), rules: $r } } }
-    macro_rules! mr { ($r:expr) => { rmr!(Matcher::Choice($r)) } }
-    macro_rules! opt { ($o:expr) => { Matcher::Optional(Box::new($o)) } }
-    macro_rules! lit { ($t:expr) => { Matcher::Literal($t.to_owned()) } }
-    macro_rules! epty { () => { Matcher::Empty } }
-    macro_rules! grp { ($r:expr) => { Matcher::Group(Box::new($r)) } }
+    macro_rules! rmr {
+        ($r:expr) => {
+            MacroRules {
+                name: "Test".to_owned(),
+                rules: $r,
+            }
+        };
+    }
+    macro_rules! mr {
+        ($r:expr) => {
+            rmr!(Matcher::Choice($r))
+        };
+    }
+    macro_rules! opt {
+        ($o:expr) => {
+            Matcher::Optional(Box::new($o))
+        };
+    }
+    macro_rules! lit {
+        ($t:expr) => {
+            Matcher::Literal($t.to_owned())
+        };
+    }
+    macro_rules! epty {
+        () => {
+            Matcher::Empty
+        };
+    }
+    macro_rules! grp {
+        ($r:expr) => {
+            Matcher::Group(Box::new($r))
+        };
+    }
     macro_rules! seq { ($($r:expr),*) => { Matcher::Sequence(vec![$($r,)+]) } }
     macro_rules! lseq { ($($r:expr),*) => { seq!($(lit!($r)),+) } }
     macro_rules! cho { ($($r:expr),*) => { Matcher::Choice(vec![$($r,)+]) } }
-    macro_rules! cmt { ($t:expr) => { Matcher::Comment($t.to_owned()) } }
+    macro_rules! cmt {
+        ($t:expr) => {
+            Matcher::Comment($t.to_owned())
+        };
+    }
     macro_rules! rpt { ($($c:expr),*) => { Matcher::Repeat { content: vec![$($c,)+],
                                                              seperator: None,
                                                              repetition: parser::Repetition::AtLeastOnce } } }
     macro_rules! nonterm {
-        ($t:expr, $v:expr) => { Matcher::NonTerminal { name: $t.to_owned(), fragment: $v } };
-        ($t:expr) => { nonterm!($t, parser::Fragment::Ident) }
+        ($t:expr, $v:expr) => {
+            Matcher::NonTerminal {
+                name: $t.to_owned(),
+                fragment: $v,
+            }
+        };
+        ($t:expr) => {
+            nonterm!($t, parser::Fragment::Ident)
+        };
     }
-
 
     macro_rules! test_fold {
         ($name:ident, $inp:expr, $exp:expr) => {
@@ -528,13 +613,14 @@ mod tests {
                 mr.foldcommontails();
                 assert_eq!(mr.rules, $exp);
             }
-        }
+        };
     }
 
-    test_fold!(fold_simple,
-               vec![ lseq!("A", "X", "C"), lseq!("A", "Y", "C"), ],
-               cho!( seq!(lit!("A"), cho!(lit!("X"), lit!("Y")), lit!("C")) )
-               );
+    test_fold!(
+        fold_simple,
+        vec![lseq!("A", "X", "C"), lseq!("A", "Y", "C"),],
+        cho!(seq!(lit!("A"), cho!(lit!("X"), lit!("Y")), lit!("C")))
+    );
 
     #[test]
     fn normalize_simple() {
@@ -545,7 +631,10 @@ mod tests {
 
     #[test]
     fn ungroup_simple() {
-        let mut mr = mr!(vec!(lit!("A"), seq!(lit!("A"), grp!(seq!(lit!("B"), lseq!("C"))), lit!("D"))));
+        let mut mr = mr!(vec!(
+            lit!("A"),
+            seq!(lit!("A"), grp!(seq!(lit!("B"), lseq!("C"))), lit!("D"))
+        ));
         mr.ungroup();
         assert_eq!(mr, mr!(vec!(lit!("A"), lseq!("A", "B", "C", "D"))));
     }
@@ -563,25 +652,38 @@ mod tests {
 
         mr.remove_internal();
 
-        assert_eq!(mr, mr!(vec![lit!("Not internal!"),
-                                seq!(cmt!("also not internal"),
-                                     lit!("__or is it")),
-                                cmt!("Macro-internal rules omitted") ]));
+        assert_eq!(
+            mr,
+            mr!(vec![
+                lit!("Not internal!"),
+                seq!(cmt!("also not internal"), lit!("__or is it")),
+                cmt!("Macro-internal rules omitted")
+            ])
+        );
     }
 
     #[test]
     fn collect_nonterminals() {
         let rules = vec![
-            seq![nonterm!["Foo", parser::Fragment::Ty ]],
+            seq![nonterm!["Foo", parser::Fragment::Ty]],
             opt!(cho!(nonterm!("Bar", parser::Fragment::Ty))),
-            rpt!(nonterm!("Foobar"))
+            rpt!(nonterm!("Foobar")),
         ];
         let mut mr = mr!(rules);
 
         let nonterminals = mr.collect_nonterminals();
         println!("{:#?}", nonterminals);
 
-        assert_eq!(nonterminals[&parser::Fragment::Ty], ["Foo".to_owned(), "Bar".to_owned()].into_iter().cloned().collect());
-        assert_eq!(nonterminals[&parser::Fragment::Ident], ["Foobar".to_owned()].into_iter().cloned().collect());
+        assert_eq!(
+            nonterminals[&parser::Fragment::Ty],
+            ["Foo".to_owned(), "Bar".to_owned()]
+                .into_iter()
+                .cloned()
+                .collect()
+        );
+        assert_eq!(
+            nonterminals[&parser::Fragment::Ident],
+            ["Foobar".to_owned()].into_iter().cloned().collect()
+        );
     }
 }

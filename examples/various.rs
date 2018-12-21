@@ -1,9 +1,9 @@
 extern crate htmlescape;
-extern crate railroad;
 extern crate macro_railroad;
+extern crate railroad;
+use std::fs;
 use std::io;
 use std::io::Write;
-use std::fs;
 
 pub const CSS: &str = r#"
 svg.railroad {
@@ -48,9 +48,13 @@ pre.rust {
 	padding: 10px;
 }"#;
 
-fn to_diagram(src: &str) -> (String,
-                             railroad::Diagram<Box<railroad::RailroadNode>>,
-                             railroad::Diagram<Box<railroad::RailroadNode>>) {
+fn to_diagram(
+    src: &str,
+) -> (
+    String,
+    railroad::Diagram<Box<railroad::RailroadNode>>,
+    railroad::Diagram<Box<railroad::RailroadNode>>,
+) {
     let macro_rules = macro_railroad::parser::parse(&src).expect(src);
     let tree = macro_railroad::lowering::MacroRules::from(macro_rules);
 
@@ -59,14 +63,18 @@ fn to_diagram(src: &str) -> (String,
     //optimized_tree.ungroup();
     optimized_tree.foldcommontails();
     optimized_tree.normalize();
-	let name = tree.name.clone();
+    let name = tree.name.clone();
 
     let dia = macro_railroad::diagram::into_diagram(tree, true);
     let dia_opt = macro_railroad::diagram::into_diagram(optimized_tree, true);
     (name, dia, dia_opt)
 }
 
-pub fn to_example_page(title: &str, examples: &[&str], outp_filename: &str) -> Result<(), io::Error> {
+pub fn to_example_page(
+    title: &str,
+    examples: &[&str],
+    outp_filename: &str,
+) -> Result<(), io::Error> {
     println!("Generating `{}`, written to `{}`.", title, outp_filename);
     let mut outp = fs::File::create(outp_filename)?;
 
@@ -76,7 +84,7 @@ pub fn to_example_page(title: &str, examples: &[&str], outp_filename: &str) -> R
     outp.write_all(macro_railroad::diagram::CSS.as_bytes())?;
     outp.write_all(CSS.as_bytes())?;
     outp.write_all(b"</style>")?;
-	outp.write_all(b"</head><body>")?;
+    outp.write_all(b"</head><body>")?;
 
     write!(outp, "<h1>{}</h1>", htmlescape::encode_minimal(title))?;
     outp.write_all(b"<div>")?;
@@ -85,25 +93,50 @@ pub fn to_example_page(title: &str, examples: &[&str], outp_filename: &str) -> R
     for src in examples {
         let (name, dia, dia_opt) = to_diagram(&src);
         println!(" * `{}`", name);
-        write!(outp, "<div class=\"example\" id=\"{}\">", htmlescape::encode_attribute(&name))?;
-        write!(outp, "<a href=\"#{}\">", htmlescape::encode_attribute(&name))?;
-        write!(outp, "<h3>Macro <i>`{}`</i></h3></a>", htmlescape::encode_minimal(&name))?;
+        write!(
+            outp,
+            "<div class=\"example\" id=\"{}\">",
+            htmlescape::encode_attribute(&name)
+        )?;
+        write!(
+            outp,
+            "<a href=\"#{}\">",
+            htmlescape::encode_attribute(&name)
+        )?;
+        write!(
+            outp,
+            "<h3>Macro <i>`{}`</i></h3></a>",
+            htmlescape::encode_minimal(&name)
+        )?;
         names.push(name);
-        write!(outp, "<pre class=\"rust\">{}</pre><br>", htmlescape::encode_minimal(src))?;
+        write!(
+            outp,
+            "<pre class=\"rust\">{}</pre><br>",
+            htmlescape::encode_minimal(src)
+        )?;
         let dia_svg = dia.to_string();
         let dia_opt_svg = dia_opt.to_string();
         if dia_svg != dia_opt_svg {
             write!(outp, "<input class=\"opt_ckbox\" type=\"checkbox\" checked><label>Optimized layout</label>")?;
-            write!(outp, "<div style=\"width: {}; height:auto\" class=\"dia unoptimized\">{}</div>",
-                   (&dia as &railroad::RailroadNode).width(),
-                   dia_svg)?;
-            write!(outp, "<div style=\"width: {}; height: auto\" class=\"dia optimized\">{}</div>",
-                   (&dia_opt as &railroad::RailroadNode).width(),
-                   dia_opt_svg)?;
+            write!(
+                outp,
+                "<div style=\"width: {}; height:auto\" class=\"dia unoptimized\">{}</div>",
+                (&dia as &railroad::RailroadNode).width(),
+                dia_svg
+            )?;
+            write!(
+                outp,
+                "<div style=\"width: {}; height: auto\" class=\"dia optimized\">{}</div>",
+                (&dia_opt as &railroad::RailroadNode).width(),
+                dia_opt_svg
+            )?;
         } else {
-            write!(outp, "<div style=\"width: {}; height: auto\" class=\"dia\">{}</div>",
-                   (&dia_opt as &railroad::RailroadNode).width(),
-                   dia_opt_svg)?;
+            write!(
+                outp,
+                "<div style=\"width: {}; height: auto\" class=\"dia\">{}</div>",
+                (&dia_opt as &railroad::RailroadNode).width(),
+                dia_opt_svg
+            )?;
         }
         outp.write_all(b"</div>")?;
     }
@@ -113,31 +146,35 @@ pub fn to_example_page(title: &str, examples: &[&str], outp_filename: &str) -> R
 }
 
 fn main() -> Result<(), io::Error> {
-    let stdlib_examples = &[r#"macro_rules! vec {
+    let stdlib_examples = &[
+        r#"macro_rules! vec {
     ( $ elem : expr ; $ n : expr ) => { ... };
     ( $ ( $ x : expr ) , * ) => { ... };
     ( $ ( $ x : expr , ) * ) => { ... };
 }"#,
-r#"macro_rules! println {
+        r#"macro_rules! println {
     () => { ... };
     ($fmt:expr) => { ... };
     ($fmt:expr, $($arg:tt)*) => { ... };
 }"#,
-r#"macro_rules! assert_eq {
+        r#"macro_rules! assert_eq {
     ( $ left : expr , $ right : expr ) => { ... };
     ( $ left : expr , $ right : expr , ) => { ... };
     (
 $ left : expr , $ right : expr , $ ( $ arg : tt ) + ) => { ... };
 }"#,
-r#"macro_rules! panic {
+        r#"macro_rules! panic {
     () => { ... };
     ($msg:expr) => { ... };
     ($msg:expr,) => { ... };
     ($fmt:expr, $($arg:tt)+) => { ... };
 }"#,
-][..];
-    to_example_page("Examples from the standard library", stdlib_examples, "examples/stdlib_examples.html")?;
-
+    ][..];
+    to_example_page(
+        "Examples from the standard library",
+        stdlib_examples,
+        "examples/stdlib_examples.html",
+    )?;
 
     let nom_examples = &[
 r#"macro_rules! add_return_error {
@@ -712,9 +749,14 @@ r#"macro_rules! ws {
     ($i:expr, $($args:tt)*) => { ... };
 }"#
 ][..];
-    to_example_page("Examples from nom-4.1.1", nom_examples, "examples/nom_examples.html")?;
+    to_example_page(
+        "Examples from nom-4.1.1",
+        nom_examples,
+        "examples/nom_examples.html",
+    )?;
 
-    let syn_examples = &[r#"macro_rules! Token {
+    let syn_examples = &[
+        r#"macro_rules! Token {
     (+) => { ... };
     (+=) => { ... };
     (&) => { ... };
@@ -803,7 +845,7 @@ r#"macro_rules! ws {
     (while) => { ... };
     (yield) => { ... };
 }"#,
-r#"macro_rules! alt {
+        r#"macro_rules! alt {
     ($i:expr, $e:ident | $($rest:tt)*) => { ... };
     ($i:expr, $subrule:ident!( $($args:tt)*) | $($rest:tt)*) => { ... };
     ($i:expr, $subrule:ident!( $($args:tt)* ) => { $gen:expr } | $($rest:tt)+) => { ... };
@@ -813,30 +855,30 @@ r#"macro_rules! alt {
     ($i:expr, $e:ident) => { ... };
     ($i:expr, $subrule:ident!( $($args:tt)*)) => { ... };
 }"#,
-r#"macro_rules! braces {
+        r#"macro_rules! braces {
     ($i:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $f:expr) => { ... };
 }"#,
-r#"macro_rules! brackets {
+        r#"macro_rules! brackets {
     ($i:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $f:expr) => { ... };
 }"#,
-r#"macro_rules! call {
+        r#"macro_rules! call {
     ($i:expr, $fun:expr $(, $args:expr)*) => { ... };
 }"#,
-r#"macro_rules! cond {
+        r#"macro_rules! cond {
     ($i:expr, $cond:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $cond:expr, $f:expr) => { ... };
 }"#,
-r#"macro_rules! cond_reduce {
+        r#"macro_rules! cond_reduce {
     ($i:expr, $cond:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $cond:expr) => { ... };
     ($i:expr, $cond:expr, $f:expr) => { ... };
 }"#,
-r#"macro_rules! custom_keyword {
+        r#"macro_rules! custom_keyword {
     ($i:expr, $keyword:ident) => { ... };
 }"#,
-r#"macro_rules! do_parse {
+        r#"macro_rules! do_parse {
     ($i:expr, ( $($rest:expr),* )) => { ... };
     ($i:expr, $e:ident >> $($rest:tt)*) => { ... };
     ($i:expr, $submac:ident!( $($args:tt)* ) >> $($rest:tt)*) => { ... };
@@ -845,13 +887,13 @@ r#"macro_rules! do_parse {
     ($i:expr, mut $field:ident : $e:ident >> $($rest:tt)*) => { ... };
     ($i:expr, mut $field:ident : $submac:ident!( $($args:tt)* ) >> $($rest:tt)*) => { ... };
 }"#,
-r#"macro_rules! epsilon {
+        r#"macro_rules! epsilon {
     ($i:expr,) => { ... };
 }"#,
-r#"macro_rules! input_end {
+        r#"macro_rules! input_end {
     ($i:expr,) => { ... };
 }"#,
-r#"macro_rules! keyword {
+        r#"macro_rules! keyword {
     ($i:expr, as) => { ... };
     ($i:expr, auto) => { ... };
     ($i:expr, box) => { ... };
@@ -895,35 +937,35 @@ r#"macro_rules! keyword {
     ($i:expr, while) => { ... };
     ($i:expr, yield) => { ... };
 }"#,
-r#"macro_rules! many0 {
+        r#"macro_rules! many0 {
     ($i:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $f:expr) => { ... };
 }"#,
-r#"macro_rules! map {
+        r#"macro_rules! map {
     ($i:expr, $submac:ident!( $($args:tt)* ), $g:expr) => { ... };
     ($i:expr, $f:expr, $g:expr) => { ... };
 }"#,
-r#"macro_rules! named {
+        r#"macro_rules! named {
     ($name:ident -> $o:ty, $submac:ident!( $($args:tt)* )) => { ... };
     (pub $name:ident -> $o:ty, $submac:ident!( $($args:tt)* )) => { ... };
     ($name:ident($($params:tt)*) -> $o:ty, $submac:ident!( $($args:tt)* )) => { ... };
     (pub $name:ident($($params:tt)*) -> $o:ty, $submac:ident!( $($args:tt)* )) => { ... };
 }"#,
-r#"macro_rules! not {
+        r#"macro_rules! not {
     ($i:expr, $submac:ident!( $($args:tt)* )) => { ... };
 }"#,
-r#"macro_rules! option {
-    ($i:expr, $submac:ident!( $($args:tt)* )) => { ... };
-    ($i:expr, $f:expr) => { ... };
-}"#,
-r#"macro_rules! parens {
+        r#"macro_rules! option {
     ($i:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $f:expr) => { ... };
 }"#,
-r#"macro_rules! parse_quote {
+        r#"macro_rules! parens {
+    ($i:expr, $submac:ident!( $($args:tt)* )) => { ... };
+    ($i:expr, $f:expr) => { ... };
+}"#,
+        r#"macro_rules! parse_quote {
     ($($tt:tt)*) => { ... };
 }"#,
-r#"macro_rules! punct {
+        r#"macro_rules! punct {
     ($i:expr, +) => { ... };
     ($i:expr, +=) => { ... };
     ($i:expr, &) => { ... };
@@ -970,20 +1012,24 @@ r#"macro_rules! punct {
     ($i:expr, -=) => { ... };
     ($i:expr, _) => { ... };
 }"#,
-r#"macro_rules! reject {
+        r#"macro_rules! reject {
     ($i:expr,) => { ... };
 }"#,
-r#"macro_rules! syn {
+        r#"macro_rules! syn {
     ($i:expr, $t:ty) => { ... };
 }"#,
-r#"macro_rules! tuple {
+        r#"macro_rules! tuple {
     ($i:expr, $($rest:tt)+) => { ... };
 }"#,
-r#"macro_rules! value {
+        r#"macro_rules! value {
     ($i:expr, $res:expr) => { ... };
-}"#
-][..];
-    to_example_page("Examples from syn-0.14", syn_examples, "examples/syn_examples.html")?;
+}"#,
+    ][..];
+    to_example_page(
+        "Examples from syn-0.14",
+        syn_examples,
+        "examples/syn_examples.html",
+    )?;
 
     let various_examples = &[r#"macro_rules! bitflags {
     (
@@ -1502,9 +1548,12 @@ r#"macro_rules! quick_error {
     (IDENT $ident:ident) => { ... };
 }"#,
 ][..];
-    to_example_page("Examples from various crates, from the coy to the insane", various_examples, "examples/various_examples.html")?;
+    to_example_page(
+        "Examples from various crates, from the coy to the insane",
+        various_examples,
+        "examples/various_examples.html",
+    )?;
     println!("Done");
 
     Ok(())
-
 }

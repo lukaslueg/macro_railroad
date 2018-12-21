@@ -1,8 +1,8 @@
 //! Transform a `lowering::MacroRules`-tree into a `railroad::Diagram`
 
-use std::collections;
 use crate::lowering;
 use crate::parser;
+use std::collections;
 
 /// The default CSS used for macro-diagrams
 pub const CSS: &str = r#"
@@ -84,12 +84,16 @@ pub const CSS: &str = r#"
 struct Container<T: railroad::RailroadNode> {
     inner: T,
     padding: i64,
-    attributes: collections::HashMap<String, String>
+    attributes: collections::HashMap<String, String>,
 }
 
 impl<T: railroad::RailroadNode> Container<T> {
     fn new(inner: T, padding: i64) -> Self {
-        Container { inner, padding, attributes: collections::HashMap::new() }
+        Container {
+            inner,
+            padding,
+            attributes: collections::HashMap::new(),
+        }
     }
 
     pub fn attr(&mut self, key: String) -> collections::hash_map::Entry<String, String> {
@@ -98,16 +102,24 @@ impl<T: railroad::RailroadNode> Container<T> {
 }
 
 impl<T: railroad::RailroadNode> railroad::RailroadNode for Container<T> {
-    fn entry_height(&self) -> i64 { self.inner.entry_height() + self.padding }
-    fn height(&self) -> i64 { self.inner.height() + self.padding*2 }
-    fn width(&self) -> i64 { self.inner.width() + self.padding*2 }
+    fn entry_height(&self) -> i64 {
+        self.inner.entry_height() + self.padding
+    }
+    fn height(&self) -> i64 {
+        self.inner.height() + self.padding * 2
+    }
+    fn width(&self) -> i64 {
+        self.inner.width() + self.padding * 2
+    }
     fn draw(&self, x: i64, y: i64, hdir: railroad::svg::HDir) -> railroad::svg::Element {
         railroad::svg::Element::new("g")
-            .add(railroad::svg::Element::new("rect")
-                 .set("x", x)
-                 .set("y", y)
-                 .set("height", self.height())
-                 .set("width", self.width()))
+            .add(
+                railroad::svg::Element::new("rect")
+                    .set("x", x)
+                    .set("y", y)
+                    .set("height", self.height())
+                    .set("width", self.width()),
+            )
             .add(self.inner.draw(x + self.padding, y + self.padding, hdir))
             .set_all(self.attributes.iter())
             .debug("Container", x, y, self)
@@ -126,7 +138,9 @@ fn create_legend(tree: &mut lowering::MacroRules) -> Option<impl railroad::Railr
     bag.sort_unstable_by(|(frag1, _), (frag2, _)| frag1.cmp(frag2));
 
     let mut lines = railroad::VerticalGrid::new(vec![]);
-    lines.push(Box::new(railroad::Comment::new("Non-terminal patterns used by this macro:".to_owned())));
+    lines.push(Box::new(railroad::Comment::new(
+        "Non-terminal patterns used by this macro:".to_owned(),
+    )));
 
     for (fragment, names) in bag {
         let mut items = railroad::HorizontalGrid::new(vec![]);
@@ -161,31 +175,33 @@ fn create_legend(tree: &mut lowering::MacroRules) -> Option<impl railroad::Railr
         let mut names = names.into_iter().collect::<Vec<_>>();
         names.sort_unstable();
         for name in names {
-            let m = lowering::Matcher::NonTerminal { name, fragment: fragment.clone() };
+            let m = lowering::Matcher::NonTerminal {
+                name,
+                fragment: fragment.clone(),
+            };
             items.push(into_primitive(m));
         }
         items.push(Box::new(railroad::Comment::new(explanation.to_owned())));
         lines.push(Box::new(items));
     }
     let mut legend = Container::new(lines, 6);
-    legend.attr("class".to_owned())
+    legend
+        .attr("class".to_owned())
         .or_insert_with(Default::default)
         .push_str(" legend");
     Some(legend)
 }
 
-pub fn into_diagram(mut mr: lowering::MacroRules, legend: bool) -> railroad::Diagram<Box<railroad::RailroadNode>> {
-
-    let legend = if legend {
-        create_legend(&mut mr)
-    } else {
-        None
-    };
+pub fn into_diagram(
+    mut mr: lowering::MacroRules,
+    legend: bool,
+) -> railroad::Diagram<Box<railroad::RailroadNode>> {
+    let legend = if legend { create_legend(&mut mr) } else { None };
 
     let seq = railroad::Sequence::new(vec![
         Box::new(railroad::SimpleStart),
         Box::new(into_primitive(mr.rules)),
-        Box::new(railroad::SimpleEnd)
+        Box::new(railroad::SimpleEnd),
     ]);
 
     match legend {
@@ -201,9 +217,11 @@ pub fn into_diagram(mut mr: lowering::MacroRules, legend: bool) -> railroad::Dia
 ///
 /// Should be called with the main diagram-element.
 pub fn add_default_css<T: railroad::RailroadNode>(dia: &mut railroad::Diagram<T>) {
-    dia.add_element(railroad::svg::Element::new("style")
-                        .set("type", "text/css")
-                        .raw_text(CSS));
+    dia.add_element(
+        railroad::svg::Element::new("style")
+            .set("type", "text/css")
+            .raw_text(CSS),
+    );
 }
 
 fn fragment_to_class(f: &parser::Fragment) -> &'static str {
@@ -220,42 +238,51 @@ fn fragment_to_class(f: &parser::Fragment) -> &'static str {
         parser::Fragment::Tt => " fragment_tt",
         parser::Fragment::Vis => " fragment_vis",
         parser::Fragment::Literal => " fragment_literal",
-        parser::Fragment::Lifetime => " fragment_lifetime"
+        parser::Fragment::Lifetime => " fragment_lifetime",
     }
 }
 
 /// Convert a Matcher into a diagram-element.
 fn into_primitive(m: lowering::Matcher) -> Box<railroad::RailroadNode> {
     match m {
-        lowering::Matcher::Group(m) => Box::new(railroad::LabeledBox::without_label(into_primitive(*m))),
+        lowering::Matcher::Group(m) => {
+            Box::new(railroad::LabeledBox::without_label(into_primitive(*m)))
+        }
         lowering::Matcher::Empty => Box::new(railroad::Empty),
         lowering::Matcher::Comment(s) => Box::new(railroad::Comment::new(s)),
         lowering::Matcher::Optional(o) => Box::new(railroad::Optional::new(into_primitive(*o))),
-        lowering::Matcher::Choice(s) => Box::new(railroad::Choice::new(s.into_iter().map(into_primitive).collect())),
-        lowering::Matcher::Sequence(s) => Box::new(railroad::Sequence::new(s.into_iter().map(into_primitive).collect())),
+        lowering::Matcher::Choice(s) => Box::new(railroad::Choice::new(
+            s.into_iter().map(into_primitive).collect(),
+        )),
+        lowering::Matcher::Sequence(s) => Box::new(railroad::Sequence::new(
+            s.into_iter().map(into_primitive).collect(),
+        )),
         lowering::Matcher::Literal(s) => Box::new(railroad::Terminal::new(s)),
-        lowering::Matcher::Repeat { content, seperator, repetition } => {
+        lowering::Matcher::Repeat {
+            content,
+            seperator,
+            repetition,
+        } => {
             let seperator: Box<railroad::RailroadNode> = match seperator {
                 Some(s) => Box::new(railroad::Terminal::new(s)),
-                None => Box::new(railroad::Empty)
+                None => Box::new(railroad::Empty),
             };
-            let main = Box::new(railroad::Sequence::new(content.into_iter().map(into_primitive).collect()));
+            let main = Box::new(railroad::Sequence::new(
+                content.into_iter().map(into_primitive).collect(),
+            ));
             match repetition {
-                parser::Repetition::AtMostOnce => {
-                    Box::new(railroad::Optional::new(main))
-                },
-                parser::Repetition::AtLeastOnce => {
-                    Box::new(railroad::Repeat::new(main, seperator))
-                },
+                parser::Repetition::AtMostOnce => Box::new(railroad::Optional::new(main)),
+                parser::Repetition::AtLeastOnce => Box::new(railroad::Repeat::new(main, seperator)),
                 parser::Repetition::Repeated => {
                     let r = Box::new(railroad::Repeat::new(main, seperator));
                     Box::new(railroad::Optional::new(r))
                 }
             }
-        },
+        }
         lowering::Matcher::NonTerminal { name, fragment } => {
             let mut nonterm = railroad::NonTerminal::new(name);
-            nonterm.attr("class".to_owned())
+            nonterm
+                .attr("class".to_owned())
                 .or_insert_with(Default::default)
                 .push_str(fragment_to_class(&fragment));
             Box::new(nonterm)

@@ -1,7 +1,7 @@
 extern crate macro_railroad;
 
-use std::io;
 use std::fs;
+use std::io;
 
 fn main() -> Result<(), io::Error> {
     let src = r#"macro_rules! method {

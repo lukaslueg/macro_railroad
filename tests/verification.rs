@@ -6,31 +6,39 @@
 
 #[macro_use]
 extern crate lazy_static;
-extern crate railroad_verification;
 extern crate macro_railroad;
+extern crate railroad_verification;
 
 lazy_static! {
-    static ref VERIFIER: railroad_verification::Verifier = {
-        railroad_verification::Verifier::new().unwrap()
-    };
+    static ref VERIFIER: railroad_verification::Verifier =
+        { railroad_verification::Verifier::new().unwrap() };
 }
 
 fn to_diagram(src: &str) -> (String, Vec<(&'static str, String)>) {
     let macro_rules = macro_railroad::parser::parse(&src).expect(src);
     let mut tree = macro_railroad::lowering::MacroRules::from(macro_rules);
-	let name = tree.name.clone();
+    let name = tree.name.clone();
     let mut v = Vec::new();
 
-    v.push(("vanilla", macro_railroad::diagram::into_diagram(tree.clone(), true).to_string()));
+    v.push((
+        "vanilla",
+        macro_railroad::diagram::into_diagram(tree.clone(), true).to_string(),
+    ));
 
     let mut tree_ungrouped = tree.clone();
     tree_ungrouped.ungroup();
-    v.push(("ungrouped", macro_railroad::diagram::into_diagram(tree_ungrouped, false).to_string()));
+    v.push((
+        "ungrouped",
+        macro_railroad::diagram::into_diagram(tree_ungrouped, false).to_string(),
+    ));
 
     tree.remove_internal();
     tree.foldcommontails();
     tree.normalize();
-    v.push(("optimized", macro_railroad::diagram::into_diagram(tree, true).to_string()));
+    v.push((
+        "optimized",
+        macro_railroad::diagram::into_diagram(tree, true).to_string(),
+    ));
 
     (name, v)
 }
