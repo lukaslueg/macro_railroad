@@ -4,6 +4,7 @@ rust:
   - beta
   - nightly
 script:
+  - cargo fmt --all -- --check
   - cargo test --verbose
   - cargo test --verbose -- --ignored
   - cargo test --verbose --features visual-debug -- --ignored
