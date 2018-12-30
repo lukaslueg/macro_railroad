@@ -74,6 +74,7 @@ pub enum Matcher {
     Choice(Vec<Matcher>),
     Comment(String),
     Empty,
+    InternalMacroHint,
     Group(Box<Matcher>),
     Literal(String),
     Optional(Box<Matcher>),
@@ -176,6 +177,7 @@ pub trait MatcherVisitor {
     fn visit_children(&mut self, m: &mut Matcher) {
         match m {
             Matcher::Empty
+            | Matcher::InternalMacroHint
             | Matcher::Comment(_)
             | Matcher::Literal(_)
             | Matcher::NonTerminal { .. } => {}
@@ -198,7 +200,7 @@ impl MatcherVisitor for Ungrouper {
             // A Group is replaced by the element it contains
             Matcher::Group(b) => *b,
             // If we unpacked a Group in a Sequence, we probably end up with
-            // a nested Sequences. Clean this up now, so folding only sees
+            // nested Sequences. Clean this up now, so folding only sees
             // flat Sequences.
             Matcher::Sequence(v) => {
                 if v.iter().any(|e| e.is_sequence()) {
@@ -327,6 +329,7 @@ impl InternalMacroRemover {
     fn first_literal<'a>(&self, m: &'a Matcher) -> Option<&'a str> {
         match m {
             Matcher::Choice(_)
+            | Matcher::InternalMacroHint
             | Matcher::Comment(_)
             | Matcher::Empty
             | Matcher::NonTerminal { .. }
@@ -356,7 +359,7 @@ impl MatcherVisitor for InternalMacroRemover {
                 .any(|l| self.is_internal(l))
             {
                 rules.retain(|e| self.first_literal(e).map_or(true, |l| !self.is_internal(l)));
-                rules.push(Matcher::Comment("Macro-internal rules omitted".to_owned()));
+                rules.push(Matcher::InternalMacroHint);
             }
         }
         self.visit_children(m);
@@ -640,7 +643,7 @@ mod tests {
     }
 
     #[test]
-    fn remove_interals() {
+    fn remove_internals() {
         let rules = vec![
             lit!("Not internal!"),
             lit!("__impl internal"),
@@ -657,7 +660,7 @@ mod tests {
             mr!(vec![
                 lit!("Not internal!"),
                 seq!(cmt!("also not internal"), lit!("__or is it")),
-                cmt!("Macro-internal rules omitted")
+                Matcher::InternalMacroHint,
             ])
         );
     }

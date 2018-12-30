@@ -249,6 +249,7 @@ fn into_primitive(m: lowering::Matcher) -> Box<railroad::RailroadNode> {
             Box::new(railroad::LabeledBox::without_label(into_primitive(*m)))
         }
         lowering::Matcher::Empty => Box::new(railroad::Empty),
+        lowering::Matcher::InternalMacroHint => Box::new(railroad::Comment::new("Macro-internal rules omitted".to_owned())),
         lowering::Matcher::Comment(s) => Box::new(railroad::Comment::new(s)),
         lowering::Matcher::Optional(o) => Box::new(railroad::Optional::new(into_primitive(*o))),
         lowering::Matcher::Choice(s) => Box::new(railroad::Choice::new(
