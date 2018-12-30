@@ -75,7 +75,7 @@ pub enum Fragment {
     Lifetime,
 }
 
-fn delimited(input: ParseStream) -> Result<(Delimiter, ParseBuffer)> {
+fn delimited(input: ParseStream<'_>) -> Result<(Delimiter, ParseBuffer<'_>)> {
     let content;
     let delimiter = if input.peek(Paren) {
         parenthesized!(content in input);
@@ -93,7 +93,7 @@ fn delimited(input: ParseStream) -> Result<(Delimiter, ParseBuffer)> {
 }
 
 impl Parse for MacroRules {
-    fn parse(input: ParseStream) -> Result<Self> {
+    fn parse(input: ParseStream<'_>) -> Result<Self> {
         // Parse `macro_rules! macro_name`.
         custom_keyword!(macro_rules);
         input.parse::<macro_rules>()?;
@@ -117,7 +117,7 @@ impl Parse for MacroRules {
 }
 
 impl Rule {
-    fn parse_many(input: ParseStream) -> Result<Vec<Self>> {
+    fn parse_many(input: ParseStream<'_>) -> Result<Vec<Self>> {
         let rules = input.parse_terminated::<Rule, Token![;]>(Rule::parse)?;
         if rules.is_empty() {
             Err(input.error("expected at least one macro rule"))
@@ -128,7 +128,7 @@ impl Rule {
 }
 
 impl Parse for Rule {
-    fn parse(input: ParseStream) -> Result<Self> {
+    fn parse(input: ParseStream<'_>) -> Result<Self> {
         // Parse the input pattern.
         let content = delimited(&input)?.1;
         let matcher = Matcher::parse_many(&content)?;
@@ -144,7 +144,7 @@ impl Parse for Rule {
 }
 
 impl Matcher {
-    fn parse_many(input: ParseStream) -> Result<Vec<Self>> {
+    fn parse_many(input: ParseStream<'_>) -> Result<Vec<Self>> {
         let mut matchers = Vec::new();
         while !input.is_empty() {
             matchers.push(input.parse()?);
@@ -154,7 +154,7 @@ impl Matcher {
 }
 
 impl Parse for Matcher {
-    fn parse(input: ParseStream) -> Result<Self> {
+    fn parse(input: ParseStream<'_>) -> Result<Self> {
         if input.peek(Paren) || input.peek(Bracket) || input.peek(Brace) {
             let (delimiter, content) = delimited(&input)?;
             let content = Matcher::parse_many(&content)?;
@@ -196,7 +196,7 @@ impl Parse for Matcher {
 }
 
 impl Separator {
-    fn parse_optional(input: ParseStream) -> Result<Option<Self>> {
+    fn parse_optional(input: ParseStream<'_>) -> Result<Option<Self>> {
         if input.peek(Token![*]) || input.peek(Token![+]) || input.peek(Token![?]) {
             Ok(None)
         } else {
@@ -206,7 +206,7 @@ impl Separator {
 }
 
 impl Parse for Separator {
-    fn parse(input: ParseStream) -> Result<Self> {
+    fn parse(input: ParseStream<'_>) -> Result<Self> {
         Ok(match input.parse()? {
             TokenTree::Ident(ident) => Separator::Ident(ident),
             // FIXME: multi-character punctuation
@@ -220,7 +220,7 @@ impl Parse for Separator {
 }
 
 impl Parse for Repetition {
-    fn parse(input: ParseStream) -> Result<Self> {
+    fn parse(input: ParseStream<'_>) -> Result<Self> {
         if input.parse::<Option<Token![*]>>()?.is_some() {
             Ok(Repetition::Repeated)
         } else if input.parse::<Option<Token![+]>>()?.is_some() {
@@ -234,7 +234,7 @@ impl Parse for Repetition {
 }
 
 impl Parse for Fragment {
-    fn parse(input: ParseStream) -> Result<Self> {
+    fn parse(input: ParseStream<'_>) -> Result<Self> {
         let ident: Ident = input.parse()?;
         match ident.to_string().as_str() {
             "ident" => Ok(Fragment::Ident),

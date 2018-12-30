@@ -6,8 +6,8 @@
 
 #[macro_use]
 extern crate lazy_static;
-extern crate macro_railroad;
-extern crate railroad_verification;
+use macro_railroad;
+use railroad_verification;
 
 lazy_static! {
     static ref VERIFIER: railroad_verification::Verifier =

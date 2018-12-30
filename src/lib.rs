@@ -68,8 +68,6 @@
 //! ```
 #[macro_use]
 extern crate syn;
-extern crate proc_macro2;
-extern crate railroad;
 
 pub mod diagram;
 pub mod lowering;

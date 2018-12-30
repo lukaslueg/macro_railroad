@@ -2,7 +2,7 @@
 name = "macro_railroad"
 version = "0.1.0"
 authors = ["Lukas Lueg <lukas.lueg@gmail.com>"]
-edition="2018"
+edition = "2018"
 
 [dependencies]
 syn = { version = "0.15", features = ["full", "extra-traits"] }

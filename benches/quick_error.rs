@@ -4,8 +4,7 @@
 #[macro_use]
 extern crate quote;
 
-extern crate macro_railroad;
-extern crate syn;
+use syn;
 extern crate test;
 
 use macro_railroad::parser::MacroRules;

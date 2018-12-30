@@ -1,6 +1,6 @@
-extern crate htmlescape;
-extern crate macro_railroad;
-extern crate railroad;
+use htmlescape;
+use macro_railroad;
+use railroad;
 use std::fs;
 use std::io;
 use std::io::Write;
@@ -52,8 +52,8 @@ fn to_diagram(
     src: &str,
 ) -> (
     String,
-    railroad::Diagram<Box<railroad::RailroadNode>>,
-    railroad::Diagram<Box<railroad::RailroadNode>>,
+    railroad::Diagram<Box<dyn railroad::RailroadNode>>,
+    railroad::Diagram<Box<dyn railroad::RailroadNode>>,
 ) {
     let macro_rules = macro_railroad::parser::parse(&src).expect(src);
     let tree = macro_railroad::lowering::MacroRules::from(macro_rules);
@@ -121,20 +121,20 @@ pub fn to_example_page(
             write!(
                 outp,
                 "<div style=\"width: {}; height:auto\" class=\"dia unoptimized\">{}</div>",
-                (&dia as &railroad::RailroadNode).width(),
+                (&dia as &dyn railroad::RailroadNode).width(),
                 dia_svg
             )?;
             write!(
                 outp,
                 "<div style=\"width: {}; height: auto\" class=\"dia optimized\">{}</div>",
-                (&dia_opt as &railroad::RailroadNode).width(),
+                (&dia_opt as &dyn railroad::RailroadNode).width(),
                 dia_opt_svg
             )?;
         } else {
             write!(
                 outp,
                 "<div style=\"width: {}; height: auto\" class=\"dia\">{}</div>",
-                (&dia_opt as &railroad::RailroadNode).width(),
+                (&dia_opt as &dyn railroad::RailroadNode).width(),
                 dia_opt_svg
             )?;
         }

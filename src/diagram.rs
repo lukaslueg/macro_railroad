@@ -96,7 +96,7 @@ impl<T: railroad::RailroadNode> Container<T> {
         }
     }
 
-    pub fn attr(&mut self, key: String) -> collections::hash_map::Entry<String, String> {
+    pub fn attr(&mut self, key: String) -> collections::hash_map::Entry<'_, String, String> {
         self.attributes.entry(key)
     }
 }
@@ -195,7 +195,7 @@ fn create_legend(tree: &mut lowering::MacroRules) -> Option<impl railroad::Railr
 pub fn into_diagram(
     mut mr: lowering::MacroRules,
     legend: bool,
-) -> railroad::Diagram<Box<railroad::RailroadNode>> {
+) -> railroad::Diagram<Box<dyn railroad::RailroadNode>> {
     let legend = if legend { create_legend(&mut mr) } else { None };
 
     let seq = railroad::Sequence::new(vec![
@@ -243,13 +243,15 @@ fn fragment_to_class(f: &parser::Fragment) -> &'static str {
 }
 
 /// Convert a Matcher into a diagram-element.
-fn into_primitive(m: lowering::Matcher) -> Box<railroad::RailroadNode> {
+fn into_primitive(m: lowering::Matcher) -> Box<dyn railroad::RailroadNode> {
     match m {
         lowering::Matcher::Group(m) => {
             Box::new(railroad::LabeledBox::without_label(into_primitive(*m)))
         }
         lowering::Matcher::Empty => Box::new(railroad::Empty),
-        lowering::Matcher::InternalMacroHint => Box::new(railroad::Comment::new("Macro-internal rules omitted".to_owned())),
+        lowering::Matcher::InternalMacroHint => Box::new(railroad::Comment::new(
+            "Macro-internal rules omitted".to_owned(),
+        )),
         lowering::Matcher::Comment(s) => Box::new(railroad::Comment::new(s)),
         lowering::Matcher::Optional(o) => Box::new(railroad::Optional::new(into_primitive(*o))),
         lowering::Matcher::Choice(s) => Box::new(railroad::Choice::new(
@@ -264,7 +266,7 @@ fn into_primitive(m: lowering::Matcher) -> Box<railroad::RailroadNode> {
             seperator,
             repetition,
         } => {
-            let seperator: Box<railroad::RailroadNode> = match seperator {
+            let seperator: Box<dyn railroad::RailroadNode> = match seperator {
                 Some(s) => Box::new(railroad::Terminal::new(s)),
                 None => Box::new(railroad::Empty),
             };
