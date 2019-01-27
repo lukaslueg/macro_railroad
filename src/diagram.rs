@@ -261,11 +261,7 @@ fn into_primitive(m: lowering::Matcher) -> Box<dyn railroad::RailroadNode> {
             s.into_iter().map(into_primitive).collect(),
         )),
         lowering::Matcher::Literal(s) => Box::new(railroad::Terminal::new(s)),
-        lowering::Matcher::Repeat {
-            content,
-            seperator,
-            repetition,
-        } => {
+        lowering::Matcher::Repeat { content, seperator } => {
             let seperator: Box<dyn railroad::RailroadNode> = match seperator {
                 Some(s) => Box::new(railroad::Terminal::new(s)),
                 None => Box::new(railroad::Empty),
@@ -273,14 +269,7 @@ fn into_primitive(m: lowering::Matcher) -> Box<dyn railroad::RailroadNode> {
             let main = Box::new(railroad::Sequence::new(
                 content.into_iter().map(into_primitive).collect(),
             ));
-            match repetition {
-                parser::Repetition::AtMostOnce => Box::new(railroad::Optional::new(main)),
-                parser::Repetition::AtLeastOnce => Box::new(railroad::Repeat::new(main, seperator)),
-                parser::Repetition::Repeated => {
-                    let r = Box::new(railroad::Repeat::new(main, seperator));
-                    Box::new(railroad::Optional::new(r))
-                }
-            }
+            Box::new(railroad::Repeat::new(main, seperator))
         }
         lowering::Matcher::NonTerminal { name, fragment } => {
             let mut nonterm = railroad::NonTerminal::new(name);

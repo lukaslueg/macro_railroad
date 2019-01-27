@@ -93,3 +93,30 @@ pub fn to_diagram(src: &str) -> Result<String> {
 
     Ok(dia.to_string())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn fold_nested_options() {
+        // Issue 22, folding a ?-repetition might lead to a nested Option
+        // which should be unnested
+        use lowering::*;
+
+        let src = r#"macro_rules! isolate_params {
+    ($self:ident.$fn:ident(&self $(, $ident:ident: $ty:ty)*)) => ($self.$fn($($ident),*));
+    ($self:ident.$fn:ident(&$($lt:tt)? self $(, $ident:ident: $ty:ty)*)) => ($self.$fn($($ident),*));
+}"#;
+        let mut tree = MacroRules::from(parser::parse(&src).unwrap());
+        tree.ungroup();
+        tree.foldcommontails();
+        tree.normalize();
+        let needle = Matcher::Optional(Box::new(Matcher::NonTerminal {
+            name: "lt".to_owned(),
+            fragment: parser::Fragment::Tt,
+        }));
+        assert!(tree.contains(&needle));
+        assert!(!tree.contains(&Matcher::Optional(Box::new(needle))));
+    }
+}

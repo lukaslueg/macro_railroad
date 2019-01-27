@@ -54,6 +54,16 @@ impl MacroRules {
     fn accept(&mut self, visitor: &mut impl InspectVisitor) {
         self.rules.accept(visitor);
     }
+
+    /// Tests if any `Matcher` matches the given predicate.
+    pub fn any<F: FnMut(&Matcher) -> bool>(&self, predicate: F) -> bool {
+        self.rules.any(predicate)
+    }
+
+    /// Tests if the given `Matcher` is found in the graph.
+    pub fn contains(&self, needle: &Matcher) -> bool {
+        self.rules.contains(needle)
+    }
 }
 
 impl From<parser::MacroRules> for MacroRules {
@@ -87,7 +97,6 @@ pub enum Matcher {
     Repeat {
         content: Vec<Matcher>,
         seperator: Option<String>,
-        repetition: parser::Repetition,
     },
     NonTerminal {
         name: String,
@@ -102,6 +111,16 @@ impl Matcher {
 
     pub fn accept(&self, visitor: &mut impl InspectVisitor) {
         visitor.visit(self);
+    }
+
+    pub fn any<F: FnMut(&Self) -> bool>(&self, predicate: F) -> bool {
+        let mut s = SearchVisitor::new(predicate);
+        s.visit(self);
+        s.found
+    }
+
+    pub fn contains(&self, needle: &Matcher) -> bool {
+        self.any(|m| m == needle)
     }
 
     fn delimiter_to_str(delimiter: proc_macro2::Delimiter) -> Option<(&'static str, &'static str)> {
@@ -162,15 +181,26 @@ impl From<parser::Matcher> for Matcher {
                 content,
                 separator,
                 repetition,
-            } => Matcher::Repeat {
-                content: content.into_iter().map(|m| m.into()).collect(),
-                seperator: separator.map(|s| match s {
+            } => {
+                let seperator = separator.map(|s| match s {
                     parser::Separator::Punct(p) => p.to_string(),
                     parser::Separator::Literal(l) => l.to_string(),
                     parser::Separator::Ident(i) => i.to_string(),
-                }),
-                repetition,
-            },
+                });
+                let content = content.into_iter().map(|m| m.into()).collect();
+                match repetition {
+                    parser::Repetition::AtMostOnce => {
+                        // The ? repetition does not take a seperator, should
+                        // be a parse-error!
+                        debug_assert!(seperator.is_none());
+                        Matcher::Optional(Box::new(Matcher::Sequence(content)))
+                    }
+                    parser::Repetition::AtLeastOnce => Matcher::Repeat { content, seperator },
+                    parser::Repetition::Repeated => {
+                        Matcher::Optional(Box::new(Matcher::Repeat { content, seperator }))
+                    }
+                }
+            }
             parser::Matcher::Fragment { name, fragment } => Matcher::NonTerminal {
                 name: name.to_string(),
                 fragment,
@@ -194,6 +224,31 @@ pub trait InspectVisitor {
             | Matcher::Choice(content)
             | Matcher::Repeat { content, .. } => content.iter().for_each(|e| self.visit(e)),
             Matcher::Group(m) | Matcher::Optional(m) => self.visit(m),
+        }
+    }
+}
+
+/// Tests if any `Matcher` matches a given predicate.
+pub struct SearchVisitor<F> {
+    predicate: F,
+    found: bool,
+}
+
+impl<F> SearchVisitor<F> {
+    fn new(predicate: F) -> Self {
+        SearchVisitor {
+            predicate,
+            found: false,
+        }
+    }
+}
+
+impl<F: FnMut(&Matcher) -> bool> InspectVisitor for SearchVisitor<F> {
+    fn visit(&mut self, m: &Matcher) {
+        if (self.predicate)(m) {
+            self.found = true;
+        } else if !self.found {
+            self.visit_children(m);
         }
     }
 }
@@ -260,6 +315,14 @@ impl TransformVisitor for Normalizer {
             changed = false;
             // The Matcher::Empty is just temporary, it never actually materializes
             *m = match ::std::mem::replace(m, Matcher::Empty) {
+                Matcher::Optional(mut b) => {
+                    if let Matcher::Optional(c) = *b {
+                        // A nested Optional can be unnested
+                        changed |= true;
+                        b = c;
+                    }
+                    Matcher::Optional(b)
+                }
                 Matcher::Choice(mut b) => {
                     if b.is_empty() {
                         // An empty Choice is just the empty element
@@ -622,8 +685,7 @@ mod tests {
         };
     }
     macro_rules! rpt { ($($c:expr),*) => { Matcher::Repeat { content: vec![$($c,)+],
-                                                             seperator: None,
-                                                             repetition: parser::Repetition::AtLeastOnce } } }
+                                                             seperator: None } } }
     macro_rules! nonterm {
         ($t:expr, $v:expr) => {
             Matcher::NonTerminal {
@@ -658,6 +720,18 @@ mod tests {
         let mut mr = mr!(vec!(seq!(cho!(lseq!("A", "B"), epty!()), lit!("C"))));
         mr.normalize();
         assert_eq!(mr, rmr!(seq!(opt!(lseq!("A", "B")), lit!("C"))));
+    }
+
+    #[test]
+    fn fold_nested_options() {
+        // Issue 22
+        let mut mr = rmr!(seq!(opt!(opt!(lit!("A"))), lit!("B")));
+        mr.normalize();
+        assert_eq!(mr, rmr!(seq!(opt!(lit!("A")), lit!("B"))));
+
+        let mut mr = rmr!(seq!(opt!(opt!(lit!("A"))), opt!(opt!(opt!(lit!("B"))))));
+        mr.normalize();
+        assert_eq!(mr, rmr!(seq!(opt!(lit!("A")), opt!(lit!("B")))));
     }
 
     #[test]
