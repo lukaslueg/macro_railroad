@@ -181,11 +181,10 @@ pub trait MatcherVisitor {
             | Matcher::Comment(_)
             | Matcher::Literal(_)
             | Matcher::NonTerminal { .. } => {}
-            Matcher::Sequence(v) | Matcher::Choice(v) => v.iter_mut().for_each(|e| self.visit(e)),
+            Matcher::Sequence(content)
+            | Matcher::Choice(content)
+            | Matcher::Repeat { content, .. } => content.iter_mut().for_each(|e| self.visit(e)),
             Matcher::Group(m) | Matcher::Optional(m) => self.visit(m),
-            Matcher::Repeat {
-                ref mut content, ..
-            } => content.iter_mut().for_each(|e| self.visit(e)),
         }
     }
 }
@@ -326,7 +325,7 @@ impl MatcherVisitor for NonTerminalCollector {
 pub struct InternalMacroRemover;
 
 impl InternalMacroRemover {
-    fn first_literal<'a>(&self, m: &'a Matcher) -> Option<&'a str> {
+    fn first_literal(m: &Matcher) -> Option<&str> {
         match m {
             Matcher::Choice(_)
             | Matcher::InternalMacroHint
@@ -334,14 +333,15 @@ impl InternalMacroRemover {
             | Matcher::Empty
             | Matcher::NonTerminal { .. }
             | Matcher::Optional(_) => None,
-            Matcher::Group(m) => self.first_literal(m),
+            Matcher::Group(m) => Self::first_literal(m),
             Matcher::Literal(s) => Some(s),
-            Matcher::Repeat { content, .. } => content.first().and_then(|m| self.first_literal(m)),
-            Matcher::Sequence(v) => v.first().and_then(|m| self.first_literal(m)),
+            Matcher::Repeat { content, .. } | Matcher::Sequence(content) => {
+                content.first().and_then(Self::first_literal)
+            }
         }
     }
 
-    fn is_internal(&self, literal: &str) -> bool {
+    fn is_internal(literal: &str) -> bool {
         // Maybe more ?! Maybe none at all? This is effectivly a #[doc(hidden)] by convention,
         // which may be bad...
         ["__", "@"][..]
@@ -355,10 +355,10 @@ impl MatcherVisitor for InternalMacroRemover {
         if let Matcher::Choice(rules) = m {
             if rules
                 .iter()
-                .filter_map(|e| self.first_literal(e))
-                .any(|l| self.is_internal(l))
+                .filter_map(Self::first_literal)
+                .any(Self::is_internal)
             {
-                rules.retain(|e| self.first_literal(e).map_or(true, |l| !self.is_internal(l)));
+                rules.retain(|e| Self::first_literal(e).map_or(true, |l| !Self::is_internal(l)));
                 rules.push(Matcher::InternalMacroHint);
             }
         }
