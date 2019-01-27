@@ -17,12 +17,12 @@ pub struct MacroRules {
 impl MacroRules {
     /// Recursivly fold common prefixes and suffixes in all rules
     pub fn foldcommontails(&mut self) {
-        self.accept(&mut FoldCommonTails);
+        self.accept_mut(&mut FoldCommonTails);
     }
 
     /// Replace all rules starting with dunder-literals (e.g. "__impl") with a single comment.
     pub fn remove_internal(&mut self) {
-        self.accept(&mut InternalMacroRemover)
+        self.accept_mut(&mut InternalMacroRemover)
     }
 
     /// Collect the unique set of non-terminal symbols.
@@ -34,7 +34,7 @@ impl MacroRules {
 
     /// Unpack all `Matcher::Group` in the tree
     pub fn ungroup(&mut self) {
-        self.accept(&mut Ungrouper);
+        self.accept_mut(&mut Ungrouper);
     }
 
     /// Transmogrify the tree by removing superfluous elements.
@@ -42,11 +42,16 @@ impl MacroRules {
     /// For example, a `Choice([Sequence([Terminal("Foo"), Empty])])` becomes just
     /// `Terminal("Foo")`.
     pub fn normalize(&mut self) {
-        self.accept(&mut Normalizer);
+        self.accept_mut(&mut Normalizer);
     }
 
     /// Walk all rules using the specified visitor.
-    fn accept(&mut self, visitor: &mut impl MatcherVisitor) {
+    fn accept_mut(&mut self, visitor: &mut impl TransformVisitor) {
+        self.rules.accept_mut(visitor);
+    }
+
+    /// Walk all rules using the specified visitor.
+    fn accept(&mut self, visitor: &mut impl InspectVisitor) {
         self.rules.accept(visitor);
     }
 }
@@ -91,7 +96,11 @@ pub enum Matcher {
 }
 
 impl Matcher {
-    pub fn accept(&mut self, visitor: &mut impl MatcherVisitor) {
+    pub fn accept_mut(&mut self, visitor: &mut impl TransformVisitor) {
+        visitor.visit(self);
+    }
+
+    pub fn accept(&self, visitor: &mut impl InspectVisitor) {
         visitor.visit(self);
     }
 
@@ -170,8 +179,27 @@ impl From<parser::Matcher> for Matcher {
     }
 }
 
-/// A simple Visitor to walk `Matcher`.
-pub trait MatcherVisitor {
+/// A  Visitor to walk `Matcher`.
+pub trait InspectVisitor {
+    fn visit(&mut self, m: &Matcher);
+
+    fn visit_children(&mut self, m: &Matcher) {
+        match m {
+            Matcher::Empty
+            | Matcher::InternalMacroHint
+            | Matcher::Comment(_)
+            | Matcher::Literal(_)
+            | Matcher::NonTerminal { .. } => {}
+            Matcher::Sequence(content)
+            | Matcher::Choice(content)
+            | Matcher::Repeat { content, .. } => content.iter().for_each(|e| self.visit(e)),
+            Matcher::Group(m) | Matcher::Optional(m) => self.visit(m),
+        }
+    }
+}
+
+/// A Visitor to walk `Matcher` and mutate it.
+pub trait TransformVisitor {
     fn visit(&mut self, m: &mut Matcher);
 
     fn visit_children(&mut self, m: &mut Matcher) {
@@ -192,7 +220,7 @@ pub trait MatcherVisitor {
 /// Unpacks all Groups in a Matcher
 pub struct Ungrouper;
 
-impl MatcherVisitor for Ungrouper {
+impl TransformVisitor for Ungrouper {
     fn visit(&mut self, m: &mut Matcher) {
         self.visit_children(m);
         *m = match ::std::mem::replace(m, Matcher::Empty) {
@@ -223,7 +251,7 @@ impl MatcherVisitor for Ungrouper {
 /// Simplifies a Matcher-tree
 pub struct Normalizer;
 
-impl MatcherVisitor for Normalizer {
+impl TransformVisitor for Normalizer {
     fn visit(&mut self, m: &mut Matcher) {
         self.visit_children(m);
         let mut changed;
@@ -253,7 +281,7 @@ impl MatcherVisitor for Normalizer {
                                 changed |= true;
                                 b.remove(idx);
                                 let mut new_m = Matcher::Optional(Box::new(Matcher::Choice(b)));
-                                new_m.accept(self);
+                                new_m.accept_mut(self);
                                 new_m
                             }
                             None => Matcher::Choice(b),
@@ -307,8 +335,8 @@ impl Default for NonTerminalCollector {
     }
 }
 
-impl MatcherVisitor for NonTerminalCollector {
-    fn visit(&mut self, m: &mut Matcher) {
+impl InspectVisitor for NonTerminalCollector {
+    fn visit(&mut self, m: &Matcher) {
         match m {
             Matcher::NonTerminal { name, fragment } => {
                 self.bag
@@ -350,7 +378,7 @@ impl InternalMacroRemover {
     }
 }
 
-impl MatcherVisitor for InternalMacroRemover {
+impl TransformVisitor for InternalMacroRemover {
     fn visit(&mut self, m: &mut Matcher) {
         if let Matcher::Choice(rules) = m {
             if rules
@@ -538,7 +566,7 @@ impl FoldCommonTails {
     }
 }
 
-impl MatcherVisitor for FoldCommonTails {
+impl TransformVisitor for FoldCommonTails {
     fn visit(&mut self, m: &mut Matcher) {
         if let Matcher::Choice(rules) = m {
             Self::mostcommontails(rules)
