@@ -51,7 +51,7 @@ impl MacroRules {
     }
 
     /// Walk all rules using the specified visitor.
-    fn accept(&mut self, visitor: &mut impl InspectVisitor) {
+    fn accept(&self, visitor: &mut impl InspectVisitor) {
         self.rules.accept(visitor);
     }
 
