@@ -97,12 +97,12 @@ pub fn to_diagram(src: &str) -> Result<String> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use lowering::*;
 
     #[test]
     fn fold_nested_options() {
         // Issue 22, folding a ?-repetition might lead to a nested Option
         // which should be unnested
-        use lowering::*;
 
         let src = r#"macro_rules! isolate_params {
     ($self:ident.$fn:ident(&self $(, $ident:ident: $ty:ty)*)) => ($self.$fn($($ident),*));
@@ -118,5 +118,21 @@ mod tests {
         }));
         assert!(tree.contains(&needle));
         assert!(!tree.contains(&Matcher::Optional(Box::new(needle))));
+    }
+
+    #[test]
+    fn issue23() {
+        // caused a assertion tripped in the folding pass due to
+        // InternalMacroHint being unexpected
+        let src = r#"macro_rules! Token {
+    (+) => { ... };
+    (+=) => { ... };
+    (&) => { ... };
+    (&&) => { ... };
+    (@) => { ... };
+}"#;
+        let mut tree = MacroRules::from(parser::parse(&src).unwrap());
+        tree.remove_internal();
+        tree.foldcommontails();
     }
 }

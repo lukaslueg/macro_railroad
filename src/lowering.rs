@@ -3,7 +3,7 @@
 //! The representation in this module is more coarse than what the parser provides,
 //! yet has still more information than a diagram-node.
 use crate::parser;
-use std::collections::{HashMap, HashSet};
+use std::collections::{BTreeMap, HashMap, HashSet};
 
 /// A more coarse representation of `parser::MacroRules`.
 #[derive(Clone, Debug, PartialEq)]
@@ -306,9 +306,8 @@ impl TransformVisitor for Ungrouper {
 /// Simplifies a Matcher-tree
 pub struct Normalizer;
 
-impl TransformVisitor for Normalizer {
-    fn visit(&mut self, m: &mut Matcher) {
-        self.visit_children(m);
+impl Normalizer {
+    fn normalize(m: &mut Matcher) {
         let mut changed;
         // Pound on this element until no more transformations are performed
         loop {
@@ -344,7 +343,7 @@ impl TransformVisitor for Normalizer {
                                 changed |= true;
                                 b.remove(idx);
                                 let mut new_m = Matcher::Optional(Box::new(Matcher::Choice(b)));
-                                new_m.accept_mut(self);
+                                Normalizer.visit(&mut new_m);
                                 new_m
                             }
                             None => Matcher::Choice(b),
@@ -381,6 +380,13 @@ impl TransformVisitor for Normalizer {
                 break;
             };
         }
+    }
+}
+
+impl TransformVisitor for Normalizer {
+    fn visit(&mut self, m: &mut Matcher) {
+        self.visit_children(m);
+        Self::normalize(m);
     }
 }
 
@@ -480,7 +486,7 @@ impl FoldCommonTails {
     // 7. Select the next best candidate and repeat until there are no more common tails.
     /// Determine the longest common prefix/suffix and the rules which share these.
     fn mostcommongroups<'a>(
-        tails: HashMap<&Matcher, Vec<&'a Vec<Matcher>>>,
+        tails: BTreeMap<&Matcher, Vec<&'a Vec<Matcher>>>,
     ) -> Option<(Vec<&'a Vec<Matcher>>, &'a [Matcher], &'a [Matcher])> {
         let max_size = tails.values().map(|g| g.len()).max().unwrap_or_default();
         if max_size <= 1 {
@@ -533,8 +539,10 @@ impl FoldCommonTails {
     /// Perform one step in folding a `Matcher::Choice`.
     fn mostcommontails_core(inp: &[Matcher]) -> Option<(Vec<usize>, Matcher)> {
         // Determine rules with at lest one common prefix/suffix
-        let mut prefixes = HashMap::new();
-        let mut suffixes = HashMap::new();
+        // We use a BTreeMap in order to have deterministic ordering
+        // of otherwise equal elements
+        let mut prefixes = BTreeMap::new();
+        let mut suffixes = BTreeMap::new();
         for i in inp {
             if let Matcher::Sequence(i) = i {
                 if let Some(n) = i.first() {
@@ -600,7 +608,7 @@ impl FoldCommonTails {
             .filter_map(|s| {
                 inp.iter().position(|n| match n {
                     Matcher::Sequence(t) => s == t,
-                    u => panic!("There should be only Sequences here, got {:?}", u),
+                    _ => false,
                 })
             })
             .collect::<Vec<usize>>();
