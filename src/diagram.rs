@@ -147,7 +147,7 @@ fn create_legend(tree: &mut lowering::MacroRules) -> Option<impl railroad::Railr
         let explanation = match (&fragment, names.len() > 1) {
             (parser::Fragment::Block, false) => "is a block.",
             (parser::Fragment::Block, true) => "are blocks.",
-            (parser::Fragment::Expr, false) => "is an expressions.",
+            (parser::Fragment::Expr, false) => "is an expression.",
             (parser::Fragment::Expr, true) => "are expressions.",
             (parser::Fragment::Ident, false) => "is an identifier.",
             (parser::Fragment::Ident, true) => "are identifiers.",
