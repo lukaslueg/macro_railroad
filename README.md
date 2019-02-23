@@ -38,7 +38,7 @@ macro_rules! method {
 
 ... the library generates an SVG which renders (using default CSS) as
 
-![Syntax diagram for nom::method](./examples/nom4_method.svg)
+![Syntax diagram for nom::method](https://github.com/lukaslueg/macro_railroad/raw/master/examples/nom4_method.svg?sanitize=true)
 
 The library is currently mostly a tech-demo. Pull requests are most welcome.
 
