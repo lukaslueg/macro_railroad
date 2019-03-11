@@ -42,7 +42,7 @@ macro_rules! method {
 
 ![Syntax diagram for nom::method](https://github.com/lukaslueg/macro_railroad/raw/master/examples/nom4_method.svg?sanitize=true)
 
-The library is currently mostly a tech-demo. Pull requests are most welcome.
+---
 
 To generate the examples shown here, run
 
