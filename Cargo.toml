@@ -10,13 +10,13 @@ readme = "README.md"
 exclude = ["examples/*.jpeg", "examples/*.jpg", "examples/*.svg", "examples/*.html"]
 
 [dependencies]
-syn = { version = "0.15", features = ["full", "extra-traits"] }
+syn = { version = "0.15", features = ["full", "extra-traits", "parsing"], default_features=false }
 railroad = "0.1"
 proc-macro2 = { version = "0.4", default-features=false }
 
 [dev-dependencies]
 lazy_static = "1.1"
-quote = "0.6"
+quote = { version = "0.6", default_features = false }
 railroad_verification = "0.1"
 htmlescape = "0.3"
 
