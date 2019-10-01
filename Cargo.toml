@@ -10,7 +10,7 @@ readme = "README.md"
 exclude = ["examples/*.jpeg", "examples/*.jpg", "examples/*.svg", "examples/*.html"]
 
 [dependencies]
-syn = { version = "1.0", features = ["full", "extra-traits", "parsing"], default_features=false }
+syn = { version = "1.0", features = ["full", "parsing"], default_features=false }
 railroad = "0.1"
 proc-macro2 = { version = "1.0", default-features=false }
 
@@ -21,4 +21,6 @@ railroad_verification = "0.1"
 htmlescape = "0.3"
 
 [features]
+default = ["extra-traits"]
 visual-debug = ["railroad/visual-debug"]
+extra-traits = ["syn/extra-traits"]

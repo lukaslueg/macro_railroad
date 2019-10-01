@@ -8,19 +8,19 @@ use syn::parse::{Error, Parse, ParseBuffer, ParseStream, Result};
 use syn::token::{Brace, Bracket, Dollar, Paren};
 use syn::Lifetime;
 
-#[derive(Debug)]
+#[cfg_attr(feature = "extra-traits", derive(Debug))]
 pub struct MacroRules {
     pub name: Ident,
     pub rules: Vec<Rule>,
 }
 
-#[derive(Debug)]
+#[cfg_attr(feature = "extra-traits", derive(Debug))]
 pub struct Rule {
     pub matcher: Vec<Matcher>,
     pub expansion: TokenStream,
 }
 
-#[derive(Debug)]
+#[cfg_attr(feature = "extra-traits", derive(Debug))]
 pub enum Matcher {
     Punct(Punct),
     Ident(Ident),
@@ -272,9 +272,9 @@ mod tests {
         let src = r#"macro_rules! a ( (a) => { $a } );"#;
         parse(&src).unwrap();
         let src = r#"macro_rules! a ( (a) => { $a } )"#;
-        parse(&src).expect_err("Expected missing semicolon-error");
+        parse(&src).err().expect("Expected missing semicolon-error");
         let src = r#"macro_rules! a [ (a) => { $a } ]"#;
-        parse(&src).expect_err("Expected missing semicolon-error");
+        parse(&src).err().expect("Expected missing semicolon-error");
         let src = r#"macro_rules! a { (a) => { $a } }"#;
         parse(&src).unwrap();
     }
@@ -283,7 +283,7 @@ mod tests {
     fn qmark_repeat_disallows_separator() {
         // Issue 21
         let src = r#"macro_rules! m { ($($tt:tt)-?) => {} }"#;
-        let err = parse(&src).expect_err("Should not have parsed");
+        let err = parse(&src).err().expect("Should not have parsed");
         assert!(err.to_string().contains("does not take a separator"));
     }
 
