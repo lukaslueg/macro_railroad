@@ -67,8 +67,9 @@ macro_rules! verify {
 // Holy mother of copy&paste, batman!
 
 verify!(
-(verify_syn15_token,
-r#"macro_rules! Token {
+    (
+        verify_syn15_token,
+        r#"macro_rules! Token {
     (abstract) => { ... };
     (as) => { ... };
     (async) => { ... };
@@ -167,40 +168,52 @@ r#"macro_rules! Token {
     (-=) => { ... };
     (~) => { ... };
     (_) => { ... };
-}"#),
-(verify_stdlib_vec,
-r#"macro_rules! vec {
+}"#
+    ),
+    (
+        verify_stdlib_vec,
+        r#"macro_rules! vec {
     ( $ elem : expr ; $ n : expr ) => { ... };
     ( $ ( $ x : expr ) , * ) => { ... };
     ( $ ( $ x : expr , ) * ) => { ... };
-}"#),
-(verify_stdlib_println,
-r#"macro_rules! println {
+}"#
+    ),
+    (
+        verify_stdlib_println,
+        r#"macro_rules! println {
     () => { ... };
     ($fmt:expr) => { ... };
     ($fmt:expr, $($arg:tt)*) => { ... };
-}"#),
-(verify_stdlib_assert_eq,
-r#"macro_rules! assert_eq {
+}"#
+    ),
+    (
+        verify_stdlib_assert_eq,
+        r#"macro_rules! assert_eq {
     ( $ left : expr , $ right : expr ) => { ... };
     ( $ left : expr , $ right : expr , ) => { ... };
     (
 $ left : expr , $ right : expr , $ ( $ arg : tt ) + ) => { ... };
-}"#),
-(verify_stdlib_panic,
-r#"macro_rules! panic {
+}"#
+    ),
+    (
+        verify_stdlib_panic,
+        r#"macro_rules! panic {
     () => { ... };
     ($msg:expr) => { ... };
     ($msg:expr,) => { ... };
     ($fmt:expr, $($arg:tt)+) => { ... };
-}"#),
-(verify_nom4_add_return_error,
-r#"macro_rules! add_return_error {
+}"#
+    ),
+    (
+        verify_nom4_add_return_error,
+        r#"macro_rules! add_return_error {
     ($i:expr, $code:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $code:expr, $f:expr) => { ... };
-}"#),
-(verify_nom4_alt,
-r#"macro_rules! alt {
+}"#
+    ),
+    (
+        verify_nom4_alt,
+        r#"macro_rules! alt {
     (__impl $i:expr, $submac:ident!( $($args:tt)* ), $($rest:tt)* ) => { ... };
     (__impl $i:expr, $e:path, $($rest:tt)* ) => { ... };
     (__impl $i:expr, $e:path | $($rest:tt)*) => { ... };
@@ -209,9 +222,11 @@ r#"macro_rules! alt {
     (__impl $i:expr, $e:path => { $gen:expr } | $($rest:tt)*) => { ... };
     (__impl $i:expr, __end) => { ... };
     ($i:expr, $($rest:tt)*) => { ... };
-}"#),
-(verify_nom4_alt_complete,
-r#"macro_rules! alt_complete {
+}"#
+    ),
+    (
+        verify_nom4_alt_complete,
+        r#"macro_rules! alt_complete {
     ($i:expr, $e:path | $($rest:tt)*) => { ... };
     ($i:expr, $subrule:ident!( $($args:tt)*) | $($rest:tt)*) => { ... };
     ($i:expr, $subrule:ident!( $($args:tt)* ) => { $gen:expr } | $($rest:tt)+) => { ... };
@@ -220,91 +235,127 @@ r#"macro_rules! alt_complete {
     ($i:expr, $subrule:ident!( $($args:tt)* ) => { $gen:expr }) => { ... };
     ($i:expr, $e:path) => { ... };
     ($i:expr, $subrule:ident!( $($args:tt)*)) => { ... };
-}"#),
-(verify_nom4_apply,
-r#"macro_rules! apply {
+}"#
+    ),
+    (
+        verify_nom4_apply,
+        r#"macro_rules! apply {
     ($i:expr, $fun:expr, $($args:expr),* ) => { ... };
-}"#),
-(verify_nom4_apply_m,
-r#"macro_rules! apply_m {
+}"#
+    ),
+    (
+        verify_nom4_apply_m,
+        r#"macro_rules! apply_m {
     ($i:expr, $self_:ident.$method:ident, $($args:expr),* ) => { ... };
-}"#),
-(verify_nom4_bits,
-r#"macro_rules! bits {
+}"#
+    ),
+    (
+        verify_nom4_bits,
+        r#"macro_rules! bits {
     ($i:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $f:expr) => { ... };
-}"#),
-(verify_nom4_bytes,
-r#"macro_rules! bytes {
+}"#
+    ),
+    (
+        verify_nom4_bytes,
+        r#"macro_rules! bytes {
     ($i:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $f:expr) => { ... };
-}"#),
-(verify_nom4_call,
-r#"macro_rules! call {
+}"#
+    ),
+    (
+        verify_nom4_call,
+        r#"macro_rules! call {
     ($i:expr, $fun:expr) => { ... };
     ($i:expr, $fun:expr, $($args:expr),* ) => { ... };
-}"#),
-(verify_nom4_call_m,
-r#"macro_rules! call_m {
+}"#
+    ),
+    (
+        verify_nom4_call_m,
+        r#"macro_rules! call_m {
     ($i:expr, $self_:ident.$method:ident) => { ... };
     ($i:expr, $self_:ident.$method:ident, $($args:expr),* ) => { ... };
-}"#),
-(verify_nom4_char,
-r#"macro_rules! char {
+}"#
+    ),
+    (
+        verify_nom4_char,
+        r#"macro_rules! char {
     ($i:expr, $c: expr) => { ... };
-}"#),
-(verify_nom4_closure,
-r#"macro_rules! closure {
+}"#
+    ),
+    (
+        verify_nom4_closure,
+        r#"macro_rules! closure {
     ($ty:ty, $submac:ident!( $($args:tt)* )) => { ... };
     ($submac:ident!( $($args:tt)* )) => { ... };
-}"#),
-(verify_nom4_complete,
-r#"macro_rules! complete {
+}"#
+    ),
+    (
+        verify_nom4_complete,
+        r#"macro_rules! complete {
     ($i:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $f:expr) => { ... };
-}"#),
-(verify_nom4_cond,
-r#"macro_rules! cond {
+}"#
+    ),
+    (
+        verify_nom4_cond,
+        r#"macro_rules! cond {
     ($i:expr, $cond:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $cond:expr, $f:expr) => { ... };
-}"#),
-(verify_nom4_cond_reduce,
-r#"macro_rules! cond_reduce {
+}"#
+    ),
+    (
+        verify_nom4_cond_reduce,
+        r#"macro_rules! cond_reduce {
     ($i:expr, $cond:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $cond:expr, $f:expr) => { ... };
-}"#),
-(verify_nom4_cond_with_error,
-r#"macro_rules! cond_with_error {
+}"#
+    ),
+    (
+        verify_nom4_cond_with_error,
+        r#"macro_rules! cond_with_error {
     ($i:expr, $cond:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $cond:expr, $f:expr) => { ... };
-}"#),
-(verify_nom4_count,
-r#"macro_rules! count {
+}"#
+    ),
+    (
+        verify_nom4_count,
+        r#"macro_rules! count {
     ($i:expr, $submac:ident!( $($args:tt)* ), $count: expr) => { ... };
     ($i:expr, $f:expr, $count: expr) => { ... };
-}"#),
-(verify_nom4_count_fixed,
-r#"macro_rules! count_fixed {
+}"#
+    ),
+    (
+        verify_nom4_count_fixed,
+        r#"macro_rules! count_fixed {
     ($i:expr, $typ:ty, $submac:ident!( $($args:tt)* ), $count: expr) => { ... };
     ($i:expr, $typ: ty, $f:expr, $count: expr) => { ... };
-}"#),
-(verify_nom4_dbg,
-r#"macro_rules! dbg {
+}"#
+    ),
+    (
+        verify_nom4_dbg,
+        r#"macro_rules! dbg {
     ($i: expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $f:ident) => { ... };
-}"#),
-(verify_nom4_dbp_dmp,
-r#"macro_rules! dbg_dmp {
+}"#
+    ),
+    (
+        verify_nom4_dbp_dmp,
+        r#"macro_rules! dbg_dmp {
     ($i: expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $f:ident) => { ... };
-}"#),
-(verify_nom4_delimited,
-r#"macro_rules! delimited {
+}"#
+    ),
+    (
+        verify_nom4_delimited,
+        r#"macro_rules! delimited {
     ($i:expr, $submac:ident!( $($args:tt)* ), $($rest:tt)+) => { ... };
     ($i:expr, $f:expr, $($rest:tt)+) => { ... };
-}"#),
-(verify_nom4_do_parse,
-r#"macro_rules! do_parse {
+}"#
+    ),
+    (
+        verify_nom4_do_parse,
+        r#"macro_rules! do_parse {
     (__impl $i:expr, ( $($rest:expr),* )) => { ... };
     (__impl $i:expr, $field:ident : $submac:ident!( $($args:tt)* ) ) => { ... };
     (__impl $i:expr, $submac:ident!( $($args:tt)* ) ) => { ... };
@@ -325,171 +376,233 @@ r#"macro_rules! do_parse {
     ($i:expr, $($rest:tt)*) => { ... };
     ($submac:ident!( $($args:tt)* ) >> $($rest:tt)* ) => { ... };
     ($e:ident! >> $($rest:tt)* ) => { ... };
-}"#),
-(verify_nom4_eat_seperator,
-r#"macro_rules! eat_separator {
+}"#
+    ),
+    (
+        verify_nom4_eat_seperator,
+        r#"macro_rules! eat_separator {
     ($i:expr, $arr:expr) => { ... };
-}"#),
-(verify_nom4_eof,
-r#"macro_rules! eof {
+}"#
+    ),
+    (
+        verify_nom4_eof,
+        r#"macro_rules! eof {
     ($i:expr,) => { ... };
-}"#),
-(verify_nom4_error_node_position,
-r#"macro_rules! error_node_position {
+}"#
+    ),
+    (
+        verify_nom4_error_node_position,
+        r#"macro_rules! error_node_position {
     ($input:expr, $code:expr, $next:expr) => { ... };
-}"#),
-(verify_nom4_error_position,
-r#"macro_rules! error_position {
+}"#
+    ),
+    (
+        verify_nom4_error_position,
+        r#"macro_rules! error_position {
     ($input:expr, $code:expr) => { ... };
-}"#),
-(verify_nom4_escaped,
-r#"macro_rules! escaped {
+}"#
+    ),
+    (
+        verify_nom4_escaped,
+        r#"macro_rules! escaped {
     (__impl $i: expr, $normal:ident!(  $($args:tt)* ), $control_char: expr, $escapable:ident!(  $($args2:tt)* )) => { ... };
     (__impl_1 $i:expr, $submac1:ident!( $($args:tt)* ), $control_char: expr, $submac2:ident!( $($args2:tt)*) ) => { ... };
     (__impl_1 $i:expr, $submac1:ident!( $($args:tt)* ), $control_char: expr, $g:expr) => { ... };
     ($i:expr, $submac:ident!( $($args:tt)* ), $control_char: expr, $($rest:tt)+) => { ... };
     ($i:expr, $f:expr, $control_char: expr, $($rest:tt)+) => { ... };
-}"#),
-(verify_nom4_escaped_transform,
-r#"macro_rules! escaped_transform {
+}"#
+    ),
+    (
+        verify_nom4_escaped_transform,
+        r#"macro_rules! escaped_transform {
     (__impl $i: expr, $normal:ident!(  $($args:tt)* ), $control_char: expr, $transform:ident!(  $($args2:tt)* )) => { ... };
     (__impl_1 $i:expr, $submac1:ident!( $($args:tt)* ), $control_char: expr, $submac2:ident!( $($args2:tt)*) ) => { ... };
     (__impl_1 $i:expr, $submac1:ident!( $($args:tt)* ), $control_char: expr, $g:expr) => { ... };
     ($i:expr, $submac:ident!( $($args:tt)* ), $control_char: expr, $($rest:tt)+) => { ... };
     ($i:expr, $f:expr, $control_char: expr, $($rest:tt)+) => { ... };
-}"#),
-(verify_nom4_escape_exact,
-r#"macro_rules! exact {
+}"#
+    ),
+    (
+        verify_nom4_escape_exact,
+        r#"macro_rules! exact {
     ($i:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $f:expr) => { ... };
-}"#),
-(verify_nom4_expr_opt,
-r#"macro_rules! expr_opt {
+}"#
+    ),
+    (
+        verify_nom4_expr_opt,
+        r#"macro_rules! expr_opt {
     ($i:expr, $e:expr) => { ... };
-}"#),
-(verify_nom4_expr_res,
-r#"macro_rules! expr_res {
+}"#
+    ),
+    (
+        verify_nom4_expr_res,
+        r#"macro_rules! expr_res {
     ($i:expr, $e:expr) => { ... };
-}"#),
-(verify_nom4_fix_error,
-r#"macro_rules! fix_error {
+}"#
+    ),
+    (
+        verify_nom4_fix_error,
+        r#"macro_rules! fix_error {
     ($i:expr, $t:ty, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $t:ty, $f:expr) => { ... };
-}"#),
-(verify_nom4_flat_map,
-r#"macro_rules! flat_map {
+}"#
+    ),
+    (
+        verify_nom4_flat_map,
+        r#"macro_rules! flat_map {
     ($i:expr, $submac:ident!( $($args:tt)* ), $submac2:ident!( $($args2:tt)* )) => { ... };
     ($i:expr, $submac:ident!( $($args:tt)* ), $g:expr) => { ... };
     ($i:expr, $f:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $f:expr, $g:expr) => { ... };
     (__impl $i:expr, $submac:ident!( $($args:tt)* ), $submac2:ident!( $($args2:tt)* )) => { ... };
-}"#),
-(verify_nom4_fold_many0,
-r#"macro_rules! fold_many0 {
+}"#
+    ),
+    (
+        verify_nom4_fold_many0,
+        r#"macro_rules! fold_many0 {
     ($i:expr, $submac:ident!( $($args:tt)* ), $init:expr, $f:expr) => { ... };
     ($i:expr, $f:expr, $init:expr, $fold_f:expr) => { ... };
-}"#),
-(verify_nom4_fold_many1,
-r#"macro_rules! fold_many1 {
+}"#
+    ),
+    (
+        verify_nom4_fold_many1,
+        r#"macro_rules! fold_many1 {
     ($i:expr, $submac:ident!( $($args:tt)* ), $init:expr, $f:expr) => { ... };
     ($i:expr, $f:expr, $init:expr, $fold_f:expr) => { ... };
-}"#),
-(verify_nom4_fold_many_m_n,
-r#"macro_rules! fold_many_m_n {
+}"#
+    ),
+    (
+        verify_nom4_fold_many_m_n,
+        r#"macro_rules! fold_many_m_n {
     ($i:expr, $m:expr, $n: expr, $submac:ident!( $($args:tt)* ), $init:expr, $f:expr) => { ... };
     ($i:expr, $m:expr, $n: expr, $f:expr, $init:expr, $fold_f:expr) => { ... };
-}"#),
-(verify_nom4_i16,
-r#"macro_rules! i16 {
+}"#
+    ),
+    (
+        verify_nom4_i16,
+        r#"macro_rules! i16 {
     ($i:expr, $e:expr) => { ... };
-}"#),
-(verify_nom4_i32,
-r#"macro_rules! i32 {
+}"#
+    ),
+    (
+        verify_nom4_i32,
+        r#"macro_rules! i32 {
     ($i:expr, $e:expr) => { ... };
-}"#),
-(verify_nom4_i64,
-r#"macro_rules! i64 {
+}"#
+    ),
+    (
+        verify_nom4_i64,
+        r#"macro_rules! i64 {
     ($i:expr, $e:expr) => { ... };
-}"#),
-(verify_nom4_is_a,
-r#"macro_rules! is_a {
+}"#
+    ),
+    (
+        verify_nom4_is_a,
+        r#"macro_rules! is_a {
     ($input:expr, $arr:expr) => { ... };
-}"#),
-(verify_nom4_is_not,
-r#"macro_rules! is_not {
+}"#
+    ),
+    (
+        verify_nom4_is_not,
+        r#"macro_rules! is_not {
     ($input:expr, $arr:expr) => { ... };
-}"#),
-(verify_nom4_length_bytes,
-r#"macro_rules! length_bytes {
+}"#
+    ),
+    (
+        verify_nom4_length_bytes,
+        r#"macro_rules! length_bytes {
     ($i:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $f:expr) => { ... };
-}"#),
-(verify_nom4_length_count,
-r#"macro_rules! length_count {
+}"#
+    ),
+    (
+        verify_nom4_length_count,
+        r#"macro_rules! length_count {
     ($i:expr, $submac:ident!( $($args:tt)* ), $submac2:ident!( $($args2:tt)* )) => { ... };
     ($i:expr, $submac:ident!( $($args:tt)* ), $g:expr) => { ... };
     ($i:expr, $f:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $f:expr, $g:expr) => { ... };
-}"#),
-(verify_nom4_length_data,
-r#"macro_rules! length_data {
+}"#
+    ),
+    (
+        verify_nom4_length_data,
+        r#"macro_rules! length_data {
     ($i:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $f:expr) => { ... };
-}"#),
-(verify_nom4_length_value,
-r#"macro_rules! length_value {
+}"#
+    ),
+    (
+        verify_nom4_length_value,
+        r#"macro_rules! length_value {
     ($i:expr, $submac:ident!( $($args:tt)* ), $submac2:ident!( $($args2:tt)* )) => { ... };
     ($i:expr, $submac:ident!( $($args:tt)* ), $g:expr) => { ... };
     ($i:expr, $f:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $f:expr, $g:expr) => { ... };
-}"#),
-(verify_nom4_many0,
-r#"macro_rules! many0 {
+}"#
+    ),
+    (
+        verify_nom4_many0,
+        r#"macro_rules! many0 {
     ($i:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $f:expr) => { ... };
-}"#),
-(verify_nom4_many1,
-r#"macro_rules! many1 {
+}"#
+    ),
+    (
+        verify_nom4_many1,
+        r#"macro_rules! many1 {
     ($i:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $f:expr) => { ... };
-}"#),
-(verify_nom4_many_m_n,
-r#"macro_rules! many_m_n {
+}"#
+    ),
+    (
+        verify_nom4_many_m_n,
+        r#"macro_rules! many_m_n {
     ($i:expr, $m:expr, $n: expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $m:expr, $n: expr, $f:expr) => { ... };
-}"#),
-(verify_nom4_many_till,
-r#"macro_rules! many_till {
+}"#
+    ),
+    (
+        verify_nom4_many_till,
+        r#"macro_rules! many_till {
     (__impl $i:expr, $submac1:ident!( $($args1:tt)* ), $submac2:ident!( $($args2:tt)* )) => { ... };
     ($i:expr, $submac1:ident!( $($args1:tt)* ), $submac2:ident!( $($args2:tt)* )) => { ... };
     ($i:expr, $submac1:ident!( $($args1:tt)* ), $g:expr) => { ... };
     ($i:expr, $f:expr, $submac2:ident!( $($args2:tt)* )) => { ... };
     ($i:expr, $f:expr, $g: expr) => { ... };
-}"#),
-(verify_nom4_map,
-r#"macro_rules! map {
+}"#
+    ),
+    (
+        verify_nom4_map,
+        r#"macro_rules! map {
     (__impl $i:expr, $submac:ident!( $($args:tt)* ), $g:expr) => { ... };
     ($i:expr, $submac:ident!( $($args:tt)* ), $g:expr) => { ... };
     ($i:expr, $f:expr, $g:expr) => { ... };
-}"#),
-(verify_nom4_map_opt,
-r#"macro_rules! map_opt {
+}"#
+    ),
+    (
+        verify_nom4_map_opt,
+        r#"macro_rules! map_opt {
     (__impl $i:expr, $submac:ident!( $($args:tt)* ), $submac2:ident!( $($args2:tt)* )) => { ... };
     ($i:expr, $submac:ident!( $($args:tt)* ), $g:expr) => { ... };
     ($i:expr, $submac:ident!( $($args:tt)* ), $submac2:ident!( $($args2:tt)* )) => { ... };
     ($i:expr, $f:expr, $g:expr) => { ... };
     ($i:expr, $f:expr, $submac:ident!( $($args:tt)* )) => { ... };
-}"#),
-(verify_nom4_map_res,
-r#"macro_rules! map_res {
+}"#
+    ),
+    (
+        verify_nom4_map_res,
+        r#"macro_rules! map_res {
     (__impl $i:expr, $submac:ident!( $($args:tt)* ), $submac2:ident!( $($args2:tt)* )) => { ... };
     ($i:expr, $submac:ident!( $($args:tt)* ), $g:expr) => { ... };
     ($i:expr, $submac:ident!( $($args:tt)* ), $submac2:ident!( $($args2:tt)* )) => { ... };
     ($i:expr, $f:expr, $g:expr) => { ... };
     ($i:expr, $f:expr, $submac:ident!( $($args:tt)* )) => { ... };
-}"#),
-(verify_nom4_method,
-r#"macro_rules! method {
+}"#
+    ),
+    (
+        verify_nom4_method,
+        r#"macro_rules! method {
     ($name:ident<$a:ty>( $i:ty ) -> $o:ty, $self_:ident, $submac:ident!( $($args:tt)* )) => { ... };
     ($name:ident<$a:ty,$i:ty,$o:ty,$e:ty>, $self_:ident, $submac:ident!( $($args:tt)* )) => { ... };
     ($name:ident<$a:ty,$i:ty,$o:ty>, $self_:ident, $submac:ident!( $($args:tt)* )) => { ... };
@@ -510,9 +623,11 @@ r#"macro_rules! method {
     (pub $name:ident<$a:ty,$i:ty,$o:ty>, mut $self_:ident, $submac:ident!( $($args:tt)* )) => { ... };
     (pub $name:ident<$a:ty,$o:ty>, mut $self_:ident, $submac:ident!( $($args:tt)* )) => { ... };
     (pub $name:ident<$a:ty>, mut $self_:ident, $submac:ident!( $($args:tt)* )) => { ... };
-}"#),
-(verify_nom4_named,
-r#"macro_rules! named {
+}"#
+    ),
+    (
+        verify_nom4_named,
+        r#"macro_rules! named {
     (#$($args:tt)*) => { ... };
     ($name:ident( $i:ty ) -> $o:ty, $submac:ident!( $($args:tt)* )) => { ... };
     ($name:ident<$i:ty,$o:ty,$e:ty>, $submac:ident!( $($args:tt)* )) => { ... };
@@ -524,9 +639,11 @@ r#"macro_rules! named {
     (pub $name:ident<$i:ty,$o:ty>, $submac:ident!( $($args:tt)* )) => { ... };
     (pub $name:ident<$o:ty>, $submac:ident!( $($args:tt)* )) => { ... };
     (pub $name:ident, $submac:ident!( $($args:tt)* )) => { ... };
-}"#),
-(verify_nom4_named_args,
-r#"macro_rules! named_args {
+}"#
+    ),
+    (
+        verify_nom4_named_args,
+        r#"macro_rules! named_args {
     (pub $func_name:ident ( $( $arg:ident : $typ:ty ),* ) < $return_type:ty > , $submac:ident!( $($args:tt)* ) ) => { ... };
     (pub $func_name:ident < 'a > ( $( $arg:ident : $typ:ty ),* ) < $return_type:ty > , $submac:ident!( $($args:tt)* ) ) => { ... };
     ($func_name:ident ( $( $arg:ident : $typ:ty ),* ) < $return_type:ty > , $submac:ident!( $($args:tt)* ) ) => { ... };
@@ -535,9 +652,11 @@ r#"macro_rules! named_args {
     ($func_name:ident ( $( $arg:ident : $typ:ty ),* ) < $input_type:ty, $return_type:ty > , $submac:ident!( $($args:tt)* ) ) => { ... };
     (pub $func_name:ident < 'a > ( $( $arg:ident : $typ:ty ),* ) < $input_type:ty, $return_type:ty > , $submac:ident!( $($args:tt)* ) ) => { ... };
     ($func_name:ident < 'a > ( $( $arg:ident : $typ:ty ),* ) < $input_type:ty, $return_type:ty > , $submac:ident!( $($args:tt)* ) ) => { ... };
-}"#),
-(verify_nom4_named_attr,
-r#"macro_rules! named_attr {
+}"#
+    ),
+    (
+        verify_nom4_named_attr,
+        r#"macro_rules! named_attr {
     ($(#[$attr:meta])*, $name:ident( $i:ty ) -> $o:ty, $submac:ident!( $($args:tt)* )) => { ... };
     ($(#[$attr:meta])*, $name:ident<$i:ty,$o:ty,$e:ty>, $submac:ident!( $($args:tt)* )) => { ... };
     ($(#[$attr:meta])*, $name:ident<$i:ty,$o:ty>, $submac:ident!( $($args:tt)* )) => { ... };
@@ -548,71 +667,97 @@ r#"macro_rules! named_attr {
     ($(#[$attr:meta])*, pub $name:ident<$i:ty,$o:ty>, $submac:ident!( $($args:tt)* )) => { ... };
     ($(#[$attr:meta])*, pub $name:ident<$o:ty>, $submac:ident!( $($args:tt)* )) => { ... };
     ($(#[$attr:meta])*, pub $name:ident, $submac:ident!( $($args:tt)* )) => { ... };
-}"#),
-(verify_nom4_none_of,
-r#"macro_rules! none_of {
+}"#
+    ),
+    (
+        verify_nom4_none_of,
+        r#"macro_rules! none_of {
     ($i:expr, $inp: expr) => { ... };
-}"#),
-(verify_nom4_not,
-r#"macro_rules! not {
+}"#
+    ),
+    (
+        verify_nom4_not,
+        r#"macro_rules! not {
     ($i:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $f:expr) => { ... };
-}"#),
-(verify_nom4_one_of,
-r#"macro_rules! one_of {
+}"#
+    ),
+    (
+        verify_nom4_one_of,
+        r#"macro_rules! one_of {
     ($i:expr, $inp: expr) => { ... };
-}"#),
-(verify_nom4_opt,
-r#"macro_rules! opt {
+}"#
+    ),
+    (
+        verify_nom4_opt,
+        r#"macro_rules! opt {
     ($i:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $f:expr) => { ... };
-}"#),
-(verify_nom4_opt_res,
-r#"macro_rules! opt_res {
+}"#
+    ),
+    (
+        verify_nom4_opt_res,
+        r#"macro_rules! opt_res {
     ($i:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $f:expr) => { ... };
-}"#),
-(verify_nom4_pair,
-r#"macro_rules! pair {
+}"#
+    ),
+    (
+        verify_nom4_pair,
+        r#"macro_rules! pair {
     ($i:expr, $submac:ident!( $($args:tt)* ), $submac2:ident!( $($args2:tt)* )) => { ... };
     ($i:expr, $submac:ident!( $($args:tt)* ), $g:expr) => { ... };
     ($i:expr, $f:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $f:expr, $g:expr) => { ... };
-}"#),
-(verify_nom4_parse_to,
-r#"macro_rules! parse_to {
+}"#
+    ),
+    (
+        verify_nom4_parse_to,
+        r#"macro_rules! parse_to {
     ($i:expr, $t:ty ) => { ... };
-}"#),
-(verify_nom4_peek,
-r#"macro_rules! peek {
+}"#
+    ),
+    (
+        verify_nom4_peek,
+        r#"macro_rules! peek {
     ($i:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $f:expr) => { ... };
-}"#),
-(verify_nom4_permutation,
-r#"macro_rules! permutation {
+}"#
+    ),
+    (
+        verify_nom4_permutation,
+        r#"macro_rules! permutation {
     ($i:expr, $($rest:tt)*) => { ... };
-}"#),
-(verify_nom4_preceded,
-r#"macro_rules! preceded {
+}"#
+    ),
+    (
+        verify_nom4_preceded,
+        r#"macro_rules! preceded {
     ($i:expr, $submac:ident!( $($args:tt)* ), $submac2:ident!( $($args2:tt)* )) => { ... };
     ($i:expr, $submac:ident!( $($args:tt)* ), $g:expr) => { ... };
     ($i:expr, $f:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $f:expr, $g:expr) => { ... };
-}"#),
-(verify_nom4_recognize,
-r#"macro_rules! recognize {
+}"#
+    ),
+    (
+        verify_nom4_recognize,
+        r#"macro_rules! recognize {
     ($i:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $f:expr) => { ... };
-}"#),
-(verify_nom4_return_error,
-r#"macro_rules! return_error {
+}"#
+    ),
+    (
+        verify_nom4_return_error,
+        r#"macro_rules! return_error {
     ($i:expr, $code:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $code:expr, $f:expr) => { ... };
     ($i:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $f:expr) => { ... };
-}"#),
-(verify_nom4_sep,
-r#"macro_rules! sep {
+}"#
+    ),
+    (
+        verify_nom4_sep,
+        r#"macro_rules! sep {
     ($i:expr,  $separator:path, tuple ! ($($rest:tt)*) ) => { ... };
     ($i:expr,  $separator:path, pair ! ($($rest:tt)*) ) => { ... };
     ($i:expr,  $separator:path, delimited ! ($($rest:tt)*) ) => { ... };
@@ -630,185 +775,259 @@ r#"macro_rules! sep {
     ($i:expr, $separator:path, return_error!( $($args:tt)* )) => { ... };
     ($i:expr, $separator:path, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $separator:path, $f:expr) => { ... };
-}"#),
-(verify_nom4_separated_list,
-r#"macro_rules! separated_list {
+}"#
+    ),
+    (
+        verify_nom4_separated_list,
+        r#"macro_rules! separated_list {
     ($i:expr, $sep:ident!( $($args:tt)* ), $submac:ident!( $($args2:tt)* )) => { ... };
     ($i:expr, $submac:ident!( $($args:tt)* ), $g:expr) => { ... };
     ($i:expr, $f:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $f:expr, $g:expr) => { ... };
-}"#),
-(verify_nom4_seperated_list_complete,
-r#"macro_rules! separated_list_complete {
+}"#
+    ),
+    (
+        verify_nom4_seperated_list_complete,
+        r#"macro_rules! separated_list_complete {
     ($i:expr, $sep:ident!( $($args:tt)* ), $submac:ident!( $($args2:tt)* )) => { ... };
     ($i:expr, $submac:ident!( $($args:tt)* ), $g:expr) => { ... };
     ($i:expr, $f:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $f:expr, $g:expr) => { ... };
-}"#),
-(verify_nom4_seperated_nonempty_list,
-r#"macro_rules! separated_nonempty_list {
+}"#
+    ),
+    (
+        verify_nom4_seperated_nonempty_list,
+        r#"macro_rules! separated_nonempty_list {
     ($i:expr, $sep:ident!( $($args:tt)* ), $submac:ident!( $($args2:tt)* )) => { ... };
     ($i:expr, $submac:ident!( $($args:tt)* ), $g:expr) => { ... };
     ($i:expr, $f:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $f:expr, $g:expr) => { ... };
-}"#),
-(verify_nom4_seperated_nonempty_list_complete,
-r#"macro_rules! separated_nonempty_list_complete {
+}"#
+    ),
+    (
+        verify_nom4_seperated_nonempty_list_complete,
+        r#"macro_rules! separated_nonempty_list_complete {
     ($i:expr, $sep:ident!( $($args:tt)* ), $submac:ident!( $($args2:tt)* )) => { ... };
     ($i:expr, $submac:ident!( $($args:tt)* ), $g:expr) => { ... };
     ($i:expr, $f:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $f:expr, $g:expr) => { ... };
-}"#),
-(verify_nom4_separated_pair,
-r#"macro_rules! separated_pair {
+}"#
+    ),
+    (
+        verify_nom4_separated_pair,
+        r#"macro_rules! separated_pair {
     ($i:expr, $submac:ident!( $($args:tt)* ), $($rest:tt)+) => { ... };
     ($i:expr, $f:expr, $($rest:tt)+) => { ... };
-}"#),
-(verify_nom4_switch,
-r#"macro_rules! switch {
+}"#
+    ),
+    (
+        verify_nom4_switch,
+        r#"macro_rules! switch {
     (__impl $i:expr, $submac:ident!( $($args:tt)* ), $( $($p:pat)|+ => $subrule:ident!( $($args2:tt)* ))|* ) => { ... };
     ($i:expr, $submac:ident!( $($args:tt)*), $($rest:tt)*) => { ... };
     ($i:expr, $e:path, $($rest:tt)*) => { ... };
-}"#),
-(verify_nom4_tag,
-r#"macro_rules! tag {
+}"#
+    ),
+    (
+        verify_nom4_tag,
+        r#"macro_rules! tag {
     ($i:expr, $tag: expr) => { ... };
-}"#),
-(verify_nom4_tag_bits,
-r#"macro_rules! tag_bits {
+}"#
+    ),
+    (
+        verify_nom4_tag_bits,
+        r#"macro_rules! tag_bits {
     ($i:expr, $t:ty, $count:expr, $p: pat) => { ... };
-}"#),
-(verify_nom4_tag_no_case,
-r#"macro_rules! tag_no_case {
+}"#
+    ),
+    (
+        verify_nom4_tag_no_case,
+        r#"macro_rules! tag_no_case {
     ($i:expr, $tag: expr) => { ... };
-}"#),
-(verify_nom4_take,
-r#"macro_rules! take {
+}"#
+    ),
+    (
+        verify_nom4_take,
+        r#"macro_rules! take {
     ($i:expr, $count:expr) => { ... };
-}"#),
-(verify_nom4_take_bits,
-r#"macro_rules! take_bits {
+}"#
+    ),
+    (
+        verify_nom4_take_bits,
+        r#"macro_rules! take_bits {
     ($i:expr, $t:ty, $count:expr) => { ... };
-}"#),
-(verify_nom4_take_str,
-r#"macro_rules! take_str {
+}"#
+    ),
+    (
+        verify_nom4_take_str,
+        r#"macro_rules! take_str {
     ( $i:expr, $size:expr ) => { ... };
-}"#),
-(verify_nom4_take_till,
-r#"macro_rules! take_till {
+}"#
+    ),
+    (
+        verify_nom4_take_till,
+        r#"macro_rules! take_till {
     ($input:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($input:expr, $f:expr) => { ... };
-}"#),
-(verify_nom4_take_till1,
-r#"macro_rules! take_till1 {
+}"#
+    ),
+    (
+        verify_nom4_take_till1,
+        r#"macro_rules! take_till1 {
     ($input:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($input:expr, $f:expr) => { ... };
-}"#),
-(verify_nom4_take_until,
-r#"macro_rules! take_until {
+}"#
+    ),
+    (
+        verify_nom4_take_until,
+        r#"macro_rules! take_until {
     ($i:expr, $substr:expr) => { ... };
-}"#),
-(verify_nom4_take_until1,
-r#"macro_rules! take_until1 {
+}"#
+    ),
+    (
+        verify_nom4_take_until1,
+        r#"macro_rules! take_until1 {
     ($i:expr, $substr:expr) => { ... };
-}"#),
-(verify_nom4_take_until_and_consume,
-r#"macro_rules! take_until_and_consume {
+}"#
+    ),
+    (
+        verify_nom4_take_until_and_consume,
+        r#"macro_rules! take_until_and_consume {
     ($i:expr, $substr:expr) => { ... };
-}"#),
-(verify_nom4_take_until_and_consume1,
-r#"macro_rules! take_until_and_consume1 {
+}"#
+    ),
+    (
+        verify_nom4_take_until_and_consume1,
+        r#"macro_rules! take_until_and_consume1 {
     ($i:expr, $substr:expr) => { ... };
-}"#),
-(verify_nom4_take_until_either,
-r#"macro_rules! take_until_either {
+}"#
+    ),
+    (
+        verify_nom4_take_until_either,
+        r#"macro_rules! take_until_either {
     ($input:expr, $arr:expr) => { ... };
-}"#),
-(verify_nom4_take_until_either1,
-r#"macro_rules! take_until_either1 {
+}"#
+    ),
+    (
+        verify_nom4_take_until_either1,
+        r#"macro_rules! take_until_either1 {
     ($input:expr, $arr:expr) => { ... };
-}"#),
-(verify_nom4_take_until_either_and_consume,
-r#"macro_rules! take_until_either_and_consume {
+}"#
+    ),
+    (
+        verify_nom4_take_until_either_and_consume,
+        r#"macro_rules! take_until_either_and_consume {
     ($input:expr, $arr:expr) => { ... };
-}"#),
-(verify_nom4_take_until_either_and_consume1,
-r#"macro_rules! take_until_either_and_consume1 {
+}"#
+    ),
+    (
+        verify_nom4_take_until_either_and_consume1,
+        r#"macro_rules! take_until_either_and_consume1 {
     ($input:expr, $arr:expr) => { ... };
-}"#),
-(verify_nom4_take_while,
-r#"macro_rules! take_while {
+}"#
+    ),
+    (
+        verify_nom4_take_while,
+        r#"macro_rules! take_while {
     ($input:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($input:expr, $f:expr) => { ... };
-}"#),
-(verify_nom4_take_while1,
-r#"macro_rules! take_while1 {
+}"#
+    ),
+    (
+        verify_nom4_take_while1,
+        r#"macro_rules! take_while1 {
     ($input:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($input:expr, $f:expr) => { ... };
-}"#),
-(verify_nom4_take_while_m_n,
-r#"macro_rules! take_while_m_n {
+}"#
+    ),
+    (
+        verify_nom4_take_while_m_n,
+        r#"macro_rules! take_while_m_n {
     ($input:expr, $m:expr, $n:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($input:expr, $m:expr, $n: expr, $f:expr) => { ... };
-}"#),
-(verify_nom4_tap,
-r#"macro_rules! tap {
+}"#
+    ),
+    (
+        verify_nom4_tap,
+        r#"macro_rules! tap {
     ($i:expr, $name:ident : $submac:ident!( $($args:tt)* ) => $e:expr) => { ... };
     ($i:expr, $name: ident: $f:expr => $e:expr) => { ... };
-}"#),
-(verify_nom4_terminated,
-r#"macro_rules! terminated {
+}"#
+    ),
+    (
+        verify_nom4_terminated,
+        r#"macro_rules! terminated {
     ($i:expr, $submac:ident!( $($args:tt)* ), $submac2:ident!( $($args2:tt)* )) => { ... };
     ($i:expr, $submac:ident!( $($args:tt)* ), $g:expr) => { ... };
     ($i:expr, $f:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $f:expr, $g:expr) => { ... };
-}"#),
-(verify_nom4_try_parse,
-r#"macro_rules! try_parse {
+}"#
+    ),
+    (
+        verify_nom4_try_parse,
+        r#"macro_rules! try_parse {
     ($i:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $f:expr) => { ... };
-}"#),
-(verify_nom4_tuple,
-r#"macro_rules! tuple {
+}"#
+    ),
+    (
+        verify_nom4_tuple,
+        r#"macro_rules! tuple {
     ($i:expr, $($rest:tt)*) => { ... };
-}"#),
-(verify_nom4_u16,
-r#"macro_rules! u16 {
+}"#
+    ),
+    (
+        verify_nom4_u16,
+        r#"macro_rules! u16 {
     ($i:expr, $e:expr) => { ... };
-}"#),
-(verify_nom4_u32,
-r#"macro_rules! u32 {
+}"#
+    ),
+    (
+        verify_nom4_u32,
+        r#"macro_rules! u32 {
     ($i:expr, $e:expr) => { ... };
-}"#),
-(verify_nom4_u64,
-r#"macro_rules! u64 {
+}"#
+    ),
+    (
+        verify_nom4_u64,
+        r#"macro_rules! u64 {
     ($i:expr, $e:expr) => { ... };
-}"#),
-(verify_nom4_value,
-r#"macro_rules! value {
+}"#
+    ),
+    (
+        verify_nom4_value,
+        r#"macro_rules! value {
     ($i:expr, $res:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $res:expr, $f:expr) => { ... };
     ($i:expr, $res:expr) => { ... };
-}"#),
-(verify_nom4_verify,
-r#"macro_rules! verify {
+}"#
+    ),
+    (
+        verify_nom4_verify,
+        r#"macro_rules! verify {
     (__impl $i:expr, $submac:ident!( $($args:tt)* ), $submac2:ident!( $($args2:tt)* )) => { ... };
     ($i:expr, $submac:ident!( $($args:tt)* ), $g:expr) => { ... };
     ($i:expr, $submac:ident!( $($args:tt)* ), $submac2:ident!( $($args2:tt)* )) => { ... };
     ($i:expr, $f:expr, $g:expr) => { ... };
     ($i:expr, $f:expr, $submac:ident!( $($args:tt)* )) => { ... };
-}"#),
-(verify_nom4_wrap_sep,
-r#"macro_rules! wrap_sep {
+}"#
+    ),
+    (
+        verify_nom4_wrap_sep,
+        r#"macro_rules! wrap_sep {
     ($i:expr, $separator:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $separator:expr, $f:expr) => { ... };
-}"#),
-(verify_nom4_ws,
-r#"macro_rules! ws {
+}"#
+    ),
+    (
+        verify_nom4_ws,
+        r#"macro_rules! ws {
     ($i:expr, $($args:tt)*) => { ... };
-}"#),
-(verify_syn_token,
-r#"macro_rules! Token {
+}"#
+    ),
+    (
+        verify_syn_token,
+        r#"macro_rules! Token {
     (+) => { ... };
     (+=) => { ... };
     (&) => { ... };
@@ -896,9 +1115,11 @@ r#"macro_rules! Token {
     (where) => { ... };
     (while) => { ... };
     (yield) => { ... };
-}"#),
-(verify_syn_alt,
-r#"macro_rules! alt {
+}"#
+    ),
+    (
+        verify_syn_alt,
+        r#"macro_rules! alt {
     ($i:expr, $e:ident | $($rest:tt)*) => { ... };
     ($i:expr, $subrule:ident!( $($args:tt)*) | $($rest:tt)*) => { ... };
     ($i:expr, $subrule:ident!( $($args:tt)* ) => { $gen:expr } | $($rest:tt)+) => { ... };
@@ -907,38 +1128,52 @@ r#"macro_rules! alt {
     ($i:expr, $subrule:ident!( $($args:tt)* ) => { $gen:expr }) => { ... };
     ($i:expr, $e:ident) => { ... };
     ($i:expr, $subrule:ident!( $($args:tt)*)) => { ... };
-}"#),
-(verify_syn_braces,
-r#"macro_rules! braces {
+}"#
+    ),
+    (
+        verify_syn_braces,
+        r#"macro_rules! braces {
     ($i:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $f:expr) => { ... };
-}"#),
-(verify_syn_brackets,
-r#"macro_rules! brackets {
+}"#
+    ),
+    (
+        verify_syn_brackets,
+        r#"macro_rules! brackets {
     ($i:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $f:expr) => { ... };
-}"#),
-(verify_syn_call,
-r#"macro_rules! call {
+}"#
+    ),
+    (
+        verify_syn_call,
+        r#"macro_rules! call {
     ($i:expr, $fun:expr $(, $args:expr)*) => { ... };
-}"#),
-(verify_syn_cond,
-r#"macro_rules! cond {
+}"#
+    ),
+    (
+        verify_syn_cond,
+        r#"macro_rules! cond {
     ($i:expr, $cond:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $cond:expr, $f:expr) => { ... };
-}"#),
-(verify_syn_cond_reduce,
-r#"macro_rules! cond_reduce {
+}"#
+    ),
+    (
+        verify_syn_cond_reduce,
+        r#"macro_rules! cond_reduce {
     ($i:expr, $cond:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $cond:expr) => { ... };
     ($i:expr, $cond:expr, $f:expr) => { ... };
-}"#),
-(verify_syn_custom_keyword,
-r#"macro_rules! custom_keyword {
+}"#
+    ),
+    (
+        verify_syn_custom_keyword,
+        r#"macro_rules! custom_keyword {
     ($i:expr, $keyword:ident) => { ... };
-}"#),
-(verify_syn_do_parse,
-r#"macro_rules! do_parse {
+}"#
+    ),
+    (
+        verify_syn_do_parse,
+        r#"macro_rules! do_parse {
     ($i:expr, ( $($rest:expr),* )) => { ... };
     ($i:expr, $e:ident >> $($rest:tt)*) => { ... };
     ($i:expr, $submac:ident!( $($args:tt)* ) >> $($rest:tt)*) => { ... };
@@ -946,17 +1181,23 @@ r#"macro_rules! do_parse {
     ($i:expr, $field:ident : $submac:ident!( $($args:tt)* ) >> $($rest:tt)*) => { ... };
     ($i:expr, mut $field:ident : $e:ident >> $($rest:tt)*) => { ... };
     ($i:expr, mut $field:ident : $submac:ident!( $($args:tt)* ) >> $($rest:tt)*) => { ... };
-}"#),
-(verify_syn_epsilon,
-r#"macro_rules! epsilon {
+}"#
+    ),
+    (
+        verify_syn_epsilon,
+        r#"macro_rules! epsilon {
     ($i:expr,) => { ... };
-}"#),
-(verify_syn_input_end,
-r#"macro_rules! input_end {
+}"#
+    ),
+    (
+        verify_syn_input_end,
+        r#"macro_rules! input_end {
     ($i:expr,) => { ... };
-}"#),
-(verify_syn_keyword,
-r#"macro_rules! keyword {
+}"#
+    ),
+    (
+        verify_syn_keyword,
+        r#"macro_rules! keyword {
     ($i:expr, as) => { ... };
     ($i:expr, auto) => { ... };
     ($i:expr, box) => { ... };
@@ -999,44 +1240,60 @@ r#"macro_rules! keyword {
     ($i:expr, where) => { ... };
     ($i:expr, while) => { ... };
     ($i:expr, yield) => { ... };
-}"#),
-(verify_syn_many0,
-r#"macro_rules! many0 {
+}"#
+    ),
+    (
+        verify_syn_many0,
+        r#"macro_rules! many0 {
     ($i:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $f:expr) => { ... };
-}"#),
-(verify_syn_map,
-r#"macro_rules! map {
+}"#
+    ),
+    (
+        verify_syn_map,
+        r#"macro_rules! map {
     ($i:expr, $submac:ident!( $($args:tt)* ), $g:expr) => { ... };
     ($i:expr, $f:expr, $g:expr) => { ... };
-}"#),
-(verify_syn_named,
-r#"macro_rules! named {
+}"#
+    ),
+    (
+        verify_syn_named,
+        r#"macro_rules! named {
     ($name:ident -> $o:ty, $submac:ident!( $($args:tt)* )) => { ... };
     (pub $name:ident -> $o:ty, $submac:ident!( $($args:tt)* )) => { ... };
     ($name:ident($($params:tt)*) -> $o:ty, $submac:ident!( $($args:tt)* )) => { ... };
     (pub $name:ident($($params:tt)*) -> $o:ty, $submac:ident!( $($args:tt)* )) => { ... };
-}"#),
-(verify_syn_not,
-r#"macro_rules! not {
+}"#
+    ),
+    (
+        verify_syn_not,
+        r#"macro_rules! not {
     ($i:expr, $submac:ident!( $($args:tt)* )) => { ... };
-}"#),
-(verify_syn_option,
-r#"macro_rules! option {
+}"#
+    ),
+    (
+        verify_syn_option,
+        r#"macro_rules! option {
     ($i:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $f:expr) => { ... };
-}"#),
-(verify_syn_parens,
-r#"macro_rules! parens {
+}"#
+    ),
+    (
+        verify_syn_parens,
+        r#"macro_rules! parens {
     ($i:expr, $submac:ident!( $($args:tt)* )) => { ... };
     ($i:expr, $f:expr) => { ... };
-}"#),
-(verify_syn_parse_quote,
-r#"macro_rules! parse_quote {
+}"#
+    ),
+    (
+        verify_syn_parse_quote,
+        r#"macro_rules! parse_quote {
     ($($tt:tt)*) => { ... };
-}"#),
-(verify_syn_punct,
-r#"macro_rules! punct {
+}"#
+    ),
+    (
+        verify_syn_punct,
+        r#"macro_rules! punct {
     ($i:expr, +) => { ... };
     ($i:expr, +=) => { ... };
     ($i:expr, &) => { ... };
@@ -1082,25 +1339,35 @@ r#"macro_rules! punct {
     ($i:expr, -) => { ... };
     ($i:expr, -=) => { ... };
     ($i:expr, _) => { ... };
-}"#),
-(verify_syn_reject,
-r#"macro_rules! reject {
+}"#
+    ),
+    (
+        verify_syn_reject,
+        r#"macro_rules! reject {
     ($i:expr,) => { ... };
-}"#),
-(verify_syn_syn,
-r#"macro_rules! syn {
+}"#
+    ),
+    (
+        verify_syn_syn,
+        r#"macro_rules! syn {
     ($i:expr, $t:ty) => { ... };
-}"#),
-(verify_syn_tuple,
-r#"macro_rules! tuple {
+}"#
+    ),
+    (
+        verify_syn_tuple,
+        r#"macro_rules! tuple {
     ($i:expr, $($rest:tt)+) => { ... };
-}"#),
-(verify_syn_value,
-r#"macro_rules! value {
+}"#
+    ),
+    (
+        verify_syn_value,
+        r#"macro_rules! value {
     ($i:expr, $res:expr) => { ... };
-}"#),
-(verify_bitflags,
-r#"macro_rules! bitflags {
+}"#
+    ),
+    (
+        verify_bitflags,
+        r#"macro_rules! bitflags {
     (
         $(#[$outer:meta])*
         pub struct $BitFlags:ident: $T:ty {
@@ -1128,16 +1395,20 @@ r#"macro_rules! bitflags {
             )+
         }
     ) => { ... };
-}"#),
-(verify_lazy_static,
-r#"macro_rules! lazy_static {
+}"#
+    ),
+    (
+        verify_lazy_static,
+        r#"macro_rules! lazy_static {
     ($(#[$attr:meta])* static ref $N:ident : $T:ty = $e:expr; $($t:tt)*) => { ... };
     ($(#[$attr:meta])* pub static ref $N:ident : $T:ty = $e:expr; $($t:tt)*) => { ... };
     ($(#[$attr:meta])* pub ($($vis:tt)+) static ref $N:ident : $T:ty = $e:expr; $($t:tt)*) => { ... };
     () => { ... };
-}"#),
-(verify_quickcheck,
-r#"macro_rules! quickcheck {
+}"#
+    ),
+    (
+        verify_quickcheck,
+        r#"macro_rules! quickcheck {
     (@as_items $($i:item)*) => { ... };
     {
         $(
@@ -1147,9 +1418,11 @@ r#"macro_rules! quickcheck {
             }
         )*
     } => { ... };
-}"#),
-(verify_handlebards_helper,
-r#"macro_rules! handlebars_helper {
+}"#
+    ),
+    (
+        verify_handlebards_helper,
+        r#"macro_rules! handlebars_helper {
     ($struct_name:ident: |$($name:ident: $tpe:tt),*| $body:expr ) => { ... };
     (@as_json_value $x:ident, object) => { ... };
     (@as_json_value $x:ident, array) => { ... };
@@ -1159,9 +1432,11 @@ r#"macro_rules! handlebars_helper {
     (@as_json_value $x:ident, f64) => { ... };
     (@as_json_value $x:ident, bool) => { ... };
     (@as_json_value $x:ident, null) => { ... };
-}"#),
-(verify_dlopen_external_library,
-r#"macro_rules! dlopen_external_library {
+}"#
+    ),
+    (
+        verify_dlopen_external_library,
+        r#"macro_rules! dlopen_external_library {
     (__struct, $structname: ident,
         $(statics: $($sname: ident: $stype: ty),+,)|*
         $(functions: $(fn $fname: ident($($farg: ty),*) -> $fret:ty),+,)|*
@@ -1177,9 +1452,11 @@ r#"macro_rules! dlopen_external_library {
         $(functions: $(fn $fname: ident($($farg: ty),*) -> $fret:ty),+,)|*
         $(varargs: $(fn $vname: ident($($vargs: ty),+) -> $vret: ty),+,)|*
     ) => { ... };
-}"#),
-(verify_gfx_defines,
-r#"macro_rules! gfx_defines {
+}"#
+    ),
+    (
+        verify_gfx_defines,
+        r#"macro_rules! gfx_defines {
     ($(#[$attr:meta])* vertex $name:ident {
             $( $(#[$field_attr:meta])* $field:ident : $ty:ty = $e:expr, )+
     }) => { ... };
@@ -1198,9 +1475,11 @@ r#"macro_rules! gfx_defines {
     ($keyword:ident $name:ident {
             $( $field:ident : $ty:ty = $e:expr, )+
     } $($tail:tt)+) => { ... };
-}"#),
-(verify_clap_app,
-r#"macro_rules! clap_app {
+}"#
+    ),
+    (
+        verify_clap_app,
+        r#"macro_rules! clap_app {
     (@app ($builder:expr)) => { ... };
     (@app ($builder:expr) (@arg ($name:expr): $($tail:tt)*) $($tt:tt)*) => { ... };
     (@app ($builder:expr) (@arg $name:ident: $($tail:tt)*) $($tt:tt)*) => { ... };
@@ -1235,18 +1514,22 @@ r#"macro_rules! clap_app {
     (@subcommand $name:ident => $($tail:tt)*) => { ... };
     (($name:expr) => $($tail:tt)*) => { ... };
     ($name:ident => $($tail:tt)*) => { ... };
-}"#),
-(verify_convert_args,
-r#"macro_rules! convert_args {
+}"#
+    ),
+    (
+        verify_convert_args,
+        r#"macro_rules! convert_args {
     (keys=$kf:expr, $macro_name:ident !($($k:expr),* $(,)*)) => { ... };
     (keys=$kf:expr, values=$vf:expr, $macro_name:ident !($($k:expr),* $(,)*)) => { ... };
     (keys=$kf:expr, values=$vf:expr, $macro_name:ident !( $($k:expr => $v:expr),* $(,)*)) => { ... };
     (keys=$kf:expr, $macro_name:ident !($($rest:tt)*)) => { ... };
     (values=$vf:expr, $macro_name:ident !($($rest:tt)*)) => { ... };
     ($macro_name:ident ! $($rest:tt)*) => { ... };
-}"#),
-(verify_cfg_if,
-r#"macro_rules! cfg_if {
+}"#
+    ),
+    (
+        verify_cfg_if,
+        r#"macro_rules! cfg_if {
     ($(
         if #[cfg($($meta:meta),*)] { $($it:item)* }
     ) else * else {
@@ -1258,9 +1541,11 @@ r#"macro_rules! cfg_if {
             else if #[cfg($($e_met:meta),*)] { $($e_it:item)* }
         )*
     ) => { ... };
-}"#),
-(verify_enum_from_primitive,
-r#"macro_rules! enum_from_primitive {
+}"#
+    ),
+    (
+        verify_enum_from_primitive,
+        r#"macro_rules! enum_from_primitive {
     (
         $( #[$enum_attr:meta] )*
         enum $name:ident {
@@ -1364,9 +1649,11 @@ r#"macro_rules! enum_from_primitive {
         }
         enum_from_primitive_impl! { $name, $( $( $variant )+ )+ }
     };
-}"#),
-(verify_quick_check,
-r#"macro_rules! quick_error {
+}"#
+    ),
+    (
+        verify_quick_check,
+        r#"macro_rules! quick_error {
     (   $(#[$meta:meta])*
         pub enum $name:ident { $($chunks:tt)* }
     ) => { ... };
@@ -1625,4 +1912,6 @@ r#"macro_rules! quick_error {
         -> {$( $v:ident: $e:expr ),*} $( $tail:tt )*) => { ... };
     (ERROR_CHECK $imode:tt ) => { ... };
     (IDENT $ident:ident) => { ... };
-}"#));
+}"#
+    )
+);
