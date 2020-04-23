@@ -790,13 +790,13 @@ mod tests {
         assert_eq!(
             nonterminals[&parser::Fragment::Ty],
             ["Foo".to_owned(), "Bar".to_owned()]
-                .into_iter()
+                .iter()
                 .cloned()
                 .collect()
         );
         assert_eq!(
             nonterminals[&parser::Fragment::Ident],
-            ["Foobar".to_owned()].into_iter().cloned().collect()
+            ["Foobar".to_owned()].iter().cloned().collect()
         );
     }
 }

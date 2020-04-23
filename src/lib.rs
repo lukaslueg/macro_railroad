@@ -24,7 +24,7 @@
 //!
 //! ```
 //! let src = r#"macro_rules! vec {
-//!           	     ( $ elem : expr ; $ n : expr ) => { ... };
+//!                  ( $ elem : expr ; $ n : expr ) => { ... };
 //!                  ( $ ( $ x : expr ) , * ) => { ... };
 //!                  ( $ ( $ x : expr , ) * ) => { ... };
 //!              }
@@ -44,7 +44,7 @@
 //!
 //! ```
 //! let src = r#"macro_rules! vec {
-//!           	     ( $ elem : expr ; $ n : expr ) => { ... };
+//!                  ( $ elem : expr ; $ n : expr ) => { ... };
 //!                  ( $ ( $ x : expr ) , * ) => { ... };
 //!                  ( $ ( $ x : expr , ) * ) => { ... };
 //!              }
