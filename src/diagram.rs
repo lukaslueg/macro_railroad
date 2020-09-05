@@ -266,9 +266,7 @@ fn into_primitive(m: lowering::Matcher) -> Box<dyn railroad::RailroadNode> {
                 Some(s) => Box::new(railroad::Terminal::new(s)),
                 None => Box::new(railroad::Empty),
             };
-            let main = Box::new(railroad::Sequence::new(
-                content.into_iter().map(into_primitive).collect(),
-            ));
+            let main = into_primitive(*content);
             Box::new(railroad::Repeat::new(main, seperator))
         }
         lowering::Matcher::NonTerminal { name, fragment } => {

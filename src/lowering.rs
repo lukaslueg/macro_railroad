@@ -17,6 +17,7 @@ pub struct MacroRules {
 impl MacroRules {
     /// Recursivly fold common prefixes and suffixes in all rules
     pub fn foldcommontails(&mut self) {
+        self.normalize();
         self.accept_mut(&mut FoldCommonTails);
     }
 
@@ -95,7 +96,7 @@ pub enum Matcher {
     Optional(Box<Matcher>),
     Sequence(Vec<Matcher>),
     Repeat {
-        content: Vec<Matcher>,
+        content: Box<Matcher>,
         seperator: Option<String>,
     },
     NonTerminal {
@@ -129,20 +130,6 @@ impl Matcher {
             proc_macro2::Delimiter::Brace => Some(("{", "}")),
             proc_macro2::Delimiter::Parenthesis => Some(("(", ")")),
             proc_macro2::Delimiter::Bracket => Some(("[", "]")),
-        }
-    }
-
-    pub fn is_empty(&self) -> bool {
-        match self {
-            Matcher::Empty => true,
-            _ => false,
-        }
-    }
-
-    pub fn is_sequence(&self) -> bool {
-        match self {
-            Matcher::Sequence(_) => true,
-            _ => false,
         }
     }
 }
@@ -187,13 +174,15 @@ impl From<parser::Matcher> for Matcher {
                     parser::Separator::Literal(l) => l.to_string(),
                     parser::Separator::Ident(i) => i.to_string(),
                 });
-                let content = content.into_iter().map(|m| m.into()).collect();
+                let content = Box::new(Matcher::Sequence(
+                    content.into_iter().map(|m| m.into()).collect(),
+                ));
                 match repetition {
                     parser::Repetition::AtMostOnce => {
                         // The ? repetition does not take a seperator, should
                         // be a parse-error!
                         debug_assert!(seperator.is_none());
-                        Matcher::Optional(Box::new(Matcher::Sequence(content)))
+                        Matcher::Optional(content)
                     }
                     parser::Repetition::AtLeastOnce => Matcher::Repeat { content, seperator },
                     parser::Repetition::Repeated => {
@@ -220,10 +209,12 @@ pub trait InspectVisitor {
             | Matcher::Comment(_)
             | Matcher::Literal(_)
             | Matcher::NonTerminal { .. } => {}
-            Matcher::Sequence(content)
-            | Matcher::Choice(content)
-            | Matcher::Repeat { content, .. } => content.iter().for_each(|e| self.visit(e)),
-            Matcher::Group(m) | Matcher::Optional(m) => self.visit(m),
+            Matcher::Sequence(content) | Matcher::Choice(content) => {
+                content.iter().for_each(|e| self.visit(e))
+            }
+            Matcher::Repeat { content, .. }
+            | Matcher::Group(content)
+            | Matcher::Optional(content) => self.visit(content),
         }
     }
 }
@@ -264,10 +255,12 @@ pub trait TransformVisitor {
             | Matcher::Comment(_)
             | Matcher::Literal(_)
             | Matcher::NonTerminal { .. } => {}
-            Matcher::Sequence(content)
-            | Matcher::Choice(content)
-            | Matcher::Repeat { content, .. } => content.iter_mut().for_each(|e| self.visit(e)),
-            Matcher::Group(m) | Matcher::Optional(m) => self.visit(m),
+            Matcher::Sequence(content) | Matcher::Choice(content) => {
+                content.iter_mut().for_each(|e| self.visit(e))
+            }
+            Matcher::Repeat { content, .. }
+            | Matcher::Group(content)
+            | Matcher::Optional(content) => self.visit(content),
         }
     }
 }
@@ -285,7 +278,7 @@ impl TransformVisitor for Ungrouper {
             // nested Sequences. Clean this up now, so folding only sees
             // flat Sequences.
             Matcher::Sequence(v) => {
-                if v.iter().any(|e| e.is_sequence()) {
+                if v.iter().any(|e| matches!(e, Matcher::Sequence(_))) {
                     let mut new_v = Vec::with_capacity(v.len());
                     for e in v {
                         match e {
@@ -307,72 +300,139 @@ impl TransformVisitor for Ungrouper {
 pub struct Normalizer;
 
 impl Normalizer {
+    fn normalize_optional(m: Box<Matcher>) -> (bool, Matcher) {
+        // A nested Optional can be unnested
+        if let Matcher::Optional(c) = *m {
+            (true, Matcher::Optional(c))
+        } else {
+            (false, Matcher::Optional(m))
+        }
+    }
+
+    fn normalize_sequence(mut m: Vec<Matcher>) -> (bool, Matcher) {
+        if m.is_empty() {
+            // An empty sequence is the empty element
+            (true, Matcher::Empty)
+        } else if m.len() == 1 {
+            // A Sequence of exactly one element is that element
+            (true, m.pop().unwrap())
+        } else if m.iter().any(|e| matches!(e, Matcher::Sequence(_))) {
+            // A Sequence within a Sequence can be unpacked
+            let mut new_v = Vec::with_capacity(m.len());
+            for e in m {
+                match e {
+                    Matcher::Sequence(ee) => new_v.extend(ee),
+                    other => new_v.push(other),
+                }
+            }
+            (true, Matcher::Sequence(new_v))
+        } else {
+            (false, Matcher::Sequence(m))
+        }
+    }
+
+    fn normalize_choice(mut m: Vec<Matcher>) -> (bool, Matcher) {
+        if m.is_empty() {
+            // An empty Choice is just the empty element
+            return (true, Matcher::Empty);
+        }
+
+        if m.len() == 1 {
+            // A Choice of exactly one element is that element
+            return (true, m.pop().unwrap());
+        }
+
+        if let Some(idx) = m.iter().enumerate().find_map(|(idx, e)| {
+            if matches!(e, Matcher::Empty) {
+                Some(idx)
+            } else {
+                None
+            }
+        }) {
+            // A Choice with an Empty in it is an Optional(Choice)
+            m.remove(idx);
+            let mut new_m = Matcher::Optional(Box::new(Matcher::Choice(m)));
+            Normalizer.visit(&mut new_m);
+            return (true, new_m);
+        }
+
+        // A Choice with an Optional in it is an Optional(Choice) with that
+        // item being not optional
+        let mut changed = false;
+        for e in m.iter_mut() {
+            *e = match std::mem::replace(e, Matcher::Empty) {
+                Matcher::Optional(b) => {
+                    changed |= true;
+                    *b
+                }
+                other => other,
+            }
+        }
+        if changed {
+            let mut new_m = Matcher::Optional(Box::new(Matcher::Choice(m)));
+            Normalizer.visit(&mut new_m);
+            return (true, new_m);
+        }
+
+        // Duplicates in a Choice can be removed
+        if m.len() > 1 {
+            let mut refs = m.iter().enumerate().collect::<Vec<_>>();
+            refs.sort_unstable_by_key(|(_idx, e)| *e);
+            if let Some(idx) =
+                refs.iter()
+                    .rev()
+                    .zip(refs.iter().rev().skip(1))
+                    .find_map(
+                        |((_, e1), (idx, e2))| {
+                            if e1 == e2 {
+                                Some(*idx)
+                            } else {
+                                None
+                            }
+                        },
+                    )
+            {
+                m.remove(idx);
+                return (true, Matcher::Choice(m));
+            }
+        }
+
+        // Duplicates of a Repeat's content and other elements can be deduplicated in a Choice
+        if let Some(idx) = m.iter().find_map(|e| {
+            if let Matcher::Repeat { content, .. } = e {
+                m.iter().position(|e2| *e2 == **content)
+            } else {
+                None
+            }
+        }) {
+            m.remove(idx);
+            return (true, Matcher::Choice(m));
+        }
+
+        (false, Matcher::Choice(m))
+    }
+
     fn normalize(m: &mut Matcher) {
         let mut changed;
         // Pound on this element until no more transformations are performed
         loop {
             changed = false;
-            // The Matcher::Empty is just temporary, it never actually materializes
+            // TODO RFC 372
             *m = match ::std::mem::replace(m, Matcher::Empty) {
-                Matcher::Optional(mut b) => {
-                    if let Matcher::Optional(c) = *b {
-                        // A nested Optional can be unnested
-                        changed |= true;
-                        b = c;
-                    }
-                    Matcher::Optional(b)
+                Matcher::Optional(b) => {
+                    let r = Self::normalize_optional(b);
+                    changed |= r.0;
+                    r.1
                 }
-                Matcher::Choice(mut b) => {
-                    if b.is_empty() {
-                        // An empty Choice is just the empty element
-                        changed |= true;
-                        Matcher::Empty
-                    } else if b.len() == 1 {
-                        // A Choice of exactly one element is that element
-                        changed |= true;
-                        b.pop().unwrap()
-                    } else {
-                        // A Choice with an Empty in it is an Optional(Choice)
-                        match b
-                            .iter()
-                            .enumerate()
-                            .filter_map(|(idx, e)| if e.is_empty() { Some(idx) } else { None })
-                            .next()
-                        {
-                            Some(idx) => {
-                                changed |= true;
-                                b.remove(idx);
-                                let mut new_m = Matcher::Optional(Box::new(Matcher::Choice(b)));
-                                Normalizer.visit(&mut new_m);
-                                new_m
-                            }
-                            None => Matcher::Choice(b),
-                        }
-                    }
+                Matcher::Choice(b) => {
+                    let r = Self::normalize_choice(b);
+                    changed |= r.0;
+                    r.1
                 }
-                Matcher::Sequence(mut b) => {
-                    if b.is_empty() {
-                        // An empty sequence is the empty element
-                        changed |= true;
-                        Matcher::Empty
-                    } else if b.len() == 1 {
-                        // A Sequence of exactly one element is that element
-                        changed |= true;
-                        b.pop().unwrap()
-                    } else if b.iter().any(|e| e.is_sequence()) {
-                        // A Sequence within a Sequence can be unpacked
-                        changed |= true;
-                        let mut new_v = Vec::with_capacity(b.len());
-                        for e in b {
-                            match e {
-                                Matcher::Sequence(ee) => new_v.extend(ee),
-                                other => new_v.push(other),
-                            }
-                        }
-                        Matcher::Sequence(new_v)
-                    } else {
-                        Matcher::Sequence(b)
-                    }
+                Matcher::Sequence(b) => {
+                    let r = Self::normalize_sequence(b);
+                    changed |= r.0;
+                    r.1
                 }
                 other => other,
             };
@@ -430,11 +490,11 @@ impl InternalMacroRemover {
             | Matcher::Empty
             | Matcher::NonTerminal { .. }
             | Matcher::Optional(_) => None,
-            Matcher::Group(m) => Self::first_literal(m),
-            Matcher::Literal(s) => Some(s),
-            Matcher::Repeat { content, .. } | Matcher::Sequence(content) => {
-                content.first().and_then(Self::first_literal)
+            Matcher::Group(content) | Matcher::Repeat { content, .. } => {
+                Self::first_literal(content)
             }
+            Matcher::Literal(s) => Some(s),
+            Matcher::Sequence(content) => content.first().and_then(Self::first_literal),
         }
     }
 
@@ -626,6 +686,14 @@ impl FoldCommonTails {
     }
 
     fn mostcommontails(inp: &mut Vec<Matcher>) {
+        // We expect slices in `core`, so we temporarily put everything into
+        // Sequences. This gets cleaned up during normalization.
+        for e in inp.iter_mut() {
+            *e = match std::mem::replace(e, Matcher::Empty) {
+                Matcher::Sequence(v) => Matcher::Sequence(v),
+                other => Matcher::Sequence(vec![other]),
+            }
+        }
         // With every iteration, the best available candidate gets folded.
         // Repeat until there is nothing we can do at all.
         while let Some((indices, new_seq)) = Self::mostcommontails_core(&inp) {
@@ -684,7 +752,7 @@ mod tests {
             Matcher::Group(Box::new($r))
         };
     }
-    macro_rules! seq { ($($r:expr),*) => { Matcher::Sequence(vec![$($r,)+]) } }
+    macro_rules! seq { ($($r:expr),*) => { Matcher::Sequence(vec![$($r,)*]) } }
     macro_rules! lseq { ($($r:expr),*) => { seq!($(lit!($r)),+) } }
     macro_rules! cho { ($($r:expr),*) => { Matcher::Choice(vec![$($r,)+]) } }
     macro_rules! cmt {
@@ -692,8 +760,14 @@ mod tests {
             Matcher::Comment($t.to_owned())
         };
     }
-    macro_rules! rpt { ($($c:expr),*) => { Matcher::Repeat { content: vec![$($c,)+],
-                                                             seperator: None } } }
+    macro_rules! rpt {
+        ($c:expr) => {
+            Matcher::Repeat {
+                content: Box::new($c),
+                seperator: None,
+            }
+        };
+    }
     macro_rules! nonterm {
         ($t:expr, $v:expr) => {
             Matcher::NonTerminal {
@@ -706,22 +780,16 @@ mod tests {
         };
     }
 
-    macro_rules! test_fold {
-        ($name:ident, $inp:expr, $exp:expr) => {
-            #[test]
-            fn $name() {
-                let mut mr = mr!($inp);
-                mr.foldcommontails();
-                assert_eq!(mr.rules, $exp);
-            }
-        };
+    #[test]
+    fn fold_simple() {
+        let mut mr = rmr!(cho![lseq!("A", "X", "C"), lseq!("A", "Y", "C")]);
+        mr.foldcommontails();
+        mr.normalize();
+        assert_eq!(
+            mr.rules,
+            seq!(lit!("A"), cho!(lit!("X"), lit!("Y")), lit!("C"))
+        );
     }
-
-    test_fold!(
-        fold_simple,
-        vec![lseq!("A", "X", "C"), lseq!("A", "Y", "C"),],
-        cho!(seq!(lit!("A"), cho!(lit!("X"), lit!("Y")), lit!("C")))
-    );
 
     #[test]
     fn normalize_simple() {
@@ -731,7 +799,7 @@ mod tests {
     }
 
     #[test]
-    fn fold_nested_options() {
+    fn normalize_nested_options() {
         // Issue 22
         let mut mr = rmr!(seq!(opt!(opt!(lit!("A"))), lit!("B")));
         mr.normalize();
@@ -740,6 +808,29 @@ mod tests {
         let mut mr = rmr!(seq!(opt!(opt!(lit!("A"))), opt!(opt!(opt!(lit!("B"))))));
         mr.normalize();
         assert_eq!(mr, rmr!(seq!(opt!(lit!("A")), opt!(lit!("B")))));
+    }
+
+    #[test]
+    fn fold_unnormalized_source() {
+        // This didnt get folded because normalization didnt use to happen before folding.
+        let mut mr = rmr!(cho!(seq!(), seq!(lit!(",")), seq!(opt!(seq!(lit!(","))))));
+        mr.foldcommontails();
+        assert_eq!(mr, rmr!(opt!(lit!(","))));
+    }
+
+    #[test]
+    fn fold_normalizable_source() {
+        let mut mr = rmr!(cho!(lit!("x"), seq!(lit!("x"), lit!("y"))));
+        mr.foldcommontails();
+        mr.normalize();
+        assert_eq!(mr, rmr!(seq!(lit!("x"), opt!(lit!("y")))));
+    }
+
+    #[test]
+    fn normalize_repeat() {
+        let mut mr = rmr!(cho!(rpt!(lit!("A")), lit!("A")));
+        mr.normalize();
+        assert_eq!(mr, rmr!(rpt!(lit!("A"))));
     }
 
     #[test]

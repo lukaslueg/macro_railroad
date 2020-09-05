@@ -6,12 +6,10 @@
 
 #[macro_use]
 extern crate lazy_static;
-use macro_railroad;
-use railroad_verification;
 
 lazy_static! {
     static ref VERIFIER: railroad_verification::Verifier =
-        { railroad_verification::Verifier::new().unwrap() };
+        railroad_verification::Verifier::new().unwrap();
 }
 
 fn to_diagram(src: &str) -> (String, Vec<(&'static str, String)>) {
