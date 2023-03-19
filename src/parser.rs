@@ -117,7 +117,7 @@ impl Parse for MacroRules {
 
 impl Rule {
     fn parse_many(input: ParseStream<'_>) -> Result<Vec<Self>> {
-        let rules = input.parse_terminated::<Rule, Token![;]>(Rule::parse)?;
+        let rules = input.parse_terminated(Rule::parse, Token![;])?;
         if rules.is_empty() {
             Err(input.error("expected at least one macro rule"))
         } else {
