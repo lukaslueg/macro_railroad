@@ -7,19 +7,19 @@ use syn::parse::{Error, Parse, ParseBuffer, ParseStream, Result};
 use syn::token::{Brace, Bracket, Dollar, Paren};
 use syn::Lifetime;
 
-#[cfg_attr(feature = "extra-traits", derive(Debug))]
+#[derive(Debug)]
 pub struct MacroRules {
     pub name: Ident,
     pub rules: Vec<Rule>,
 }
 
-#[cfg_attr(feature = "extra-traits", derive(Debug))]
+#[derive(Debug)]
 pub struct Rule {
     pub matcher: Vec<Matcher>,
     pub expansion: TokenStream,
 }
 
-#[cfg_attr(feature = "extra-traits", derive(Debug))]
+#[derive(Debug)]
 pub enum Matcher {
     Punct(Punct),
     Ident(Ident),
