@@ -1,5 +1,4 @@
-
-[![Build Status](https://travis-ci.org/lukaslueg/macro_railroad.svg?branch=master)](https://travis-ci.org/lukaslueg/macro_railroad)
+[![Build status](https://github.com/lukaslueg/macro_railroad/actions/workflows/check.yml/badge.svg)](https://github.com/lukaslueg/macro_railroad/actions/workflows/check.yml)
 [![Crates.io Version](https://img.shields.io/crates/v/macro_railroad.svg)](https://crates.io/crates/macro_railroad)
 
 
