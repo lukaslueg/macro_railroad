@@ -23,7 +23,7 @@ impl MacroRules {
 
     /// Replace all rules starting with dunder-literals (e.g. "__impl") with a single comment.
     pub fn remove_internal(&mut self) {
-        self.accept_mut(&mut InternalMacroRemover)
+        self.accept_mut(&mut InternalMacroRemover);
     }
 
     /// Collect the unique set of non-terminal symbols.
@@ -57,11 +57,13 @@ impl MacroRules {
     }
 
     /// Tests if any `Matcher` matches the given predicate.
+    #[must_use]
     pub fn any<F: FnMut(&Matcher) -> bool>(&self, predicate: F) -> bool {
         self.rules.any(predicate)
     }
 
     /// Tests if the given `Matcher` is found in the graph.
+    #[must_use]
     pub fn contains(&self, needle: &Matcher) -> bool {
         self.rules.contains(needle)
     }
@@ -71,7 +73,7 @@ impl From<parser::MacroRules> for MacroRules {
     fn from(m: parser::MacroRules) -> MacroRules {
         MacroRules {
             name: m.name.to_string(),
-            rules: Matcher::Choice(m.rules.into_iter().map(|r| r.into()).collect()),
+            rules: Matcher::Choice(m.rules.into_iter().map(Into::into).collect()),
         }
     }
 }
@@ -120,6 +122,7 @@ impl Matcher {
         s.found
     }
 
+    #[must_use]
     pub fn contains(&self, needle: &Matcher) -> bool {
         self.any(|m| m == needle)
     }
@@ -136,7 +139,7 @@ impl Matcher {
 
 impl From<parser::Rule> for Matcher {
     fn from(r: parser::Rule) -> Matcher {
-        Matcher::Sequence(r.matcher.into_iter().map(|m| m.into()).collect())
+        Matcher::Sequence(r.matcher.into_iter().map(Into::into).collect())
     }
 }
 
@@ -157,7 +160,7 @@ impl From<parser::Matcher> for Matcher {
                 //    While one might consider this correct-ish, it may prevent a *lot*
                 //    of folding if the macro is very large.
                 //  One can use the Ungrouper-Walker to unpack Groups
-                let mut v = content.into_iter().map(|m| m.into()).collect::<Vec<_>>();
+                let mut v = content.into_iter().map(Into::into).collect::<Vec<_>>();
                 if let Some((b, e)) = Matcher::delimiter_to_str(delimiter) {
                     v.insert(0, Matcher::Literal(b.to_owned()));
                     v.push(Matcher::Literal(e.to_owned()));
@@ -175,7 +178,7 @@ impl From<parser::Matcher> for Matcher {
                     parser::Separator::Ident(i) => i.to_string(),
                 });
                 let content = Box::new(Matcher::Sequence(
-                    content.into_iter().map(|m| m.into()).collect(),
+                    content.into_iter().map(Into::into).collect(),
                 ));
                 match repetition {
                     parser::Repetition::AtMostOnce => {
@@ -210,7 +213,7 @@ pub trait InspectVisitor {
             | Matcher::Literal(_)
             | Matcher::NonTerminal { .. } => {}
             Matcher::Sequence(content) | Matcher::Choice(content) => {
-                content.iter().for_each(|e| self.visit(e))
+                content.iter().for_each(|e| self.visit(e));
             }
             Matcher::Repeat { content, .. }
             | Matcher::Group(content)
@@ -256,7 +259,7 @@ pub trait TransformVisitor {
             | Matcher::Literal(_)
             | Matcher::NonTerminal { .. } => {}
             Matcher::Sequence(content) | Matcher::Choice(content) => {
-                content.iter_mut().for_each(|e| self.visit(e))
+                content.iter_mut().for_each(|e| self.visit(e));
             }
             Matcher::Repeat { content, .. }
             | Matcher::Group(content)
@@ -359,7 +362,7 @@ impl Normalizer {
         // A Choice with an Optional in it is an Optional(Choice) with that
         // item being not optional
         let mut changed = false;
-        for e in m.iter_mut() {
+        for e in &mut m {
             *e = match std::mem::replace(e, Matcher::Empty) {
                 Matcher::Optional(b) => {
                     changed |= true;
@@ -450,18 +453,10 @@ impl TransformVisitor for Normalizer {
     }
 }
 
-/// Walks a `Matcher`-tree and collects all NonTerminals as their Name/Fragment-combinations
-#[derive(Clone, Debug)]
+/// Walks a `Matcher`-tree and collects all `NonTerminals` as their Name/Fragment-combinations
+#[derive(Clone, Debug, Default)]
 pub struct NonTerminalCollector {
     pub bag: HashMap<parser::Fragment, HashSet<String>>,
-}
-
-impl Default for NonTerminalCollector {
-    fn default() -> Self {
-        NonTerminalCollector {
-            bag: HashMap::new(),
-        }
-    }
 }
 
 impl InspectVisitor for NonTerminalCollector {
@@ -545,10 +540,11 @@ impl FoldCommonTails {
     // 6. Remove those rules from the original `Choice`, which are now represented by the above.
     // 7. Select the next best candidate and repeat until there are no more common tails.
     /// Determine the longest common prefix/suffix and the rules which share these.
+    #[allow(clippy::type_complexity)]
     fn mostcommongroups<'a>(
         tails: BTreeMap<&Matcher, Vec<&'a Vec<Matcher>>>,
     ) -> Option<(Vec<&'a Vec<Matcher>>, &'a [Matcher], &'a [Matcher])> {
-        let max_size = tails.values().map(|g| g.len()).max().unwrap_or_default();
+        let max_size = tails.values().map(Vec::len).max().unwrap_or_default();
         if max_size <= 1 {
             return None;
         }
@@ -558,40 +554,44 @@ impl FoldCommonTails {
             .filter_map(|(_k, v)| if v.len() == max_size { Some(v) } else { None })
             .map(|group| {
                 // Figure out the longest prefix common to all
-                let mut lcp = &group[0][0..group[0]
+                let mut lcprefix = &group[0][0..group[0]
                     .iter()
                     .zip(group[1])
                     .take_while(|(a, b)| a == b)
                     .count()];
                 for s in group.iter().skip(2) {
-                    if lcp.is_empty() {
+                    if lcprefix.is_empty() {
                         break;
                     }
-                    lcp = &lcp[0..lcp.iter().zip(s.iter()).take_while(|(a, b)| a == b).count()];
+                    lcprefix = &lcprefix[0..lcprefix
+                        .iter()
+                        .zip(s.iter())
+                        .take_while(|(a, b)| a == b)
+                        .count()];
                 }
                 // Figure out the longest suffix common to all
                 // Take care never to overlap the prefix, which we favor implicitly
-                let mut lcs = &group[0][group[0].len()
+                let mut lcsuffix = &group[0][group[0].len()
                     - group[0]
                         .iter()
-                        .skip(lcp.len())
+                        .skip(lcprefix.len())
                         .rev()
-                        .zip(group[1].iter().skip(lcp.len()).rev())
+                        .zip(group[1].iter().skip(lcprefix.len()).rev())
                         .take_while(|(a, b)| a == b)
                         .count()..];
                 for s in group.iter().skip(2) {
-                    if lcs.is_empty() {
+                    if lcsuffix.is_empty() {
                         break;
                     }
-                    lcs = &lcs[lcs.len()
-                        - lcs
+                    lcsuffix = &lcsuffix[lcsuffix.len()
+                        - lcsuffix
                             .iter()
                             .rev()
                             .zip(s.iter().rev())
                             .take_while(|(a, b)| a == b)
                             .count()..];
                 }
-                (group, lcp, lcs)
+                (group, lcprefix, lcsuffix)
             })
             .max_by_key(|(_group, lcp, lcs)| lcp.len() + lcs.len())
     }
@@ -696,7 +696,7 @@ impl FoldCommonTails {
         }
         // With every iteration, the best available candidate gets folded.
         // Repeat until there is nothing we can do at all.
-        while let Some((indices, new_seq)) = Self::mostcommontails_core(&inp) {
+        while let Some((indices, new_seq)) = Self::mostcommontails_core(inp) {
             indices
                 .into_iter()
                 .for_each(|idx| drop(inp.swap_remove(idx)));
@@ -708,7 +708,7 @@ impl FoldCommonTails {
 impl TransformVisitor for FoldCommonTails {
     fn visit(&mut self, m: &mut Matcher) {
         if let Matcher::Choice(rules) = m {
-            Self::mostcommontails(rules)
+            Self::mostcommontails(rules);
         }
         self.visit_children(m);
     }
@@ -876,7 +876,7 @@ mod tests {
         let mut mr = mr!(rules);
 
         let nonterminals = mr.collect_nonterminals();
-        println!("{:#?}", nonterminals);
+        println!("{nonterminals:#?}");
 
         assert_eq!(
             nonterminals[&parser::Fragment::Ty],

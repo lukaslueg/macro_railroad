@@ -77,7 +77,7 @@ pub const CSS: &str = r#"
 
 // TODO The transform causes problems with transform-box...
 
-/// A simple box with no connectors (unlike LabeledBox).
+/// A simple box with no connectors (unlike `LabeledBox`).
 ///
 /// Used for legend below the main diagram.
 #[derive(Debug)]
@@ -194,6 +194,8 @@ fn create_legend(tree: &mut lowering::MacroRules) -> Option<impl railroad::Node>
     Some(legend)
 }
 
+#[must_use]
+#[allow(clippy::module_name_repetitions)]
 pub fn into_diagram(
     mut mr: lowering::MacroRules,
     legend: bool,

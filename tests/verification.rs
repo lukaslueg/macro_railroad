@@ -13,7 +13,7 @@ lazy_static! {
 }
 
 fn to_diagram(src: &str) -> (String, Vec<(&'static str, String)>) {
-    let macro_rules = macro_railroad::parser::parse(&src).expect(src);
+    let macro_rules = macro_railroad::parser::parse(src).expect(src);
     let mut tree = macro_railroad::lowering::MacroRules::from(macro_rules);
     let name = tree.name.clone();
     let mut v = Vec::new();

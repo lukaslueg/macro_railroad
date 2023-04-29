@@ -76,9 +76,12 @@ pub mod parser;
 use syn::parse::Result;
 
 /// Create a syntax diagram as an SVG from the given macro_rules!-source.
+///
+/// # Errors
+/// If the input fails to parse as a `macro_rules!`.
 pub fn to_diagram(src: &str) -> Result<String> {
     // Parser-tree, basically as rustc sees it
-    let macro_rules = parser::parse(&src)?;
+    let macro_rules = parser::parse(src)?;
 
     // Create simplified tree
     let mut tree = lowering::MacroRules::from(macro_rules);
@@ -97,7 +100,7 @@ pub fn to_diagram(src: &str) -> Result<String> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use lowering::*;
+    use lowering::{MacroRules, Matcher};
 
     #[test]
     fn fold_nested_options() {
@@ -108,7 +111,7 @@ mod tests {
     ($self:ident.$fn:ident(&self $(, $ident:ident: $ty:ty)*)) => ($self.$fn($($ident),*));
     ($self:ident.$fn:ident(&$($lt:tt)? self $(, $ident:ident: $ty:ty)*)) => ($self.$fn($($ident),*));
 }"#;
-        let mut tree = MacroRules::from(parser::parse(&src).unwrap());
+        let mut tree = MacroRules::from(parser::parse(src).unwrap());
         tree.ungroup();
         tree.foldcommontails();
         tree.normalize();
@@ -131,7 +134,7 @@ mod tests {
     (&&) => { ... };
     (@) => { ... };
 }"#;
-        let mut tree = MacroRules::from(parser::parse(&src).unwrap());
+        let mut tree = MacroRules::from(parser::parse(src).unwrap());
         tree.remove_internal();
         tree.foldcommontails();
     }

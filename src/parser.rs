@@ -100,7 +100,7 @@ impl Parse for MacroRules {
         let name: Ident = input.parse()?;
 
         // Parse the delimited macro rules.
-        let (delimiter, content) = delimited(&input)?;
+        let (delimiter, content) = delimited(input)?;
         let rules = Rule::parse_many(&content)?;
 
         // Require trailing semicolon after parens or brackets.
@@ -129,13 +129,13 @@ impl Rule {
 impl Parse for Rule {
     fn parse(input: ParseStream<'_>) -> Result<Self> {
         // Parse the input pattern.
-        let content = delimited(&input)?.1;
+        let content = delimited(input)?.1;
         let matcher = Matcher::parse_many(&content)?;
 
         input.parse::<Token![=>]>()?;
 
         // Parse the expansion tokens.
-        let content = delimited(&input)?.1;
+        let content = delimited(input)?.1;
         let expansion: TokenStream = content.parse()?;
 
         Ok(Rule { matcher, expansion })
@@ -155,7 +155,7 @@ impl Matcher {
 impl Parse for Matcher {
     fn parse(input: ParseStream<'_>) -> Result<Self> {
         if input.peek(Paren) || input.peek(Bracket) || input.peek(Brace) {
-            let (delimiter, content) = delimited(&input)?;
+            let (delimiter, content) = delimited(input)?;
             let content = Matcher::parse_many(&content)?;
             Ok(Matcher::Group { delimiter, content })
         } else if input.parse::<Option<Dollar>>()?.is_some() {
@@ -254,6 +254,8 @@ impl Parse for Fragment {
     }
 }
 
+/// # Errors
+/// If the input fails to parse as a `macro_rules!`.
 pub fn parse(src: &str) -> Result<MacroRules> {
     syn::parse_str::<MacroRules>(src)
 }
@@ -269,20 +271,20 @@ mod tests {
         // a trailing semicolon. While this is not a strictly useful requirement,
         // we test this so the parser does not fall behind.
         let src = r#"macro_rules! a ( (a) => { $a } );"#;
-        parse(&src).unwrap();
+        parse(src).unwrap();
         let src = r#"macro_rules! a ( (a) => { $a } )"#;
-        parse(&src).err().expect("Expected missing semicolon-error");
+        parse(src).expect_err("Expected missing semicolon-error");
         let src = r#"macro_rules! a [ (a) => { $a } ]"#;
-        parse(&src).err().expect("Expected missing semicolon-error");
+        parse(src).expect_err("Expected missing semicolon-error");
         let src = r#"macro_rules! a { (a) => { $a } }"#;
-        parse(&src).unwrap();
+        parse(src).unwrap();
     }
 
     #[test]
     fn qmark_repeat_disallows_separator() {
         // Issue 21
         let src = r#"macro_rules! m { ($($tt:tt)-?) => {} }"#;
-        let err = parse(&src).err().expect("Should not have parsed");
+        let err = parse(src).expect_err("Should not have parsed");
         assert!(err.to_string().contains("does not take a separator"));
     }
 
@@ -290,7 +292,7 @@ mod tests {
     fn keywords_as_fragment_names() {
         // Issue 5
         let src = r#"macro_rules! a { ($self:ident) => { ... }; }"#;
-        parse(&src).unwrap();
+        parse(src).unwrap();
     }
 
     #[test]
@@ -344,7 +346,7 @@ $ left : expr , $ right : expr , $ ( $ arg : tt ) + ) => { ... };
 }"#,
         ][..];
         for src in fixture {
-            parse(&src).expect(src);
+            parse(src).expect(src);
         }
     }
 }
