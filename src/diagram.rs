@@ -81,13 +81,13 @@ pub const CSS: &str = r#"
 ///
 /// Used for legend below the main diagram.
 #[derive(Debug)]
-struct Container<T: railroad::RailroadNode> {
+struct Container<T: railroad::Node> {
     inner: T,
     padding: i64,
     attributes: collections::HashMap<String, String>,
 }
 
-impl<T: railroad::RailroadNode> Container<T> {
+impl<T: railroad::Node> Container<T> {
     fn new(inner: T, padding: i64) -> Self {
         Container {
             inner,
@@ -101,7 +101,7 @@ impl<T: railroad::RailroadNode> Container<T> {
     }
 }
 
-impl<T: railroad::RailroadNode> railroad::RailroadNode for Container<T> {
+impl<T: railroad::Node> railroad::Node for Container<T> {
     fn entry_height(&self) -> i64 {
         self.inner.entry_height() + self.padding
     }
@@ -115,10 +115,10 @@ impl<T: railroad::RailroadNode> railroad::RailroadNode for Container<T> {
         railroad::svg::Element::new("g")
             .add(
                 railroad::svg::Element::new("rect")
-                    .set("x", x)
-                    .set("y", y)
-                    .set("height", self.height())
-                    .set("width", self.width()),
+                    .set("x", &x)
+                    .set("y", &y)
+                    .set("height", &self.height())
+                    .set("width", &self.width()),
             )
             .add(self.inner.draw(x + self.padding, y + self.padding, hdir))
             .set_all(self.attributes.iter())
@@ -129,7 +129,7 @@ impl<T: railroad::RailroadNode> railroad::RailroadNode for Container<T> {
 /// Given a `MacroRules`, generate the legend containing all non-terminal symbols
 ///
 /// Returns `None` if there are no non-terminal symbols at all.
-fn create_legend(tree: &mut lowering::MacroRules) -> Option<impl railroad::RailroadNode> {
+fn create_legend(tree: &mut lowering::MacroRules) -> Option<impl railroad::Node> {
     // Collect nonterminals and apply *some* sorting to have repeatable ordering
     let mut bag = tree.collect_nonterminals().into_iter().collect::<Vec<_>>();
     if bag.is_empty() {
@@ -140,7 +140,7 @@ fn create_legend(tree: &mut lowering::MacroRules) -> Option<impl railroad::Railr
     let mut lines = railroad::VerticalGrid::new(vec![]);
     lines.push(Box::new(railroad::Comment::new(
         "Non-terminal patterns used by this macro:".to_owned(),
-    )));
+    )) as Box<dyn railroad::Node>);
 
     for (fragment, names) in bag {
         let mut items = railroad::HorizontalGrid::new(vec![]);
@@ -181,8 +181,10 @@ fn create_legend(tree: &mut lowering::MacroRules) -> Option<impl railroad::Railr
             };
             items.push(into_primitive(m));
         }
-        items.push(Box::new(railroad::Comment::new(explanation.to_owned())));
-        lines.push(Box::new(items));
+        items.push(
+            Box::new(railroad::Comment::new(explanation.to_owned())) as Box<dyn railroad::Node>
+        );
+        lines.push(Box::new(items) as Box<dyn railroad::Node>);
     }
     let mut legend = Container::new(lines, 6);
     legend
@@ -195,11 +197,11 @@ fn create_legend(tree: &mut lowering::MacroRules) -> Option<impl railroad::Railr
 pub fn into_diagram(
     mut mr: lowering::MacroRules,
     legend: bool,
-) -> railroad::Diagram<Box<dyn railroad::RailroadNode>> {
+) -> railroad::Diagram<Box<dyn railroad::Node>> {
     let legend = if legend { create_legend(&mut mr) } else { None };
 
     let seq = railroad::Sequence::new(vec![
-        Box::new(railroad::SimpleStart),
+        Box::new(railroad::SimpleStart) as Box<dyn railroad::Node>,
         Box::new(into_primitive(mr.rules)),
         Box::new(railroad::SimpleEnd),
     ]);
@@ -207,7 +209,10 @@ pub fn into_diagram(
     match legend {
         None => railroad::Diagram::new(Box::new(seq)),
         Some(l) => {
-            let combined = railroad::VerticalGrid::new(vec![Box::new(seq), Box::new(l)]);
+            let combined = railroad::VerticalGrid::new(vec![
+                Box::new(seq) as Box<dyn railroad::Node>,
+                Box::new(l),
+            ]);
             railroad::Diagram::new(Box::new(combined))
         }
     }
@@ -216,7 +221,7 @@ pub fn into_diagram(
 /// Shorthand to add a `<style>` containing the default CSS to a diagram-element.
 ///
 /// Should be called with the main diagram-element.
-pub fn add_default_css<T: railroad::RailroadNode>(dia: &mut railroad::Diagram<T>) {
+pub fn add_default_css<T: railroad::Node>(dia: &mut railroad::Diagram<T>) {
     dia.add_element(
         railroad::svg::Element::new("style")
             .set("type", "text/css")
@@ -243,7 +248,7 @@ fn fragment_to_class(f: &parser::Fragment) -> &'static str {
 }
 
 /// Convert a Matcher into a diagram-element.
-fn into_primitive(m: lowering::Matcher) -> Box<dyn railroad::RailroadNode> {
+fn into_primitive(m: lowering::Matcher) -> Box<dyn railroad::Node> {
     match m {
         lowering::Matcher::Group(m) => {
             Box::new(railroad::LabeledBox::without_label(into_primitive(*m)))
@@ -262,7 +267,7 @@ fn into_primitive(m: lowering::Matcher) -> Box<dyn railroad::RailroadNode> {
         )),
         lowering::Matcher::Literal(s) => Box::new(railroad::Terminal::new(s)),
         lowering::Matcher::Repeat { content, seperator } => {
-            let seperator: Box<dyn railroad::RailroadNode> = match seperator {
+            let seperator: Box<dyn railroad::Node> = match seperator {
                 Some(s) => Box::new(railroad::Terminal::new(s)),
                 None => Box::new(railroad::Empty),
             };

@@ -11,7 +11,7 @@ exclude = ["examples/*.jpeg", "examples/*.jpg", "examples/*.svg", "examples/*.ht
 
 [dependencies]
 syn = { version = "2.0", features = ["full", "parsing"], default_features=false }
-railroad = "0.1"
+railroad = "0.2"
 proc-macro2 = { version = "1.0", default-features=false }
 
 [dev-dependencies]
