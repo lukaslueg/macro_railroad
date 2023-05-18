@@ -73,6 +73,8 @@ pub mod diagram;
 pub mod lowering;
 pub mod parser;
 
+pub use railroad;
+
 use syn::parse::Result;
 
 /// Create a syntax diagram as an SVG from the given macro_rules!-source.
