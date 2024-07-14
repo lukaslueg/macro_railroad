@@ -1,4 +1,4 @@
-<svg class="railroad" viewBox="0 0 1300 302" xmlns="http://www.w3.org/2000/svg">
+<svg class="railroad" viewBox="0 0 1300 302" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <style type="text/css">
 
     svg.railroad {
@@ -11,7 +11,7 @@
     svg.railroad path {
         stroke-width: 3px;
         stroke: black;
-        fill: transparent;
+        fill: none;
     }
 
     svg.railroad .debug {
@@ -309,12 +309,10 @@ submac</text>
 <g class="repeat">
 <path d=" M 1119 42 h 12 m 52 0 h 12 m -12 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 1 -12 12 m 0 0 h -52 m 29 0 l 5 -5 m 0 10 l -5 -5 m -29 0 a 12 12 0 0 1 -12 -12 v 0 a 12 12 0 0 1 12 -12"/>
 <g/>
-<g class="sequence">
 <g class="nonterminal fragment_tt">
 <rect height="22" width="52" x="1131" y="31"/>
 <text x="1157" y="47">
 args</text>
-</g>
 </g>
 </g>
 </g>

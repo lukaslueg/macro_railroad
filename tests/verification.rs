@@ -3,13 +3,11 @@
 ///
 /// This calls out to the `xmllint` tool from libxml2, which may not be available.
 /// The test is therefor ignored by default; use `cargo test -- --ignored`
+use std::sync::OnceLock;
 
-#[macro_use]
-extern crate lazy_static;
-
-lazy_static! {
-    static ref VERIFIER: railroad_verification::Verifier =
-        railroad_verification::Verifier::new().unwrap();
+fn init_verifier() -> &'static railroad_verification::Verifier {
+    static VERIFIER: OnceLock<railroad_verification::Verifier> = OnceLock::new();
+    VERIFIER.get_or_init(|| railroad_verification::Verifier::new().unwrap())
 }
 
 fn to_diagram(src: &str) -> (String, Vec<(&'static str, String)>) {
@@ -51,7 +49,7 @@ macro_rules! verify {
                 eprintln!("Parsed `{}` as macro '{}'", stringify!($testname), name);
                 for (variant, dia) in dias.into_iter() {
                     eprintln!("Verifying variant `{}`", variant);
-                    if let Err(e) = VERIFIER.verify(dia) {
+                    if let Err(e) = init_verifier().verify(dia) {
                         eprintln!("{:?}", e);
                         panic!("Failed to verifiy `{}`", name);
                     }

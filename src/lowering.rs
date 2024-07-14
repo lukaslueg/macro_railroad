@@ -465,7 +465,7 @@ impl InspectVisitor for NonTerminalCollector {
             Matcher::NonTerminal { name, fragment } => {
                 self.bag
                     .entry(fragment.clone())
-                    .or_insert_with(Default::default)
+                    .or_default()
                     .insert(name.clone());
             }
             other => self.visit_children(other),

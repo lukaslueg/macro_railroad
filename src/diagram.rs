@@ -280,7 +280,7 @@ fn into_primitive(m: lowering::Matcher) -> Box<dyn railroad::Node> {
             let mut nonterm = railroad::NonTerminal::new(name);
             nonterm
                 .attr("class".to_owned())
-                .or_insert_with(Default::default)
+                .or_default()
                 .push_str(fragment_to_class(&fragment));
             Box::new(nonterm)
         }
