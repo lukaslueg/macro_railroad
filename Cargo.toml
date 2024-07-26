@@ -11,7 +11,7 @@ exclude = ["examples/*.jpeg", "examples/*.jpg", "examples/*.svg", "examples/*.ht
 
 [dependencies]
 syn = { version = "2.0", features = ["full", "parsing", "extra-traits"], default-features=false }
-railroad = { version = "0.3.1" }
+railroad = { version = "0.3.2", default-features=false }
 proc-macro2 = { version = "1.0", default-features=false }
 
 [dev-dependencies]
@@ -20,3 +20,4 @@ railroad_verification = "0.1"
 
 [features]
 visual-debug = ["railroad/visual-debug"]
+resvg = ["railroad/resvg"]

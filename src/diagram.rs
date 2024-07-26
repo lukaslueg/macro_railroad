@@ -5,75 +5,27 @@ use crate::parser;
 use std::collections;
 
 /// The default CSS used for macro-diagrams
-pub const CSS: &str = r#"
-    svg.railroad .fragment_ty > rect {
-        fill: red;
-    }
-    svg.railroad .fragment_ident > rect {
-        fill: orange;
+pub enum Stylesheet {
+    Light,
+    Dark,
+}
+
+impl Stylesheet {
+    pub const fn matching(other: &railroad::Stylesheet) -> Self {
+        if other.is_light() {
+            Self::Light
+        } else {
+            Self::Dark
+        }
     }
 
-    svg.railroad .fragment_path > rect {
-        fill: green;
+    pub const fn stylesheet(&self) -> &'static str {
+        match self {
+            Self::Light => include_str!("stylesheet_light.css"),
+            Self::Dark => include_str!("stylesheet_dark.css"),
+        }
     }
-
-    svg.railroad .fragment_expr > rect {
-        fill: yellow;
-    }
-
-    svg.railroad .fragment_pat > rect {
-        fill: deepskyblue;
-    }
-
-    svg.railroad .fragment_stmt > rect {
-        fill: aqua;
-    }
-
-    svg.railroad .fragment_block > rect {
-        fill: aquamarine;
-    }
-
-    svg.railroad .fragment_item > rect {
-        fill: thistle;
-    }
-
-    svg.railroad .fragment_meta > rect {
-        fill: violet;
-    }
-
-    svg.railroad .fragment_tt > rect {
-        fill: turquoise;
-    }
-
-    svg.railroad .fragment_vis > rect {
-        fill: gold;
-    }
-
-    svg.railroad .fragment_literal > rect {
-        fill: salmon;
-    }
-
-    svg.railroad .fragment_lifetime > rect {
-        fill: teal;
-    }
-
-    svg.railroad .legend {
-        transform: scale(0.85);
-        transform-origin: bottom left;
-        /*transform-box: fill-box;*/
-    }
-
-    svg.railroad .legend > rect {
-        stroke: black;
-        stroke-width: 0.5px;
-        stroke-dasharray: 2px;
-        fill: rgba(90, 90, 90, .1)
-    }
-
-    svg.railroad .legend .comment:first-child {
-        text-decoration: underline;
-    }
-"#;
+}
 
 // TODO The transform causes problems with transform-box...
 
@@ -223,12 +175,11 @@ pub fn into_diagram(
 /// Shorthand to add a `<style>` containing the default CSS to a diagram-element.
 ///
 /// Should be called with the main diagram-element.
-pub fn add_default_css<T: railroad::Node>(dia: &mut railroad::Diagram<T>) {
-    dia.add_element(
-        railroad::svg::Element::new("style")
-            .set("type", "text/css")
-            .raw_text(CSS),
-    );
+pub fn add_default_css<T: railroad::Node>(
+    dia: &mut railroad::Diagram<T>,
+    style: &railroad::Stylesheet,
+) {
+    dia.add_css(Stylesheet::matching(style).stylesheet());
 }
 
 fn fragment_to_class(f: &parser::Fragment) -> &'static str {

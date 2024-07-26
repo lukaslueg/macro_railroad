@@ -1,114 +1,118 @@
-<html><head><style type="text/css">
-    svg.railroad {
-        background-color: hsl(30, 20%, 95%);
-        background-size: 15px 15px;
-        background-image: linear-gradient(to right, rgba(30, 30, 30, .05) 1px, transparent 1px),
-                          linear-gradient(to bottom, rgba(30, 30, 30, .05) 1px, transparent 1px);
-    }
+<html><head><style type="text/css">svg.railroad {
+background-color: hsl(30, 20%, 95%);
+background-size: 15px 15px;
+background-image: linear-gradient(to right, rgba(30, 30, 30, .05) 1px, transparent 1px),
+		  linear-gradient(to bottom, rgba(30, 30, 30, .05) 1px, transparent 1px);
+}
 
-    svg.railroad path {
-        stroke-width: 3px;
-        stroke: black;
-        fill: transparent;
-    }
+svg.railroad rect.railroad_canvas {
+stroke-width: 0px;
+fill: none;
+}
 
-    svg.railroad .debug {
-        stroke-width: 1px;
-        stroke: red;
-    }
+svg.railroad path {
+stroke-width: 3px;
+stroke: black;
+fill: none;
+}
 
-    svg.railroad text {
-        font: 14px monospace;
-        text-anchor: middle;
-    }
+svg.railroad .debug {
+stroke-width: 1px;
+stroke: red;
+}
 
-    svg.railroad .nonterminal text {
-        font-weight: bold;
-    }
+svg.railroad text {
+font: 14px monospace;
+text-anchor: middle;
+}
 
-    svg.railroad text.comment {
-        font: italic 12px monospace;
-    }
+svg.railroad .nonterminal text {
+font-weight: bold;
+}
 
-    svg.railroad rect {
-        stroke-width: 3px;
-        stroke: black;
-        fill:hsl(-290, 70%, 90%);
-    }
+svg.railroad text.comment {
+font: italic 12px monospace;
+}
 
-    svg.railroad g.labeledbox > rect {
-        stroke-width: 1px;
-        stroke: grey;
-        stroke-dasharray: 5px;
-        fill:rgba(90, 90, 150, .1);
-    }
-    svg.railroad .fragment_ty > rect {
-        fill: red;
-    }
-    svg.railroad .fragment_ident > rect {
-        fill: orange;
-    }
+svg.railroad rect {
+stroke-width: 3px;
+stroke: black;
+fill:hsl(-290, 70%, 90%);
+}
 
-    svg.railroad .fragment_path > rect {
-        fill: green;
-    }
+svg.railroad g.labeledbox > rect {
+stroke-width: 1px;
+stroke: grey;
+stroke-dasharray: 5px;
+fill:rgba(90, 90, 150, .1);
+}
+svg.railroad .fragment_ty > rect {
+fill: red;
+}
+svg.railroad .fragment_ident > rect {
+fill: orange;
+}
 
-    svg.railroad .fragment_expr > rect {
-        fill: yellow;
-    }
+svg.railroad .fragment_path > rect {
+fill: green;
+}
 
-    svg.railroad .fragment_pat > rect {
-        fill: deepskyblue;
-    }
+svg.railroad .fragment_expr > rect {
+fill: yellow;
+}
 
-    svg.railroad .fragment_stmt > rect {
-        fill: aqua;
-    }
+svg.railroad .fragment_pat > rect {
+fill: deepskyblue;
+}
 
-    svg.railroad .fragment_block > rect {
-        fill: aquamarine;
-    }
+svg.railroad .fragment_stmt > rect {
+fill: aqua;
+}
 
-    svg.railroad .fragment_item > rect {
-        fill: thistle;
-    }
+svg.railroad .fragment_block > rect {
+fill: aquamarine;
+}
 
-    svg.railroad .fragment_meta > rect {
-        fill: violet;
-    }
+svg.railroad .fragment_item > rect {
+fill: thistle;
+}
 
-    svg.railroad .fragment_tt > rect {
-        fill: turquoise;
-    }
+svg.railroad .fragment_meta > rect {
+fill: violet;
+}
 
-    svg.railroad .fragment_vis > rect {
-        fill: gold;
-    }
+svg.railroad .fragment_tt > rect {
+fill: turquoise;
+}
 
-    svg.railroad .fragment_literal > rect {
-        fill: salmon;
-    }
+svg.railroad .fragment_vis > rect {
+fill: gold;
+}
 
-    svg.railroad .fragment_lifetime > rect {
-        fill: teal;
-    }
+svg.railroad .fragment_literal > rect {
+fill: salmon;
+}
 
-    svg.railroad .legend {
-        transform: scale(0.85);
-        transform-origin: bottom left;
-        /*transform-box: fill-box;*/
-    }
+svg.railroad .fragment_lifetime > rect {
+fill: teal;
+}
 
-    svg.railroad .legend > rect {
-        stroke: black;
-        stroke-width: 0.5px;
-        stroke-dasharray: 2px;
-        fill: rgba(90, 90, 90, .1)
-    }
+svg.railroad .legend {
+transform: scale(0.85);
+transform-origin: bottom left;
+/*transform-box: fill-box;*/
+}
 
-    svg.railroad .legend .comment:first-child {
-        text-decoration: underline;
-    }
+svg.railroad .legend > rect {
+stroke: black;
+stroke-width: 0.5px;
+stroke-dasharray: 2px;
+fill: rgba(90, 90, 90, .1)
+}
+
+svg.railroad .legend .comment:first-child {
+text-decoration: underline;
+}
 
 svg.railroad {
     border: 1px solid;
@@ -154,6 +158,7 @@ pre.rust {
     ($i:expr, $code:expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($i:expr, $code:expr, $f:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 626; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 626 263" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -315,6 +320,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 626; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 626 262" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -459,6 +465,7 @@ is a token tree.</text>
     (__impl $i:expr, __end) =&gt; { ... };
     ($i:expr, $($rest:tt)*) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 1006; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 1006 677" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -1067,6 +1074,7 @@ are token trees.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 212" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 34 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -1144,6 +1152,7 @@ is a token tree.</text>
     ($i:expr, $e:path) =&gt; { ... };
     ($i:expr, $subrule:ident!( $($args:tt)*)) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 880; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 880 683" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 34 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -1765,6 +1774,7 @@ are token trees.</text>
 </g>
 </svg>
 </div><div style="width: 1024; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 1024 458" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 58 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -2080,6 +2090,7 @@ are token trees.</text>
 </div></div><div class="example" id="apply"><a href="#apply"><h3>Macro <i>`apply`</i></h3></a><pre class="rust">macro_rules! apply {
     ($i:expr, $fun:expr, $($args:expr),* ) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 362; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 362 165" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 34 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -2163,6 +2174,7 @@ are expressions.</text>
 </g>
 </svg>
 </div><div style="width: 362; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 362 165" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 34 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -2243,6 +2255,7 @@ are expressions.</text>
 </div></div><div class="example" id="apply&#x5F;m"><a href="#apply&#x5F;m"><h3>Macro <i>`apply_m`</i></h3></a><pre class="rust">macro_rules! apply_m {
     ($i:expr, $self_:ident.$method:ident, $($args:expr),* ) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 494; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 494 199" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 34 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -2347,6 +2360,7 @@ are expressions.</text>
 </g>
 </svg>
 </div><div style="width: 494; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 494 199" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 34 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -2449,6 +2463,7 @@ are expressions.</text>
     ($i:expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($i:expr, $f:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 526; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 526 263" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -2581,6 +2596,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 526; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 526 262" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -2702,6 +2718,7 @@ is a token tree.</text>
     ($i:expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($i:expr, $f:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 526; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 526 263" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -2834,6 +2851,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 526; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 526 262" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -2955,6 +2973,7 @@ is a token tree.</text>
     ($i:expr, $fun:expr) =&gt; { ... };
     ($i:expr, $fun:expr, $($args:expr),* ) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 410; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 410 197" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -3059,6 +3078,7 @@ are expressions.</text>
 </g>
 </svg>
 </div><div style="width: 410; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 410 177" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 46 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -3145,6 +3165,7 @@ are expressions.</text>
     ($i:expr, $self_:ident.$method:ident) =&gt; { ... };
     ($i:expr, $self_:ident.$method:ident, $($args:expr),* ) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 542; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 542 231" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -3282,6 +3303,7 @@ are expressions.</text>
 </g>
 </svg>
 </div><div style="width: 542; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 542 211" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 46 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -3388,6 +3410,7 @@ are expressions.</text>
 </div></div><div class="example" id="char"><a href="#char"><h3>Macro <i>`char`</i></h3></a><pre class="rust">macro_rules! char {
     ($i:expr, $c: expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -3441,6 +3464,7 @@ are expressions.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -3494,6 +3518,7 @@ are expressions.</text>
     ($ty:ty, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($submac:ident!( $($args:tt)* )) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 534; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 534 304" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -3649,6 +3674,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 534; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 534 230" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -3758,6 +3784,7 @@ is a token tree.</text>
     ($i:expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($i:expr, $f:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 526; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 526 263" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -3890,6 +3917,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 526; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 526 262" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -4011,6 +4039,7 @@ is a token tree.</text>
     ($i:expr, $cond:expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($i:expr, $cond:expr, $f:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 626; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 626 263" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -4172,6 +4201,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 626; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 626 262" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -4310,6 +4340,7 @@ is a token tree.</text>
     ($i:expr, $cond:expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($i:expr, $cond:expr, $f:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 626; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 626 263" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -4471,6 +4502,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 626; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 626 262" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -4609,6 +4641,7 @@ is a token tree.</text>
     ($i:expr, $cond:expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($i:expr, $cond:expr, $f:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 626; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 626 263" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -4770,6 +4803,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 626; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 626 262" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -4908,6 +4942,7 @@ is a token tree.</text>
     ($i:expr, $submac:ident!( $($args:tt)* ), $count: expr) =&gt; { ... };
     ($i:expr, $f:expr, $count: expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 634; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 634 263" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -5069,6 +5104,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 634; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 634 262" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -5207,6 +5243,7 @@ is a token tree.</text>
     ($i:expr, $typ:ty, $submac:ident!( $($args:tt)* ), $count: expr) =&gt; { ... };
     ($i:expr, $typ: ty, $f:expr, $count: expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 726; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 726 297" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -5401,6 +5438,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 726; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 726 296" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -5560,6 +5598,7 @@ is a token tree.</text>
     ($i: expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($i:expr, $f:ident) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 526; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 526 263" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -5692,6 +5731,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 526; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 526 262" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -5813,6 +5853,7 @@ is a token tree.</text>
     ($i: expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($i:expr, $f:ident) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 526; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 526 263" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -5945,6 +5986,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 526; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 526 262" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -6066,6 +6108,7 @@ is a token tree.</text>
     ($i:expr, $submac:ident!( $($args:tt)* ), $($rest:tt)+) =&gt; { ... };
     ($i:expr, $f:expr, $($rest:tt)+) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 650; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 650 276" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -6239,6 +6282,7 @@ are token trees.</text>
 </g>
 </svg>
 </div><div style="width: 650; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 650 262" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -6399,6 +6443,7 @@ are token trees.</text>
     ($submac:ident!( $($args:tt)* ) &gt;&gt; $($rest:tt)* ) =&gt; { ... };
     ($e:ident! &gt;&gt; $($rest:tt)* ) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 1014; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 1014 1533" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -7935,6 +7980,7 @@ are token trees.</text>
 </g>
 </svg>
 </div><div style="width: 756; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 756 338" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 20 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -8108,6 +8154,7 @@ are token trees.</text>
 </div></div><div class="example" id="eat&#x5F;separator"><a href="#eat&#x5F;separator"><h3>Macro <i>`eat_separator`</i></h3></a><pre class="rust">macro_rules! eat_separator {
     ($i:expr, $arr:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -8161,6 +8208,7 @@ are expressions.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -8213,6 +8261,7 @@ are expressions.</text>
 </div></div><div class="example" id="eof"><a href="#eof"><h3>Macro <i>`eof`</i></h3></a><pre class="rust">macro_rules! eof {
     ($i:expr,) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -8255,6 +8304,7 @@ is an expression.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -8296,6 +8346,7 @@ is an expression.</text>
 </div></div><div class="example" id="error&#x5F;node&#x5F;position"><a href="#error&#x5F;node&#x5F;position"><h3>Macro <i>`error_node_position`</i></h3></a><pre class="rust">macro_rules! error_node_position {
     ($input:expr, $code:expr, $next:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 354; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 354 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -8366,6 +8417,7 @@ are expressions.</text>
 </g>
 </svg>
 </div><div style="width: 354; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 354 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -8435,6 +8487,7 @@ are expressions.</text>
 </div></div><div class="example" id="error&#x5F;position"><a href="#error&#x5F;position"><h3>Macro <i>`error_position`</i></h3></a><pre class="rust">macro_rules! error_position {
     ($input:expr, $code:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -8488,6 +8541,7 @@ are expressions.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -8544,6 +8598,7 @@ are expressions.</text>
     ($i:expr, $submac:ident!( $($args:tt)* ), $control_char: expr, $($rest:tt)+) =&gt; { ... };
     ($i:expr, $f:expr, $control_char: expr, $($rest:tt)+) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 1188; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 1188 498" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -9129,6 +9184,7 @@ are token trees.</text>
 </g>
 </svg>
 </div><div style="width: 862; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 862 293" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 20 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -9298,6 +9354,7 @@ are token trees.</text>
     ($i:expr, $submac:ident!( $($args:tt)* ), $control_char: expr, $($rest:tt)+) =&gt; { ... };
     ($i:expr, $f:expr, $control_char: expr, $($rest:tt)+) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 1188; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 1188 498" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -9883,6 +9940,7 @@ are token trees.</text>
 </g>
 </svg>
 </div><div style="width: 862; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 862 293" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 20 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -10049,6 +10107,7 @@ are token trees.</text>
     ($i:expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($i:expr, $f:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 526; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 526 263" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -10181,6 +10240,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 526; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 526 262" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -10301,6 +10361,7 @@ is a token tree.</text>
 </div></div><div class="example" id="expr&#x5F;opt"><a href="#expr&#x5F;opt"><h3>Macro <i>`expr_opt`</i></h3></a><pre class="rust">macro_rules! expr_opt {
     ($i:expr, $e:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -10354,6 +10415,7 @@ are expressions.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -10406,6 +10468,7 @@ are expressions.</text>
 </div></div><div class="example" id="expr&#x5F;res"><a href="#expr&#x5F;res"><h3>Macro <i>`expr_res`</i></h3></a><pre class="rust">macro_rules! expr_res {
     ($i:expr, $e:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -10459,6 +10522,7 @@ are expressions.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -10512,6 +10576,7 @@ are expressions.</text>
     ($i:expr, $t:ty, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($i:expr, $t:ty, $f:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 602; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 602 297" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -10677,6 +10742,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 602; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 602 296" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -10822,6 +10888,7 @@ is a token tree.</text>
     ($i:expr, $f:expr, $g:expr) =&gt; { ... };
     (__impl $i:expr, $submac:ident!( $($args:tt)* ), $submac2:ident!( $($args2:tt)* )) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 1000; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 1000 485" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -11298,6 +11365,7 @@ are token trees.</text>
 </g>
 </svg>
 </div><div style="width: 1018; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 1018 420" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 20 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -11567,6 +11635,7 @@ are token trees.</text>
     ($i:expr, $submac:ident!( $($args:tt)* ), $init:expr, $f:expr) =&gt; { ... };
     ($i:expr, $f:expr, $init:expr, $fold_f:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 702; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 702 263" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -11757,6 +11826,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 702; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 702 262" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -11938,6 +12008,7 @@ is a token tree.</text>
     ($i:expr, $submac:ident!( $($args:tt)* ), $init:expr, $f:expr) =&gt; { ... };
     ($i:expr, $f:expr, $init:expr, $fold_f:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 702; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 702 263" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -12128,6 +12199,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 702; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 702 262" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -12309,6 +12381,7 @@ is a token tree.</text>
     ($i:expr, $m:expr, $n: expr, $submac:ident!( $($args:tt)* ), $init:expr, $f:expr) =&gt; { ... };
     ($i:expr, $m:expr, $n: expr, $f:expr, $init:expr, $fold_f:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 854; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 854 263" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -12557,6 +12630,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 854; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 854 262" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -12771,6 +12845,7 @@ is a token tree.</text>
 </div></div><div class="example" id="i128"><a href="#i128"><h3>Macro <i>`i128`</i></h3></a><pre class="rust">macro_rules! i128 {
     ($i:expr, $e:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -12824,6 +12899,7 @@ are expressions.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -12876,6 +12952,7 @@ are expressions.</text>
 </div></div><div class="example" id="i16"><a href="#i16"><h3>Macro <i>`i16`</i></h3></a><pre class="rust">macro_rules! i16 {
     ($i:expr, $e:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -12929,6 +13006,7 @@ are expressions.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -12981,6 +13059,7 @@ are expressions.</text>
 </div></div><div class="example" id="i32"><a href="#i32"><h3>Macro <i>`i32`</i></h3></a><pre class="rust">macro_rules! i32 {
     ($i:expr, $e:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -13034,6 +13113,7 @@ are expressions.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -13086,6 +13166,7 @@ are expressions.</text>
 </div></div><div class="example" id="i64"><a href="#i64"><h3>Macro <i>`i64`</i></h3></a><pre class="rust">macro_rules! i64 {
     ($i:expr, $e:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -13139,6 +13220,7 @@ are expressions.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -13191,6 +13273,7 @@ are expressions.</text>
 </div></div><div class="example" id="is&#x5F;a"><a href="#is&#x5F;a"><h3>Macro <i>`is_a`</i></h3></a><pre class="rust">macro_rules! is_a {
     ($input:expr, $arr:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -13244,6 +13327,7 @@ are expressions.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -13296,6 +13380,7 @@ are expressions.</text>
 </div></div><div class="example" id="is&#x5F;a&#x5F;s"><a href="#is&#x5F;a&#x5F;s"><h3>Macro <i>`is_a_s`</i></h3></a><pre class="rust">macro_rules! is_a_s {
     ($input:expr, $arr:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -13349,6 +13434,7 @@ are expressions.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -13401,6 +13487,7 @@ are expressions.</text>
 </div></div><div class="example" id="is&#x5F;not"><a href="#is&#x5F;not"><h3>Macro <i>`is_not`</i></h3></a><pre class="rust">macro_rules! is_not {
     ($input:expr, $arr:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -13454,6 +13541,7 @@ are expressions.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -13506,6 +13594,7 @@ are expressions.</text>
 </div></div><div class="example" id="is&#x5F;not&#x5F;s"><a href="#is&#x5F;not&#x5F;s"><h3>Macro <i>`is_not_s`</i></h3></a><pre class="rust">macro_rules! is_not_s {
     ($input:expr, $arr:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -13559,6 +13648,7 @@ are expressions.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -13612,6 +13702,7 @@ are expressions.</text>
     ($i:expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($i:expr, $f:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 526; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 526 263" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -13744,6 +13835,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 526; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 526 262" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -13867,6 +13959,7 @@ is a token tree.</text>
     ($i:expr, $f:expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($i:expr, $f:expr, $g:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 922; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 922 411" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -14224,6 +14317,7 @@ are token trees.</text>
 </g>
 </svg>
 </div><div style="width: 970; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 970 389" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -14486,6 +14580,7 @@ are token trees.</text>
     ($i:expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($i:expr, $f:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 526; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 526 263" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -14618,6 +14713,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 526; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 526 262" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -14741,6 +14837,7 @@ is a token tree.</text>
     ($i:expr, $f:expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($i:expr, $f:expr, $g:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 922; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 922 411" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -15098,6 +15195,7 @@ are token trees.</text>
 </g>
 </svg>
 </div><div style="width: 970; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 970 389" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -15360,6 +15458,7 @@ are token trees.</text>
     ($i:expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($i:expr, $f:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 526; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 526 263" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -15492,6 +15591,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 526; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 526 262" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -15613,6 +15713,7 @@ is a token tree.</text>
     ($i:expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($i:expr, $f:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 526; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 526 263" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -15745,6 +15846,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 526; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 526 262" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -15866,6 +15968,7 @@ is a token tree.</text>
     ($i:expr, $m:expr, $n: expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($i:expr, $m:expr, $n: expr, $f:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 678; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 678 263" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -16056,6 +16159,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 678; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 678 262" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -16214,6 +16318,7 @@ is a token tree.</text>
     ($i:expr, $f:expr, $submac2:ident!( $($args2:tt)* )) =&gt; { ... };
     ($i:expr, $f:expr, $g: expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 1016; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 1016 485" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -16690,6 +16795,7 @@ are token trees.</text>
 </g>
 </svg>
 </div><div style="width: 1034; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 1034 293" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 20 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -16896,6 +17002,7 @@ are token trees.</text>
     ($i:expr, $submac:ident!( $($args:tt)* ), $g:expr) =&gt; { ... };
     ($i:expr, $f:expr, $g:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 680; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 680 337" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -17136,6 +17243,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 650; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 650 293" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 20 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -17284,6 +17392,7 @@ is a token tree.</text>
     ($i:expr, $f:expr, $g:expr) =&gt; { ... };
     ($i:expr, $f:expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 1000; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 1000 485" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -17760,6 +17869,7 @@ are token trees.</text>
 </g>
 </svg>
 </div><div style="width: 1018; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 1018 420" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 20 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -18032,6 +18142,7 @@ are token trees.</text>
     ($i:expr, $f:expr, $g:expr) =&gt; { ... };
     ($i:expr, $f:expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 1000; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 1000 485" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -18508,6 +18619,7 @@ are token trees.</text>
 </g>
 </svg>
 </div><div style="width: 1018; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 1018 420" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 20 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -18780,6 +18892,7 @@ are token trees.</text>
     ($i:expr, $f:expr, $g:expr) =&gt; { ... };
     ($i:expr, $f:expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 1000; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 1000 485" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -19256,6 +19369,7 @@ are token trees.</text>
 </g>
 </svg>
 </div><div style="width: 1018; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 1018 420" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 20 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -19543,6 +19657,7 @@ are token trees.</text>
     (pub $name:ident&lt;$a:ty,$o:ty&gt;, mut $self_:ident, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     (pub $name:ident&lt;$a:ty&gt;, mut $self_:ident, $submac:ident!( $($args:tt)* )) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 1124; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 1124 1636" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -22013,6 +22128,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 1300; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 1300 302" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -22319,6 +22435,7 @@ is a token tree.</text>
     (pub(crate) $name:ident&lt;$o:ty&gt;, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     (pub(crate) $name:ident, $submac:ident!( $($args:tt)* )) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 1032; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 1032 1324" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 34 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -23902,6 +24019,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 1272; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 1272 490" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 34 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -24342,6 +24460,7 @@ is a token tree.</text>
     (pub $func_name:ident &lt; &#x27;a &gt; ( $( $arg:ident : $typ:ty ),* ) &lt; $input_type:ty, $return_type:ty &gt; , $submac:ident!( $($args:tt)* ) ) =&gt; { ... };
     ($func_name:ident &lt; &#x27;a &gt; ( $( $arg:ident : $typ:ty ),* ) &lt; $input_type:ty, $return_type:ty &gt; , $submac:ident!( $($args:tt)* ) ) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 1432; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 1432 1086" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -25921,6 +26040,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 1562; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 1562 435" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -26400,6 +26520,7 @@ is a token tree.</text>
     ($(#[$attr:meta])*, pub(crate) $name:ident&lt;$o:ty&gt;, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($(#[$attr:meta])*, pub(crate) $name:ident, $submac:ident!( $($args:tt)* )) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 1334; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 1334 1300" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -28658,6 +28779,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 1526; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 1526 466" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 46 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -29119,6 +29241,7 @@ is a token tree.</text>
 </div></div><div class="example" id="none&#x5F;of"><a href="#none&#x5F;of"><h3>Macro <i>`none_of`</i></h3></a><pre class="rust">macro_rules! none_of {
     ($i:expr, $inp: expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -29172,6 +29295,7 @@ are expressions.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -29225,6 +29349,7 @@ are expressions.</text>
     ($i:expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($i:expr, $f:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 526; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 526 263" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -29357,6 +29482,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 526; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 526 262" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -29477,6 +29603,7 @@ is a token tree.</text>
 </div></div><div class="example" id="one&#x5F;of"><a href="#one&#x5F;of"><h3>Macro <i>`one_of`</i></h3></a><pre class="rust">macro_rules! one_of {
     ($i:expr, $inp: expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -29530,6 +29657,7 @@ are expressions.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -29583,6 +29711,7 @@ are expressions.</text>
     ($i:expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($i:expr, $f:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 526; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 526 263" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -29715,6 +29844,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 526; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 526 262" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -29836,6 +29966,7 @@ is a token tree.</text>
     ($i:expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($i:expr, $f:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 526; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 526 263" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -29968,6 +30099,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 526; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 526 262" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -30091,6 +30223,7 @@ is a token tree.</text>
     ($i:expr, $f:expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($i:expr, $f:expr, $g:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 922; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 922 411" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -30448,6 +30581,7 @@ are token trees.</text>
 </g>
 </svg>
 </div><div style="width: 970; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 970 389" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -30709,6 +30843,7 @@ are token trees.</text>
 </div></div><div class="example" id="parse&#x5F;to"><a href="#parse&#x5F;to"><h3>Macro <i>`parse_to`</i></h3></a><pre class="rust">macro_rules! parse_to {
     ($i:expr, $t:ty ) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 154" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -30766,6 +30901,7 @@ is a type.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 154" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -30823,6 +30959,7 @@ is a type.</text>
     ($i:expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($i:expr, $f:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 526; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 526 263" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -30955,6 +31092,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 526; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 526 262" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -31075,6 +31213,7 @@ is a token tree.</text>
 </div></div><div class="example" id="permutation"><a href="#permutation"><h3>Macro <i>`permutation`</i></h3></a><pre class="rust">macro_rules! permutation {
     ($i:expr, $($rest:tt)*) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 180" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 34 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -31141,6 +31280,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 180" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 34 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -31207,6 +31347,7 @@ is a token tree.</text>
     ($i:expr, $f:expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($i:expr, $f:expr, $g:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 922; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 922 411" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -31564,6 +31705,7 @@ are token trees.</text>
 </g>
 </svg>
 </div><div style="width: 970; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 970 389" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -31826,6 +31968,7 @@ are token trees.</text>
     ($i:expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($i:expr, $f:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 526; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 526 263" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -31958,6 +32101,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 526; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 526 262" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -32081,6 +32225,7 @@ is a token tree.</text>
     ($i:expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($i:expr, $f:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 626; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 626 370" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -32324,6 +32469,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 674; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 674 369" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -32536,6 +32682,7 @@ is a token tree.</text>
     ($i:expr, $separator:path, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($i:expr, $separator:path, $f:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 730; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 730 1407" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -33801,6 +33948,7 @@ are token trees.</text>
 </g>
 </svg>
 </div><div style="width: 778; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 778 791" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -34101,6 +34249,7 @@ are token trees.</text>
     ($i:expr, $f:expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($i:expr, $f:expr, $g:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 890; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 890 411" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -34458,6 +34607,7 @@ are token trees.</text>
 </g>
 </svg>
 </div><div style="width: 890; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 890 410" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -34769,6 +34919,7 @@ are token trees.</text>
     ($i:expr, $f:expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($i:expr, $f:expr, $g:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 890; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 890 411" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -35126,6 +35277,7 @@ are token trees.</text>
 </g>
 </svg>
 </div><div style="width: 890; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 890 410" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -35437,6 +35589,7 @@ are token trees.</text>
     ($i:expr, $f:expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($i:expr, $f:expr, $g:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 890; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 890 411" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -35794,6 +35947,7 @@ are token trees.</text>
 </g>
 </svg>
 </div><div style="width: 890; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 890 410" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -36105,6 +36259,7 @@ are token trees.</text>
     ($i:expr, $f:expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($i:expr, $f:expr, $g:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 890; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 890 411" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -36462,6 +36617,7 @@ are token trees.</text>
 </g>
 </svg>
 </div><div style="width: 890; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 890 410" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -36771,6 +36927,7 @@ are token trees.</text>
     ($i:expr, $submac:ident!( $($args:tt)* ), $($rest:tt)+) =&gt; { ... };
     ($i:expr, $f:expr, $($rest:tt)+) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 650; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 650 276" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -36944,6 +37101,7 @@ are token trees.</text>
 </g>
 </svg>
 </div><div style="width: 650; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 650 262" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -37087,6 +37245,7 @@ are token trees.</text>
     ($i:expr, $submac:ident!( $($args:tt)*), $($rest:tt)*) =&gt; { ... };
     ($i:expr, $e:path, $($rest:tt)*) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 1210; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 1210 485" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 54 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -37449,6 +37608,7 @@ are token trees.</text>
 </g>
 </svg>
 </div><div style="width: 746; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 746 339" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 20 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -37604,6 +37764,7 @@ are token trees.</text>
 </div></div><div class="example" id="tag"><a href="#tag"><h3>Macro <i>`tag`</i></h3></a><pre class="rust">macro_rules! tag {
     ($i:expr, $tag: expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -37657,6 +37818,7 @@ are expressions.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -37709,6 +37871,7 @@ are expressions.</text>
 </div></div><div class="example" id="tag&#x5F;bits"><a href="#tag&#x5F;bits"><h3>Macro <i>`tag_bits`</i></h3></a><pre class="rust">macro_rules! tag_bits {
     ($i:expr, $t:ty, $count:expr, $p: pat) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 358; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 358 188" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -37804,6 +37967,7 @@ is a pattern.</text>
 </g>
 </svg>
 </div><div style="width: 358; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 358 188" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -37898,6 +38062,7 @@ is a pattern.</text>
 </div></div><div class="example" id="tag&#x5F;no&#x5F;case"><a href="#tag&#x5F;no&#x5F;case"><h3>Macro <i>`tag_no_case`</i></h3></a><pre class="rust">macro_rules! tag_no_case {
     ($i:expr, $tag: expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -37951,6 +38116,7 @@ are expressions.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -38003,6 +38169,7 @@ are expressions.</text>
 </div></div><div class="example" id="tag&#x5F;no&#x5F;case&#x5F;s"><a href="#tag&#x5F;no&#x5F;case&#x5F;s"><h3>Macro <i>`tag_no_case_s`</i></h3></a><pre class="rust">macro_rules! tag_no_case_s {
     ($i:expr, $tag: expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -38056,6 +38223,7 @@ are expressions.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -38108,6 +38276,7 @@ are expressions.</text>
 </div></div><div class="example" id="tag&#x5F;s"><a href="#tag&#x5F;s"><h3>Macro <i>`tag_s`</i></h3></a><pre class="rust">macro_rules! tag_s {
     ($i:expr, $tag: expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -38161,6 +38330,7 @@ are expressions.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -38213,6 +38383,7 @@ are expressions.</text>
 </div></div><div class="example" id="take"><a href="#take"><h3>Macro <i>`take`</i></h3></a><pre class="rust">macro_rules! take {
     ($i:expr, $count:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -38266,6 +38437,7 @@ are expressions.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -38318,6 +38490,7 @@ are expressions.</text>
 </div></div><div class="example" id="take&#x5F;bits"><a href="#take&#x5F;bits"><h3>Macro <i>`take_bits`</i></h3></a><pre class="rust">macro_rules! take_bits {
     ($i:expr, $t:ty, $count:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 154" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -38392,6 +38565,7 @@ is a type.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 154" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -38465,6 +38639,7 @@ is a type.</text>
 </div></div><div class="example" id="take&#x5F;s"><a href="#take&#x5F;s"><h3>Macro <i>`take_s`</i></h3></a><pre class="rust">macro_rules! take_s {
     ($i:expr, $count:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -38518,6 +38693,7 @@ are expressions.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -38570,6 +38746,7 @@ are expressions.</text>
 </div></div><div class="example" id="take&#x5F;str"><a href="#take&#x5F;str"><h3>Macro <i>`take_str`</i></h3></a><pre class="rust">macro_rules! take_str {
     ( $i:expr, $size:expr ) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -38623,6 +38800,7 @@ are expressions.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -38676,6 +38854,7 @@ are expressions.</text>
     ($input:expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($input:expr, $f:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 558; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 558 263" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -38808,6 +38987,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 558; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 558 262" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -38929,6 +39109,7 @@ is a token tree.</text>
     ($input:expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($input:expr, $f:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 558; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 558 263" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -39061,6 +39242,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 558; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 558 262" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -39182,6 +39364,7 @@ is a token tree.</text>
     ($input:expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($input:expr, $f:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 558; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 558 263" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -39314,6 +39497,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 558; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 558 262" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -39435,6 +39619,7 @@ is a token tree.</text>
     ($input:expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($input:expr, $f:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 558; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 558 263" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -39567,6 +39752,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 558; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 558 262" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -39687,6 +39873,7 @@ is a token tree.</text>
 </div></div><div class="example" id="take&#x5F;until"><a href="#take&#x5F;until"><h3>Macro <i>`take_until`</i></h3></a><pre class="rust">macro_rules! take_until {
     ($i:expr, $substr:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -39740,6 +39927,7 @@ are expressions.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -39792,6 +39980,7 @@ are expressions.</text>
 </div></div><div class="example" id="take&#x5F;until1"><a href="#take&#x5F;until1"><h3>Macro <i>`take_until1`</i></h3></a><pre class="rust">macro_rules! take_until1 {
     ($i:expr, $substr:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -39845,6 +40034,7 @@ are expressions.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -39897,6 +40087,7 @@ are expressions.</text>
 </div></div><div class="example" id="take&#x5F;until&#x5F;and&#x5F;consume"><a href="#take&#x5F;until&#x5F;and&#x5F;consume"><h3>Macro <i>`take_until_and_consume`</i></h3></a><pre class="rust">macro_rules! take_until_and_consume {
     ($i:expr, $substr:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -39950,6 +40141,7 @@ are expressions.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -40002,6 +40194,7 @@ are expressions.</text>
 </div></div><div class="example" id="take&#x5F;until&#x5F;and&#x5F;consume1"><a href="#take&#x5F;until&#x5F;and&#x5F;consume1"><h3>Macro <i>`take_until_and_consume1`</i></h3></a><pre class="rust">macro_rules! take_until_and_consume1 {
     ($i:expr, $substr:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -40055,6 +40248,7 @@ are expressions.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -40107,6 +40301,7 @@ are expressions.</text>
 </div></div><div class="example" id="take&#x5F;until&#x5F;and&#x5F;consume&#x5F;s"><a href="#take&#x5F;until&#x5F;and&#x5F;consume&#x5F;s"><h3>Macro <i>`take_until_and_consume_s`</i></h3></a><pre class="rust">macro_rules! take_until_and_consume_s {
     ($input:expr, $substr:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -40160,6 +40355,7 @@ are expressions.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -40212,6 +40408,7 @@ are expressions.</text>
 </div></div><div class="example" id="take&#x5F;until&#x5F;either"><a href="#take&#x5F;until&#x5F;either"><h3>Macro <i>`take_until_either`</i></h3></a><pre class="rust">macro_rules! take_until_either {
     ($input:expr, $arr:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -40265,6 +40462,7 @@ are expressions.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -40317,6 +40515,7 @@ are expressions.</text>
 </div></div><div class="example" id="take&#x5F;until&#x5F;either1"><a href="#take&#x5F;until&#x5F;either1"><h3>Macro <i>`take_until_either1`</i></h3></a><pre class="rust">macro_rules! take_until_either1 {
     ($input:expr, $arr:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -40370,6 +40569,7 @@ are expressions.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -40422,6 +40622,7 @@ are expressions.</text>
 </div></div><div class="example" id="take&#x5F;until&#x5F;either&#x5F;and&#x5F;consume"><a href="#take&#x5F;until&#x5F;either&#x5F;and&#x5F;consume"><h3>Macro <i>`take_until_either_and_consume`</i></h3></a><pre class="rust">macro_rules! take_until_either_and_consume {
     ($input:expr, $arr:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -40475,6 +40676,7 @@ are expressions.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -40527,6 +40729,7 @@ are expressions.</text>
 </div></div><div class="example" id="take&#x5F;until&#x5F;either&#x5F;and&#x5F;consume1"><a href="#take&#x5F;until&#x5F;either&#x5F;and&#x5F;consume1"><h3>Macro <i>`take_until_either_and_consume1`</i></h3></a><pre class="rust">macro_rules! take_until_either_and_consume1 {
     ($input:expr, $arr:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -40580,6 +40783,7 @@ are expressions.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -40632,6 +40836,7 @@ are expressions.</text>
 </div></div><div class="example" id="take&#x5F;until&#x5F;s"><a href="#take&#x5F;until&#x5F;s"><h3>Macro <i>`take_until_s`</i></h3></a><pre class="rust">macro_rules! take_until_s {
     ($input:expr, $substr:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -40685,6 +40890,7 @@ are expressions.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -40738,6 +40944,7 @@ are expressions.</text>
     ($input:expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($input:expr, $f:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 558; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 558 263" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -40870,6 +41077,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 558; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 558 262" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -40991,6 +41199,7 @@ is a token tree.</text>
     ($input:expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($input:expr, $f:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 558; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 558 263" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -41123,6 +41332,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 558; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 558 262" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -41244,6 +41454,7 @@ is a token tree.</text>
     ($input:expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($input:expr, $f:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 558; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 558 263" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -41376,6 +41587,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 558; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 558 262" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -41497,6 +41709,7 @@ is a token tree.</text>
     ($input:expr, $m:expr, $n:expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($input:expr, $m:expr, $n: expr, $f:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 710; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 710 263" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -41687,6 +41900,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 710; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 710 262" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -41842,6 +42056,7 @@ is a token tree.</text>
     ($input:expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($input:expr, $f:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 558; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 558 263" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -41974,6 +42189,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 558; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 558 262" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -42095,6 +42311,7 @@ is a token tree.</text>
     ($i:expr, $name:ident : $submac:ident!( $($args:tt)* ) =&gt; $e:expr) =&gt; { ... };
     ($i:expr, $name: ident: $f:expr =&gt; $e:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 740; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 740 263" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -42297,6 +42514,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 740; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 740 262" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -42460,6 +42678,7 @@ is a token tree.</text>
     ($i:expr, $f:expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($i:expr, $f:expr, $g:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 922; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 922 411" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -42817,6 +43036,7 @@ are token trees.</text>
 </g>
 </svg>
 </div><div style="width: 970; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 970 389" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -43079,6 +43299,7 @@ are token trees.</text>
     ($i:expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($i:expr, $f:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 526; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 526 263" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -43211,6 +43432,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 526; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 526 262" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -43331,6 +43553,7 @@ is a token tree.</text>
 </div></div><div class="example" id="tuple"><a href="#tuple"><h3>Macro <i>`tuple`</i></h3></a><pre class="rust">macro_rules! tuple {
     ($i:expr, $($rest:tt)*) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 180" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 34 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -43397,6 +43620,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 180" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 34 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -43460,6 +43684,7 @@ is a token tree.</text>
 </div></div><div class="example" id="u128"><a href="#u128"><h3>Macro <i>`u128`</i></h3></a><pre class="rust">macro_rules! u128 {
     ($i:expr, $e:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -43513,6 +43738,7 @@ are expressions.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -43565,6 +43791,7 @@ are expressions.</text>
 </div></div><div class="example" id="u16"><a href="#u16"><h3>Macro <i>`u16`</i></h3></a><pre class="rust">macro_rules! u16 {
     ($i:expr, $e:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -43618,6 +43845,7 @@ are expressions.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -43670,6 +43898,7 @@ are expressions.</text>
 </div></div><div class="example" id="u32"><a href="#u32"><h3>Macro <i>`u32`</i></h3></a><pre class="rust">macro_rules! u32 {
     ($i:expr, $e:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -43723,6 +43952,7 @@ are expressions.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -43775,6 +44005,7 @@ are expressions.</text>
 </div></div><div class="example" id="u64"><a href="#u64"><h3>Macro <i>`u64`</i></h3></a><pre class="rust">macro_rules! u64 {
     ($i:expr, $e:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -43828,6 +44059,7 @@ are expressions.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -43882,6 +44114,7 @@ are expressions.</text>
     ($i:expr, $res:expr, $f:expr) =&gt; { ... };
     ($i:expr, $res:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 618; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 618 296" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -44064,6 +44297,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 666; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 666 275" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 34 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -44210,6 +44444,7 @@ is a token tree.</text>
     ($i:expr, $f:expr, $g:expr) =&gt; { ... };
     ($i:expr, $f:expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 1000; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 1000 485" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -44686,6 +44921,7 @@ are token trees.</text>
 </g>
 </svg>
 </div><div style="width: 1018; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 1018 420" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 20 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -44955,6 +45191,7 @@ are token trees.</text>
     ($i:expr, $separator:expr, $submac:ident!( $($args:tt)* )) =&gt; { ... };
     ($i:expr, $separator:expr, $f:expr) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 666; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 666 263" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -45116,6 +45353,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 666; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 666 262" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -45253,6 +45491,7 @@ is a token tree.</text>
 </div></div><div class="example" id="ws"><a href="#ws"><h3>Macro <i>`ws`</i></h3></a><pre class="rust">macro_rules! ws {
     ($i:expr, $($args:tt)*) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 180" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 34 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -45319,6 +45558,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 180" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 34 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>

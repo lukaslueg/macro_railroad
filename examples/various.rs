@@ -77,10 +77,16 @@ pub fn to_example_page(
     println!("Generating `{}`, written to `{}`.", title, outp_filename);
     let mut outp = fs::File::create(outp_filename)?;
 
+    let style = macro_railroad::railroad::Stylesheet::Light;
+
     outp.write_all(b"<html><head>")?;
     outp.write_all(b"<style type=\"text/css\">")?;
-    outp.write_all(railroad::DEFAULT_CSS.as_bytes())?;
-    outp.write_all(macro_railroad::diagram::CSS.as_bytes())?;
+    outp.write_all(style.stylesheet().as_bytes())?;
+    outp.write_all(
+        macro_railroad::diagram::Stylesheet::matching(&style)
+            .stylesheet()
+            .as_bytes(),
+    )?;
     outp.write_all(CSS.as_bytes())?;
     outp.write_all(b"</style>")?;
     outp.write_all(b"</head><body>")?;
@@ -1031,6 +1037,21 @@ $ left : expr , $ right : expr , $ ( $ arg : tt ) + ) => { ... };
     )?;
 
     let various_examples = &[
+        r#"macro_rules! fragments { (
+$block:block
+$expr:expr
+$ident:ident
+$item:item
+$lifetime:lifetime
+$literal:literal
+$meta:meta
+$pat:pat
+$path:path
+$stmt:stmt
+$tt:tt
+$ty:ty
+$vis:vis
+) => { ... }; }"#,
         r#"macro_rules! bitflags {
     (
         $(#[$outer:meta])*

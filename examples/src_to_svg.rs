@@ -39,8 +39,9 @@ fn main() -> Result<(), io::Error> {
 
     // Generate a diagram with a legend, add the `railroad`- and `macro_railroad`-CSS
     let mut dia = macro_railroad::diagram::into_diagram(tree, true);
-    dia.add_default_css();
-    macro_railroad::diagram::add_default_css(&mut dia);
+    let style = macro_railroad::railroad::Stylesheet::Light;
+    dia.add_stylesheet(&style);
+    macro_railroad::diagram::add_default_css(&mut dia, &style);
 
     // Write the SVG
     let fname = "examples/nom4_method.svg";

@@ -1,0 +1,67 @@
+svg.railroad .fragment_ty > rect {
+fill: hsl(0, 100%, 30%);
+}
+svg.railroad .fragment_ident > rect {
+fill: hsl(39, 100%, 30%);
+}
+
+svg.railroad .fragment_path > rect {
+fill: hsl(120, 100%, 25%);
+}
+
+svg.railroad .fragment_expr > rect {
+fill: hsl(60, 100%, 25%);
+}
+
+svg.railroad .fragment_pat > rect {
+fill: hsl(195, 100%, 25%);
+}
+
+svg.railroad .fragment_stmt > rect {
+fill: hsl(205, 100%, 25%);
+}
+
+svg.railroad .fragment_block > rect {
+fill: hsl(164, 100%, 25%);
+}
+
+svg.railroad .fragment_item > rect {
+fill: hsl(300, 24%, 25%);
+}
+
+svg.railroad .fragment_meta > rect {
+fill: hsl(300, 76%, 30%);
+}
+
+svg.railroad .fragment_tt > rect {
+fill: hsl(174, 72%, 30%);
+}
+
+svg.railroad .fragment_vis > rect {
+fill: hsl(33, 100%, 25%);
+}
+
+svg.railroad .fragment_literal > rect {
+fill: hsl(20, 93%, 30%);
+}
+
+svg.railroad .fragment_lifetime > rect {
+fill: teal;
+}
+
+svg.railroad .legend {
+transform: scale(0.85);
+transform-origin: bottom left;
+/*transform-box: fill-box;*/
+}
+
+svg.railroad .legend > rect {
+stroke: grey;
+stroke-width: 0.5px;
+stroke-dasharray: 2px;
+fill: rgba(90, 90, 90, .1)
+}
+
+svg.railroad .legend .comment:first-child {
+text-decoration: underline;
+}

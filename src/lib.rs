@@ -1,6 +1,6 @@
 // MIT License
 //
-// Copyright (c) 2018 Lukas Lueg (lukas.lueg@gmail.com)
+// Copyright (c) Lukas Lueg (lukas.lueg@gmail.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -37,9 +37,9 @@
 //!
 //! 1. Parsing the `macro_rules!()`-block.
 //! 0. Converting the parser-tree into an intermediate representation and applying
-//! transformations as desired.
+//!    transformations as desired.
 //! 0. Converting the intermediate representation into a `railroad::Diagram`.
-//! Adding CSS to control the graphical representation.
+//!    Adding CSS to control the graphical representation.
 //! 0. Outputting the final `SVG`.
 //!
 //! ```
@@ -67,7 +67,7 @@
 //! assert!(dia.to_string().starts_with("<svg"));
 //! ```
 #[macro_use]
-extern crate syn;
+pub extern crate syn;
 
 pub mod diagram;
 pub mod lowering;

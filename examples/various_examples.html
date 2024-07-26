@@ -1,114 +1,118 @@
-<html><head><style type="text/css">
-    svg.railroad {
-        background-color: hsl(30, 20%, 95%);
-        background-size: 15px 15px;
-        background-image: linear-gradient(to right, rgba(30, 30, 30, .05) 1px, transparent 1px),
-                          linear-gradient(to bottom, rgba(30, 30, 30, .05) 1px, transparent 1px);
-    }
+<html><head><style type="text/css">svg.railroad {
+background-color: hsl(30, 20%, 95%);
+background-size: 15px 15px;
+background-image: linear-gradient(to right, rgba(30, 30, 30, .05) 1px, transparent 1px),
+		  linear-gradient(to bottom, rgba(30, 30, 30, .05) 1px, transparent 1px);
+}
 
-    svg.railroad path {
-        stroke-width: 3px;
-        stroke: black;
-        fill: transparent;
-    }
+svg.railroad rect.railroad_canvas {
+stroke-width: 0px;
+fill: none;
+}
 
-    svg.railroad .debug {
-        stroke-width: 1px;
-        stroke: red;
-    }
+svg.railroad path {
+stroke-width: 3px;
+stroke: black;
+fill: none;
+}
 
-    svg.railroad text {
-        font: 14px monospace;
-        text-anchor: middle;
-    }
+svg.railroad .debug {
+stroke-width: 1px;
+stroke: red;
+}
 
-    svg.railroad .nonterminal text {
-        font-weight: bold;
-    }
+svg.railroad text {
+font: 14px monospace;
+text-anchor: middle;
+}
 
-    svg.railroad text.comment {
-        font: italic 12px monospace;
-    }
+svg.railroad .nonterminal text {
+font-weight: bold;
+}
 
-    svg.railroad rect {
-        stroke-width: 3px;
-        stroke: black;
-        fill:hsl(-290, 70%, 90%);
-    }
+svg.railroad text.comment {
+font: italic 12px monospace;
+}
 
-    svg.railroad g.labeledbox > rect {
-        stroke-width: 1px;
-        stroke: grey;
-        stroke-dasharray: 5px;
-        fill:rgba(90, 90, 150, .1);
-    }
-    svg.railroad .fragment_ty > rect {
-        fill: red;
-    }
-    svg.railroad .fragment_ident > rect {
-        fill: orange;
-    }
+svg.railroad rect {
+stroke-width: 3px;
+stroke: black;
+fill:hsl(-290, 70%, 90%);
+}
 
-    svg.railroad .fragment_path > rect {
-        fill: green;
-    }
+svg.railroad g.labeledbox > rect {
+stroke-width: 1px;
+stroke: grey;
+stroke-dasharray: 5px;
+fill:rgba(90, 90, 150, .1);
+}
+svg.railroad .fragment_ty > rect {
+fill: red;
+}
+svg.railroad .fragment_ident > rect {
+fill: orange;
+}
 
-    svg.railroad .fragment_expr > rect {
-        fill: yellow;
-    }
+svg.railroad .fragment_path > rect {
+fill: green;
+}
 
-    svg.railroad .fragment_pat > rect {
-        fill: deepskyblue;
-    }
+svg.railroad .fragment_expr > rect {
+fill: yellow;
+}
 
-    svg.railroad .fragment_stmt > rect {
-        fill: aqua;
-    }
+svg.railroad .fragment_pat > rect {
+fill: deepskyblue;
+}
 
-    svg.railroad .fragment_block > rect {
-        fill: aquamarine;
-    }
+svg.railroad .fragment_stmt > rect {
+fill: aqua;
+}
 
-    svg.railroad .fragment_item > rect {
-        fill: thistle;
-    }
+svg.railroad .fragment_block > rect {
+fill: aquamarine;
+}
 
-    svg.railroad .fragment_meta > rect {
-        fill: violet;
-    }
+svg.railroad .fragment_item > rect {
+fill: thistle;
+}
 
-    svg.railroad .fragment_tt > rect {
-        fill: turquoise;
-    }
+svg.railroad .fragment_meta > rect {
+fill: violet;
+}
 
-    svg.railroad .fragment_vis > rect {
-        fill: gold;
-    }
+svg.railroad .fragment_tt > rect {
+fill: turquoise;
+}
 
-    svg.railroad .fragment_literal > rect {
-        fill: salmon;
-    }
+svg.railroad .fragment_vis > rect {
+fill: gold;
+}
 
-    svg.railroad .fragment_lifetime > rect {
-        fill: teal;
-    }
+svg.railroad .fragment_literal > rect {
+fill: salmon;
+}
 
-    svg.railroad .legend {
-        transform: scale(0.85);
-        transform-origin: bottom left;
-        /*transform-box: fill-box;*/
-    }
+svg.railroad .fragment_lifetime > rect {
+fill: teal;
+}
 
-    svg.railroad .legend > rect {
-        stroke: black;
-        stroke-width: 0.5px;
-        stroke-dasharray: 2px;
-        fill: rgba(90, 90, 90, .1)
-    }
+svg.railroad .legend {
+transform: scale(0.85);
+transform-origin: bottom left;
+/*transform-box: fill-box;*/
+}
 
-    svg.railroad .legend .comment:first-child {
-        text-decoration: underline;
-    }
+svg.railroad .legend > rect {
+stroke: black;
+stroke-width: 0.5px;
+stroke-dasharray: 2px;
+fill: rgba(90, 90, 90, .1)
+}
+
+svg.railroad .legend .comment:first-child {
+text-decoration: underline;
+}
 
 svg.railroad {
     border: 1px solid;
@@ -150,7 +154,452 @@ pre.rust {
 	background-color: darkslategray;
 	color: moccasin;
 	padding: 10px;
-}</style></head><body><h1>Examples from various crates, from the coy to the insane</h1><div><div class="examples"><div class="example" id="bitflags"><a href="#bitflags"><h3>Macro <i>`bitflags`</i></h3></a><pre class="rust">macro_rules! bitflags {
+}</style></head><body><h1>Examples from various crates, from the coy to the insane</h1><div><div class="examples"><div class="example" id="fragments"><a href="#fragments"><h3>Macro <i>`fragments`</i></h3></a><pre class="rust">macro_rules! fragments { (
+$block:block
+$expr:expr
+$ident:ident
+$item:item
+$lifetime:lifetime
+$literal:literal
+$meta:meta
+$pat:pat
+$path:path
+$stmt:stmt
+$tt:tt
+$ty:ty
+$vis:vis
+) =&gt; { ... }; }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 890; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 890 528" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
+<g class="verticalgrid">
+<g class="sequence">
+<path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
+<g class="choice">
+<path d=" M 35 21 h 0 m 820 0 h 0"/>
+<g class="sequence">
+<g class="nonterminal fragment_block">
+<rect height="22" width="60" x="35" y="10"/>
+<text x="65" y="26">
+block</text>
+</g>
+<g class="nonterminal fragment_expr">
+<rect height="22" width="52" x="105" y="10"/>
+<text x="131" y="26">
+expr</text>
+</g>
+<g class="nonterminal fragment_ident">
+<rect height="22" width="60" x="167" y="10"/>
+<text x="197" y="26">
+ident</text>
+</g>
+<g class="nonterminal fragment_item">
+<rect height="22" width="52" x="237" y="10"/>
+<text x="263" y="26">
+item</text>
+</g>
+<g class="nonterminal fragment_lifetime">
+<rect height="22" width="84" x="299" y="10"/>
+<text x="341" y="26">
+lifetime</text>
+</g>
+<g class="nonterminal fragment_literal">
+<rect height="22" width="76" x="393" y="10"/>
+<text x="431" y="26">
+literal</text>
+</g>
+<g class="nonterminal fragment_meta">
+<rect height="22" width="52" x="479" y="10"/>
+<text x="505" y="26">
+meta</text>
+</g>
+<g class="nonterminal fragment_pat">
+<rect height="22" width="44" x="541" y="10"/>
+<text x="563" y="26">
+pat</text>
+</g>
+<g class="nonterminal fragment_path">
+<rect height="22" width="52" x="595" y="10"/>
+<text x="621" y="26">
+path</text>
+</g>
+<g class="nonterminal fragment_stmt">
+<rect height="22" width="52" x="657" y="10"/>
+<text x="683" y="26">
+stmt</text>
+</g>
+<g class="nonterminal fragment_tt">
+<rect height="22" width="36" x="719" y="10"/>
+<text x="737" y="26">
+tt</text>
+</g>
+<g class="nonterminal fragment_ty">
+<rect height="22" width="36" x="765" y="10"/>
+<text x="783" y="26">
+ty</text>
+</g>
+<g class="nonterminal fragment_vis">
+<rect height="22" width="44" x="811" y="10"/>
+<text x="833" y="26">
+vis</text>
+</g>
+<path d=" M 95 21 h 10"/>
+<path d=" M 157 21 h 10"/>
+<path d=" M 227 21 h 10"/>
+<path d=" M 289 21 h 10"/>
+<path d=" M 383 21 h 10"/>
+<path d=" M 469 21 h 10"/>
+<path d=" M 531 21 h 10"/>
+<path d=" M 585 21 h 10"/>
+<path d=" M 647 21 h 10"/>
+<path d=" M 709 21 h 10"/>
+<path d=" M 755 21 h 10"/>
+<path d=" M 801 21 h 10"/>
+</g>
+</g>
+<path d=" M 865 21 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
+<path d=" M 25 21 h 10"/>
+<path d=" M 855 21 h 10"/>
+</g>
+<g class=" legend">
+<rect height="474" width="323" x="10" y="44"/>
+<g class="verticalgrid">
+<text class="comment" x="171" y="65">
+Non-terminal patterns used by this macro:</text>
+<g class="horizontalgrid">
+<g class="nonterminal fragment_ident">
+<rect height="22" width="60" x="16" y="82"/>
+<text x="46" y="98">
+ident</text>
+</g>
+<text class="comment" x="152" y="97">
+is an identifier.</text>
+</g>
+<g class="horizontalgrid">
+<g class="nonterminal fragment_path">
+<rect height="22" width="52" x="16" y="116"/>
+<text x="42" y="132">
+path</text>
+</g>
+<text class="comment" x="120" y="131">
+is a path.</text>
+</g>
+<g class="horizontalgrid">
+<g class="nonterminal fragment_expr">
+<rect height="22" width="52" x="16" y="150"/>
+<text x="42" y="166">
+expr</text>
+</g>
+<text class="comment" x="144" y="165">
+is an expression.</text>
+</g>
+<g class="horizontalgrid">
+<g class="nonterminal fragment_ty">
+<rect height="22" width="36" x="16" y="184"/>
+<text x="34" y="200">
+ty</text>
+</g>
+<text class="comment" x="104" y="199">
+is a type.</text>
+</g>
+<g class="horizontalgrid">
+<g class="nonterminal fragment_pat">
+<rect height="22" width="44" x="16" y="218"/>
+<text x="38" y="234">
+pat</text>
+</g>
+<text class="comment" x="122" y="233">
+is a pattern.</text>
+</g>
+<g class="horizontalgrid">
+<g class="nonterminal fragment_stmt">
+<rect height="22" width="52" x="16" y="252"/>
+<text x="42" y="268">
+stmt</text>
+</g>
+<text class="comment" x="137" y="267">
+is a statement.</text>
+</g>
+<g class="horizontalgrid">
+<g class="nonterminal fragment_block">
+<rect height="22" width="60" x="16" y="286"/>
+<text x="46" y="302">
+block</text>
+</g>
+<text class="comment" x="131" y="301">
+is a block.</text>
+</g>
+<g class="horizontalgrid">
+<g class="nonterminal fragment_item">
+<rect height="22" width="52" x="16" y="320"/>
+<text x="42" y="336">
+item</text>
+</g>
+<text class="comment" x="123" y="335">
+is an item.</text>
+</g>
+<g class="horizontalgrid">
+<g class="nonterminal fragment_meta">
+<rect height="22" width="52" x="16" y="354"/>
+<text x="42" y="370">
+meta</text>
+</g>
+<text class="comment" x="137" y="369">
+is a meta-item.</text>
+</g>
+<g class="horizontalgrid">
+<g class="nonterminal fragment_tt">
+<rect height="22" width="36" x="16" y="388"/>
+<text x="34" y="404">
+tt</text>
+</g>
+<text class="comment" x="125" y="403">
+is a token tree.</text>
+</g>
+<g class="horizontalgrid">
+<g class="nonterminal fragment_vis">
+<rect height="22" width="44" x="16" y="422"/>
+<text x="38" y="438">
+vis</text>
+</g>
+<text class="comment" x="175" y="437">
+is a visibility annotation.</text>
+</g>
+<g class="horizontalgrid">
+<g class="nonterminal fragment_literal">
+<rect height="22" width="76" x="16" y="456"/>
+<text x="54" y="472">
+literal</text>
+</g>
+<text class="comment" x="189" y="471">
+is a literal constant.</text>
+</g>
+<g class="horizontalgrid">
+<g class="nonterminal fragment_lifetime">
+<rect height="22" width="84" x="16" y="490"/>
+<text x="58" y="506">
+lifetime</text>
+</g>
+<text class="comment" x="166" y="505">
+is a lifetime.</text>
+</g>
+</g>
+</g>
+</g>
+</svg>
+</div><div style="width: 890; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 890 528" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
+<g class="verticalgrid">
+<g class="sequence">
+<path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
+<g class="sequence">
+<g class="nonterminal fragment_block">
+<rect height="22" width="60" x="35" y="10"/>
+<text x="65" y="26">
+block</text>
+</g>
+<g class="nonterminal fragment_expr">
+<rect height="22" width="52" x="105" y="10"/>
+<text x="131" y="26">
+expr</text>
+</g>
+<g class="nonterminal fragment_ident">
+<rect height="22" width="60" x="167" y="10"/>
+<text x="197" y="26">
+ident</text>
+</g>
+<g class="nonterminal fragment_item">
+<rect height="22" width="52" x="237" y="10"/>
+<text x="263" y="26">
+item</text>
+</g>
+<g class="nonterminal fragment_lifetime">
+<rect height="22" width="84" x="299" y="10"/>
+<text x="341" y="26">
+lifetime</text>
+</g>
+<g class="nonterminal fragment_literal">
+<rect height="22" width="76" x="393" y="10"/>
+<text x="431" y="26">
+literal</text>
+</g>
+<g class="nonterminal fragment_meta">
+<rect height="22" width="52" x="479" y="10"/>
+<text x="505" y="26">
+meta</text>
+</g>
+<g class="nonterminal fragment_pat">
+<rect height="22" width="44" x="541" y="10"/>
+<text x="563" y="26">
+pat</text>
+</g>
+<g class="nonterminal fragment_path">
+<rect height="22" width="52" x="595" y="10"/>
+<text x="621" y="26">
+path</text>
+</g>
+<g class="nonterminal fragment_stmt">
+<rect height="22" width="52" x="657" y="10"/>
+<text x="683" y="26">
+stmt</text>
+</g>
+<g class="nonterminal fragment_tt">
+<rect height="22" width="36" x="719" y="10"/>
+<text x="737" y="26">
+tt</text>
+</g>
+<g class="nonterminal fragment_ty">
+<rect height="22" width="36" x="765" y="10"/>
+<text x="783" y="26">
+ty</text>
+</g>
+<g class="nonterminal fragment_vis">
+<rect height="22" width="44" x="811" y="10"/>
+<text x="833" y="26">
+vis</text>
+</g>
+<path d=" M 95 21 h 10"/>
+<path d=" M 157 21 h 10"/>
+<path d=" M 227 21 h 10"/>
+<path d=" M 289 21 h 10"/>
+<path d=" M 383 21 h 10"/>
+<path d=" M 469 21 h 10"/>
+<path d=" M 531 21 h 10"/>
+<path d=" M 585 21 h 10"/>
+<path d=" M 647 21 h 10"/>
+<path d=" M 709 21 h 10"/>
+<path d=" M 755 21 h 10"/>
+<path d=" M 801 21 h 10"/>
+</g>
+<path d=" M 865 21 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
+<path d=" M 25 21 h 10"/>
+<path d=" M 855 21 h 10"/>
+</g>
+<g class=" legend">
+<rect height="474" width="323" x="10" y="44"/>
+<g class="verticalgrid">
+<text class="comment" x="171" y="65">
+Non-terminal patterns used by this macro:</text>
+<g class="horizontalgrid">
+<g class="nonterminal fragment_ident">
+<rect height="22" width="60" x="16" y="82"/>
+<text x="46" y="98">
+ident</text>
+</g>
+<text class="comment" x="152" y="97">
+is an identifier.</text>
+</g>
+<g class="horizontalgrid">
+<g class="nonterminal fragment_path">
+<rect height="22" width="52" x="16" y="116"/>
+<text x="42" y="132">
+path</text>
+</g>
+<text class="comment" x="120" y="131">
+is a path.</text>
+</g>
+<g class="horizontalgrid">
+<g class="nonterminal fragment_expr">
+<rect height="22" width="52" x="16" y="150"/>
+<text x="42" y="166">
+expr</text>
+</g>
+<text class="comment" x="144" y="165">
+is an expression.</text>
+</g>
+<g class="horizontalgrid">
+<g class="nonterminal fragment_ty">
+<rect height="22" width="36" x="16" y="184"/>
+<text x="34" y="200">
+ty</text>
+</g>
+<text class="comment" x="104" y="199">
+is a type.</text>
+</g>
+<g class="horizontalgrid">
+<g class="nonterminal fragment_pat">
+<rect height="22" width="44" x="16" y="218"/>
+<text x="38" y="234">
+pat</text>
+</g>
+<text class="comment" x="122" y="233">
+is a pattern.</text>
+</g>
+<g class="horizontalgrid">
+<g class="nonterminal fragment_stmt">
+<rect height="22" width="52" x="16" y="252"/>
+<text x="42" y="268">
+stmt</text>
+</g>
+<text class="comment" x="137" y="267">
+is a statement.</text>
+</g>
+<g class="horizontalgrid">
+<g class="nonterminal fragment_block">
+<rect height="22" width="60" x="16" y="286"/>
+<text x="46" y="302">
+block</text>
+</g>
+<text class="comment" x="131" y="301">
+is a block.</text>
+</g>
+<g class="horizontalgrid">
+<g class="nonterminal fragment_item">
+<rect height="22" width="52" x="16" y="320"/>
+<text x="42" y="336">
+item</text>
+</g>
+<text class="comment" x="123" y="335">
+is an item.</text>
+</g>
+<g class="horizontalgrid">
+<g class="nonterminal fragment_meta">
+<rect height="22" width="52" x="16" y="354"/>
+<text x="42" y="370">
+meta</text>
+</g>
+<text class="comment" x="137" y="369">
+is a meta-item.</text>
+</g>
+<g class="horizontalgrid">
+<g class="nonterminal fragment_tt">
+<rect height="22" width="36" x="16" y="388"/>
+<text x="34" y="404">
+tt</text>
+</g>
+<text class="comment" x="125" y="403">
+is a token tree.</text>
+</g>
+<g class="horizontalgrid">
+<g class="nonterminal fragment_vis">
+<rect height="22" width="44" x="16" y="422"/>
+<text x="38" y="438">
+vis</text>
+</g>
+<text class="comment" x="175" y="437">
+is a visibility annotation.</text>
+</g>
+<g class="horizontalgrid">
+<g class="nonterminal fragment_literal">
+<rect height="22" width="76" x="16" y="456"/>
+<text x="54" y="472">
+literal</text>
+</g>
+<text class="comment" x="189" y="471">
+is a literal constant.</text>
+</g>
+<g class="horizontalgrid">
+<g class="nonterminal fragment_lifetime">
+<rect height="22" width="84" x="16" y="490"/>
+<text x="58" y="506">
+lifetime</text>
+</g>
+<text class="comment" x="166" y="505">
+is a lifetime.</text>
+</g>
+</g>
+</g>
+</g>
+</svg>
+</div></div><div class="example" id="bitflags"><a href="#bitflags"><h3>Macro <i>`bitflags`</i></h3></a><pre class="rust">macro_rules! bitflags {
     (
         $(#[$outer:meta])*
         pub struct $BitFlags:ident: $T:ty {
@@ -179,6 +628,7 @@ pre.rust {
         }
     ) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 1652; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 1652 590" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 62 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -831,6 +1281,7 @@ are token trees.</text>
 </g>
 </svg>
 </div><div style="width: 1700; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 1700 346" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 62 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -1129,6 +1580,7 @@ are token trees.</text>
     ($(#[$attr:meta])* pub ($($vis:tt)+) static ref $N:ident : $T:ty = $e:expr; $($t:tt)*) =&gt; { ... };
     () =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 1066; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 1066 459" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 41 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -1561,6 +2013,7 @@ are token trees.</text>
 </g>
 </svg>
 </div><div style="width: 1162; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 1162 321" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 65 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -1786,6 +2239,7 @@ are token trees.</text>
         )*
     } =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 1282; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 1282 397" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 34 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -2055,6 +2509,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 1282; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 1282 337" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 54 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -2295,6 +2750,7 @@ is a token tree.</text>
     (@as_json_value $x:ident, bool) =&gt; { ... };
     (@as_json_value $x:ident, null) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 628; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 628 497" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 34 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -2678,6 +3134,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 628; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 628 265" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 34 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -2812,6 +3269,7 @@ is a token tree.</text>
         $(varargs: $(fn $vname: ident($($vargs: ty),+) -&gt; $vret: ty),+,)|*
     ) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 2276; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 2276 629" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 54 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -3774,6 +4232,7 @@ are types.</text>
 </g>
 </svg>
 </div><div style="width: 2144; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 2144 323" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 54 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -4153,6 +4612,7 @@ are types.</text>
             $( $field:ident : $ty:ty = $e:expr, )+
     } $($tail:tt)+) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 1310; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 1310 730" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 49 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -5043,6 +5503,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 1406; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 1406 442" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 29 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -5497,6 +5958,7 @@ is a token tree.</text>
     (($name:expr) =&gt; $($tail:tt)*) =&gt; { ... };
     ($name:ident =&gt; $($tail:tt)*) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 1076; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 1076 2274" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 29 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -8608,6 +9070,7 @@ are token trees.</text>
 </g>
 </svg>
 </div><div style="width: 520; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 520 272" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 20 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -8727,6 +9190,7 @@ is a token tree.</text>
     (values=$vf:expr, $macro_name:ident !($($rest:tt)*)) =&gt; { ... };
     ($macro_name:ident ! $($rest:tt)*) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 1066; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 1066 641" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -9305,6 +9769,7 @@ is a token tree.</text>
 </g>
 </svg>
 </div><div style="width: 1162; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 1162 641" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -9766,6 +10231,7 @@ is a token tree.</text>
         )*
     ) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 1622; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 1622 406" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 62 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -10228,6 +10694,7 @@ are meta-items.</text>
 </g>
 </svg>
 </div><div style="width: 1622; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 1622 406" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 62 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -10780,6 +11247,7 @@ are meta-items.</text>
         enum_from_primitive_impl! { $name, $( $( $variant )+ )+ }
     };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 1942; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 1942 1340" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 61 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -12359,6 +12827,7 @@ are meta-items.</text>
 </g>
 </svg>
 </div><div style="width: 1990; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 1990 748" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 61 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -13275,6 +13744,7 @@ are meta-items.</text>
     (ERROR_CHECK $imode:tt ) =&gt; { ... };
     (IDENT $ident:ident) =&gt; { ... };
 }</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 3252; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 3252 6659" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
@@ -25672,6 +26142,7 @@ are token trees.</text>
 </g>
 </svg>
 </div><div style="width: 3396; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 3396 4839" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect class="railroad_canvas" height="100%" width="100%"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 42 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
