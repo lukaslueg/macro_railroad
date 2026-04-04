@@ -140,4 +140,15 @@ mod tests {
         tree.remove_internal();
         tree.foldcommontails();
     }
+
+    #[test]
+    fn test_fuzzcrash1() {
+        // Issue: When folding common tails, some rules have content entirely within
+        // the common prefix/suffix area. The code assumed that prefix_len + suffix_len
+        // would always fit within the rule's total length, but this isn't guaranteed.
+        let src = r#"macro_rules!ii((*i[im=]*1)=>(**)    ;(*[im=]*1)=>(***)  ;(*1)=>(*));"#;
+        let mut tree = MacroRules::from(parser::parse(src).unwrap());
+        tree.foldcommontails();
+        tree.normalize();
+    }
 }

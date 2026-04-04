@@ -579,17 +579,26 @@ impl FoldCommonTails {
                         .zip(group[1].iter().skip(lcprefix.len()).rev())
                         .take_while(|(a, b)| a == b)
                         .count()..];
+                // Also ensure lcsuffix doesn't overlap with lcprefix
+                let max_possible_suffix_len = group[0].len() - lcprefix.len();
+                if lcsuffix.len() > max_possible_suffix_len {
+                    lcsuffix = &lcsuffix[0..max_possible_suffix_len];
+                }
                 for s in group.iter().skip(2) {
                     if lcsuffix.is_empty() {
                         break;
                     }
-                    lcsuffix = &lcsuffix[lcsuffix.len()
-                        - lcsuffix
-                            .iter()
-                            .rev()
-                            .zip(s.iter().rev())
-                            .take_while(|(a, b)| a == b)
-                            .count()..];
+                    // Ensure we don't count a suffix that overlaps the prefix
+                    let max_suffix_len = s.len() - lcprefix.len();
+                    let new_count = lcsuffix
+                        .iter()
+                        .rev()
+                        .zip(s.iter().rev())
+                        .take_while(|(a, b)| a == b)
+                        .take(max_suffix_len)
+                        .count();
+                    let new_start = lcsuffix.len() - new_count;
+                    lcsuffix = &lcsuffix[new_start..];
                 }
                 (group, lcprefix, lcsuffix)
             })
@@ -646,7 +655,11 @@ impl FoldCommonTails {
             .0
             .iter()
             .map(|s| {
-                let c = &s[group.1.len()..s.len() - group.2.len()];
+                // The suffix must not overlap with the prefix. Some rules may have
+                // content entirely within the common prefix/suffix area.
+                let prefix_len = group.1.len();
+                let suffix_len = group.2.len().min(s.len() - prefix_len);
+                let c = &s[prefix_len..s.len() - suffix_len];
                 Matcher::Sequence(c.to_vec())
             })
             .collect::<Vec<_>>();
