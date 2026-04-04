@@ -510,7 +510,7 @@ impl TransformVisitor for InternalMacroRemover {
                 .filter_map(Self::first_literal)
                 .any(Self::is_internal)
             {
-                rules.retain(|e| Self::first_literal(e).map_or(true, |l| !Self::is_internal(l)));
+                rules.retain(|e| Self::first_literal(e).is_none_or(|l| !Self::is_internal(l)));
                 rules.push(Matcher::InternalMacroHint);
             }
         }
