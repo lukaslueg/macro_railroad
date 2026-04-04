@@ -5,3 +5,7 @@ examples/stdlib_examples.html
 examples/syn_examples.html
 examples/various_examples.html
 Cargo.lock
+fuzz/artifacts
+fuzz/Cargo.lock
+fuzz/corpus
+fuzz/target
