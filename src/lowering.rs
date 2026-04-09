@@ -307,8 +307,20 @@ impl Normalizer {
         // A nested Optional can be unnested
         if let Matcher::Optional(c) = *m {
             (true, Matcher::Optional(c))
+        } else if let Matcher::Empty = *m {
+            (true, Matcher::Empty)
         } else {
             (false, Matcher::Optional(m))
+        }
+    }
+
+    fn normalize_repeat(content: Box<Matcher>, seperator: Option<String>) -> (bool, Matcher) {
+        if let Matcher::Empty = *content
+            && seperator.is_none()
+        {
+            (true, Matcher::Empty)
+        } else {
+            (false, Matcher::Repeat { content, seperator })
         }
     }
 
@@ -430,6 +442,11 @@ impl Normalizer {
                 }
                 Matcher::Sequence(b) => {
                     let r = Self::normalize_sequence(b);
+                    changed |= r.0;
+                    r.1
+                }
+                Matcher::Repeat { content, seperator } => {
+                    let r = Self::normalize_repeat(content, seperator);
                     changed |= r.0;
                     r.1
                 }
@@ -807,6 +824,13 @@ mod tests {
     }
 
     #[test]
+    fn normalize_optional() {
+        let mut mr = rmr!(opt!(epty!()));
+        mr.normalize();
+        assert_eq!(mr, rmr!(epty!()));
+    }
+
+    #[test]
     fn normalize_nested_options() {
         // Issue 22
         let mut mr = rmr!(seq!(opt!(opt!(lit!("A"))), lit!("B")));
@@ -839,6 +863,13 @@ mod tests {
         let mut mr = rmr!(cho!(rpt!(lit!("A")), lit!("A")));
         mr.normalize();
         assert_eq!(mr, rmr!(rpt!(lit!("A"))));
+    }
+
+    #[test]
+    fn normalize_empty_repeat() {
+        let mut mr = rmr!(rpt!(epty!()));
+        mr.normalize();
+        assert_eq!(mr, rmr!(epty!()));
     }
 
     #[test]
