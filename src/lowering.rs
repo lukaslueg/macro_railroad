@@ -744,175 +744,321 @@ mod tests {
 
     use super::*;
 
-    macro_rules! rmr {
-        ($r:expr) => {
-            MacroRules {
-                name: "Test".to_owned(),
-                rules: $r,
-            }
-        };
-    }
-    macro_rules! mr {
-        ($r:expr) => {
-            rmr!(Matcher::Choice($r))
-        };
-    }
-    macro_rules! opt {
-        ($o:expr) => {
-            Matcher::Optional(Box::new($o))
-        };
-    }
-    macro_rules! lit {
-        ($t:expr) => {
-            Matcher::Literal($t.to_owned())
-        };
-    }
-    macro_rules! epty {
-        () => {
-            Matcher::Empty
-        };
-    }
-    macro_rules! grp {
-        ($r:expr) => {
-            Matcher::Group(Box::new($r))
-        };
-    }
-    macro_rules! seq { ($($r:expr),*) => { Matcher::Sequence(vec![$($r,)*]) } }
-    macro_rules! lseq { ($($r:expr),*) => { seq!($(lit!($r)),+) } }
-    macro_rules! cho { ($($r:expr),*) => { Matcher::Choice(vec![$($r,)+]) } }
-    macro_rules! cmt {
-        ($t:expr) => {
-            Matcher::Comment($t.to_owned())
-        };
-    }
-    macro_rules! rpt {
-        ($c:expr) => {
-            Matcher::Repeat {
-                content: Box::new($c),
-                seperator: None,
-            }
-        };
-    }
-    macro_rules! nonterm {
-        ($t:expr, $v:expr) => {
-            Matcher::NonTerminal {
-                name: $t.to_owned(),
-                fragment: $v,
-            }
-        };
-        ($t:expr) => {
-            nonterm!($t, parser::Fragment::Ident)
-        };
-    }
-
     #[test]
     fn fold_simple() {
-        let mut mr = rmr!(cho![lseq!("A", "X", "C"), lseq!("A", "Y", "C")]);
+        let mut mr = MacroRules {
+            name: "Test".to_owned(),
+            rules: Matcher::Choice(vec![
+                Matcher::Sequence(vec![
+                    Matcher::Literal("A".to_owned()),
+                    Matcher::Literal("X".to_owned()),
+                    Matcher::Literal("C".to_owned()),
+                ]),
+                Matcher::Sequence(vec![
+                    Matcher::Literal("A".to_owned()),
+                    Matcher::Literal("Y".to_owned()),
+                    Matcher::Literal("C".to_owned()),
+                ]),
+            ]),
+        };
         mr.foldcommontails();
         mr.normalize();
         assert_eq!(
             mr.rules,
-            seq!(lit!("A"), cho!(lit!("X"), lit!("Y")), lit!("C"))
+            Matcher::Sequence(vec![
+                Matcher::Literal("A".to_owned()),
+                Matcher::Choice(vec![
+                    Matcher::Literal("X".to_owned()),
+                    Matcher::Literal("Y".to_owned()),
+                ]),
+                Matcher::Literal("C".to_owned()),
+            ])
         );
     }
 
     #[test]
     fn normalize_simple() {
-        let mut mr = mr!(vec!(seq!(cho!(lseq!("A", "B"), epty!()), lit!("C"))));
+        let mut mr = MacroRules {
+            name: "Test".to_owned(),
+            rules: Matcher::Choice(vec![Matcher::Sequence(vec![
+                Matcher::Choice(vec![
+                    Matcher::Sequence(vec![
+                        Matcher::Literal("A".to_owned()),
+                        Matcher::Literal("B".to_owned()),
+                    ]),
+                    Matcher::Empty,
+                ]),
+                Matcher::Literal("C".to_owned()),
+            ])]),
+        };
         mr.normalize();
-        assert_eq!(mr, rmr!(seq!(opt!(lseq!("A", "B")), lit!("C"))));
+        assert_eq!(
+            mr,
+            MacroRules {
+                name: "Test".to_owned(),
+                rules: Matcher::Sequence(vec![
+                    Matcher::Optional(Box::new(Matcher::Sequence(vec![
+                        Matcher::Literal("A".to_owned()),
+                        Matcher::Literal("B".to_owned()),
+                    ]))),
+                    Matcher::Literal("C".to_owned()),
+                ]),
+            }
+        );
     }
 
     #[test]
     fn normalize_optional() {
-        let mut mr = rmr!(opt!(epty!()));
+        let mut mr = MacroRules {
+            name: "Test".to_owned(),
+            rules: Matcher::Optional(Box::new(Matcher::Empty)),
+        };
         mr.normalize();
-        assert_eq!(mr, rmr!(epty!()));
+        assert_eq!(
+            mr,
+            MacroRules {
+                name: "Test".to_owned(),
+                rules: Matcher::Empty,
+            }
+        );
     }
 
     #[test]
     fn normalize_nested_options() {
         // Issue 22
-        let mut mr = rmr!(seq!(opt!(opt!(lit!("A"))), lit!("B")));
+        let mut mr = MacroRules {
+            name: "Test".to_owned(),
+            rules: Matcher::Sequence(vec![
+                Matcher::Optional(Box::new(Matcher::Optional(Box::new(
+                    Matcher::Literal("A".to_owned()),
+                )))),
+                Matcher::Literal("B".to_owned()),
+            ]),
+        };
         mr.normalize();
-        assert_eq!(mr, rmr!(seq!(opt!(lit!("A")), lit!("B"))));
+        assert_eq!(
+            mr,
+            MacroRules {
+                name: "Test".to_owned(),
+                rules: Matcher::Sequence(vec![
+                    Matcher::Optional(Box::new(Matcher::Literal("A".to_owned()))),
+                    Matcher::Literal("B".to_owned()),
+                ]),
+            }
+        );
 
-        let mut mr = rmr!(seq!(opt!(opt!(lit!("A"))), opt!(opt!(opt!(lit!("B"))))));
+        let mut mr = MacroRules {
+            name: "Test".to_owned(),
+            rules: Matcher::Sequence(vec![
+                Matcher::Optional(Box::new(Matcher::Optional(Box::new(
+                    Matcher::Literal("A".to_owned()),
+                )))),
+                Matcher::Optional(Box::new(Matcher::Optional(Box::new(Matcher::Optional(
+                    Box::new(Matcher::Literal("B".to_owned())),
+                ))))),
+            ]),
+        };
         mr.normalize();
-        assert_eq!(mr, rmr!(seq!(opt!(lit!("A")), opt!(lit!("B")))));
+        assert_eq!(
+            mr,
+            MacroRules {
+                name: "Test".to_owned(),
+                rules: Matcher::Sequence(vec![
+                    Matcher::Optional(Box::new(Matcher::Literal("A".to_owned()))),
+                    Matcher::Optional(Box::new(Matcher::Literal("B".to_owned()))),
+                ]),
+            }
+        );
     }
 
     #[test]
     fn fold_unnormalized_source() {
         // This didnt get folded because normalization didnt use to happen before folding.
-        let mut mr = rmr!(cho!(seq!(), seq!(lit!(",")), seq!(opt!(seq!(lit!(","))))));
+        let mut mr = MacroRules {
+            name: "Test".to_owned(),
+            rules: Matcher::Choice(vec![
+                Matcher::Sequence(vec![]),
+                Matcher::Sequence(vec![Matcher::Literal(",".to_owned())]),
+                Matcher::Sequence(vec![Matcher::Optional(Box::new(Matcher::Sequence(vec![
+                    Matcher::Literal(",".to_owned()),
+                ])))]),
+            ]),
+        };
         mr.foldcommontails();
-        assert_eq!(mr, rmr!(opt!(lit!(","))));
+        assert_eq!(
+            mr,
+            MacroRules {
+                name: "Test".to_owned(),
+                rules: Matcher::Optional(Box::new(Matcher::Literal(",".to_owned()))),
+            }
+        );
     }
 
     #[test]
     fn fold_normalizable_source() {
-        let mut mr = rmr!(cho!(lit!("x"), seq!(lit!("x"), lit!("y"))));
+        let mut mr = MacroRules {
+            name: "Test".to_owned(),
+            rules: Matcher::Choice(vec![
+                Matcher::Literal("x".to_owned()),
+                Matcher::Sequence(vec![
+                    Matcher::Literal("x".to_owned()),
+                    Matcher::Literal("y".to_owned()),
+                ]),
+            ]),
+        };
         mr.foldcommontails();
         mr.normalize();
-        assert_eq!(mr, rmr!(seq!(lit!("x"), opt!(lit!("y")))));
+        assert_eq!(
+            mr,
+            MacroRules {
+                name: "Test".to_owned(),
+                rules: Matcher::Sequence(vec![
+                    Matcher::Literal("x".to_owned()),
+                    Matcher::Optional(Box::new(Matcher::Literal("y".to_owned()))),
+                ]),
+            }
+        );
     }
 
     #[test]
     fn normalize_repeat() {
-        let mut mr = rmr!(cho!(rpt!(lit!("A")), lit!("A")));
+        let mut mr = MacroRules {
+            name: "Test".to_owned(),
+            rules: Matcher::Choice(vec![
+                Matcher::Repeat {
+                    content: Box::new(Matcher::Literal("A".to_owned())),
+                    seperator: None,
+                },
+                Matcher::Literal("A".to_owned()),
+            ]),
+        };
         mr.normalize();
-        assert_eq!(mr, rmr!(rpt!(lit!("A"))));
+        assert_eq!(
+            mr,
+            MacroRules {
+                name: "Test".to_owned(),
+                rules: Matcher::Repeat {
+                    content: Box::new(Matcher::Literal("A".to_owned())),
+                    seperator: None,
+                },
+            }
+        );
     }
 
     #[test]
     fn normalize_empty_repeat() {
-        let mut mr = rmr!(rpt!(epty!()));
+        let mut mr = MacroRules {
+            name: "Test".to_owned(),
+            rules: Matcher::Repeat {
+                content: Box::new(Matcher::Empty),
+                seperator: None,
+            },
+        };
         mr.normalize();
-        assert_eq!(mr, rmr!(epty!()));
+        assert_eq!(
+            mr,
+            MacroRules {
+                name: "Test".to_owned(),
+                rules: Matcher::Empty,
+            }
+        );
     }
 
     #[test]
     fn ungroup_simple() {
-        let mut mr = mr!(vec!(
-            lit!("A"),
-            seq!(lit!("A"), grp!(seq!(lit!("B"), lseq!("C"))), lit!("D"))
-        ));
+        let mut mr = MacroRules {
+            name: "Test".to_owned(),
+            rules: Matcher::Choice(vec![
+                Matcher::Literal("A".to_owned()),
+                Matcher::Sequence(vec![
+                    Matcher::Literal("A".to_owned()),
+                    Matcher::Group(Box::new(Matcher::Sequence(vec![
+                        Matcher::Literal("B".to_owned()),
+                        Matcher::Sequence(vec![Matcher::Literal("C".to_owned())]),
+                    ]))),
+                    Matcher::Literal("D".to_owned()),
+                ]),
+            ]),
+        };
         mr.ungroup();
-        assert_eq!(mr, mr!(vec!(lit!("A"), lseq!("A", "B", "C", "D"))));
+        assert_eq!(
+            mr,
+            MacroRules {
+                name: "Test".to_owned(),
+                rules: Matcher::Choice(vec![
+                    Matcher::Literal("A".to_owned()),
+                    Matcher::Sequence(vec![
+                        Matcher::Literal("A".to_owned()),
+                        Matcher::Literal("B".to_owned()),
+                        Matcher::Literal("C".to_owned()),
+                        Matcher::Literal("D".to_owned()),
+                    ]),
+                ]),
+            }
+        );
     }
 
     #[test]
     fn remove_internals() {
         let rules = vec![
-            lit!("Not internal!"),
-            lit!("__impl internal"),
-            seq!(lit!("@internal")),
-            seq!(cmt!("also not internal"), lit!("__or is it")),
-            rpt!(lit!("__self")),
+            Matcher::Literal("Not internal!".to_owned()),
+            Matcher::Literal("__impl internal".to_owned()),
+            Matcher::Sequence(vec![Matcher::Literal("@internal".to_owned())]),
+            Matcher::Sequence(vec![
+                Matcher::Comment("also not internal".to_owned()),
+                Matcher::Literal("__or is it".to_owned()),
+            ]),
+            Matcher::Repeat {
+                content: Box::new(Matcher::Literal("__self".to_owned())),
+                seperator: None,
+            },
         ];
-        let mut mr = mr!(rules);
+        let mut mr = MacroRules {
+            name: "Test".to_owned(),
+            rules: Matcher::Choice(rules),
+        };
 
         mr.remove_internal();
 
         assert_eq!(
             mr,
-            mr!(vec![
-                lit!("Not internal!"),
-                seq!(cmt!("also not internal"), lit!("__or is it")),
-                Matcher::InternalMacroHint,
-            ])
+            MacroRules {
+                name: "Test".to_owned(),
+                rules: Matcher::Choice(vec![
+                    Matcher::Literal("Not internal!".to_owned()),
+                    Matcher::Sequence(vec![
+                        Matcher::Comment("also not internal".to_owned()),
+                        Matcher::Literal("__or is it".to_owned()),
+                    ]),
+                    Matcher::InternalMacroHint,
+                ]),
+            }
         );
     }
 
     #[test]
     fn collect_nonterminals() {
         let rules = vec![
-            seq![nonterm!["Foo", parser::Fragment::Ty]],
-            opt!(cho!(nonterm!("Bar", parser::Fragment::Ty))),
-            rpt!(nonterm!("Foobar")),
+            Matcher::Sequence(vec![Matcher::NonTerminal {
+                name: "Foo".to_owned(),
+                fragment: parser::Fragment::Ty,
+            }]),
+            Matcher::Optional(Box::new(Matcher::Choice(vec![Matcher::NonTerminal {
+                name: "Bar".to_owned(),
+                fragment: parser::Fragment::Ty,
+            }]))),
+            Matcher::Repeat {
+                content: Box::new(Matcher::NonTerminal {
+                    name: "Foobar".to_owned(),
+                    fragment: parser::Fragment::Ident,
+                }),
+                seperator: None,
+            },
         ];
-        let mut mr = mr!(rules);
+        let mut mr = MacroRules {
+            name: "Test".to_owned(),
+            rules: Matcher::Choice(rules),
+        };
 
         let nonterminals = mr.collect_nonterminals();
         println!("{nonterminals:#?}");
