@@ -2,10 +2,10 @@
 
 use proc_macro2::{Delimiter, Ident, Literal, Punct, TokenStream, TokenTree};
 
+use syn::Lifetime;
 use syn::ext::IdentExt;
 use syn::parse::{Error, Parse, ParseBuffer, ParseStream, Result};
 use syn::token::{Brace, Bracket, Dollar, Paren};
-use syn::Lifetime;
 
 #[derive(Debug)]
 pub struct MacroRules {

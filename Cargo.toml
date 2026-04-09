@@ -2,7 +2,7 @@
 name = "macro_railroad"
 version = "0.1.7"
 authors = ["Lukas Lueg <lukas.lueg@gmail.com>"]
-edition = "2021"
+edition = "2024"
 license = "MIT"
 description = "A library to generate syntax diagrams for Rust macros"
 repository = "https://github.com/lukaslueg/macro_railroad"

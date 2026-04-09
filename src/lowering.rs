@@ -387,11 +387,7 @@ impl Normalizer {
                     .zip(refs.iter().rev().skip(1))
                     .find_map(
                         |((_, e1), (idx, e2))| {
-                            if e1 == e2 {
-                                Some(*idx)
-                            } else {
-                                None
-                            }
+                            if e1 == e2 { Some(*idx) } else { None }
                         },
                     )
             {
@@ -504,15 +500,14 @@ impl InternalMacroRemover {
 
 impl TransformVisitor for InternalMacroRemover {
     fn visit(&mut self, m: &mut Matcher) {
-        if let Matcher::Choice(rules) = m {
-            if rules
+        if let Matcher::Choice(rules) = m
+            && rules
                 .iter()
                 .filter_map(Self::first_literal)
                 .any(Self::is_internal)
-            {
-                rules.retain(|e| Self::first_literal(e).is_none_or(|l| !Self::is_internal(l)));
-                rules.push(Matcher::InternalMacroHint);
-            }
+        {
+            rules.retain(|e| Self::first_literal(e).is_none_or(|l| !Self::is_internal(l)));
+            rules.push(Matcher::InternalMacroHint);
         }
         self.visit_children(m);
     }

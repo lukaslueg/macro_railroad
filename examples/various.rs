@@ -122,7 +122,10 @@ pub fn to_example_page(
         let dia_svg = dia.to_string();
         let dia_opt_svg = dia_opt.to_string();
         if dia_svg != dia_opt_svg {
-            write!(outp, "<input class=\"opt_ckbox\" type=\"checkbox\" checked><label>Optimized layout</label>")?;
+            write!(
+                outp,
+                "<input class=\"opt_ckbox\" type=\"checkbox\" checked><label>Optimized layout</label>"
+            )?;
             write!(
                 outp,
                 "<div style=\"width: {}; height:auto\" class=\"dia unoptimized\">{}</div>",

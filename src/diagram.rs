@@ -81,7 +81,7 @@ impl<T: railroad::Node> railroad::Node for Container<T> {
 /// Given a `MacroRules`, generate the legend containing all non-terminal symbols
 ///
 /// Returns `None` if there are no non-terminal symbols at all.
-fn create_legend(tree: &mut lowering::MacroRules) -> Option<impl railroad::Node> {
+fn create_legend(tree: &mut lowering::MacroRules) -> Option<impl railroad::Node + use<>> {
     // Collect nonterminals and apply *some* sorting to have repeatable ordering
     let mut bag = tree.collect_nonterminals().into_iter().collect::<Vec<_>>();
     if bag.is_empty() {
