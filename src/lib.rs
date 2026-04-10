@@ -105,6 +105,13 @@ mod tests {
     use lowering::{MacroRules, Matcher};
 
     #[test]
+    fn pat_param_end_to_end() {
+        let src = r#"macro_rules! m { ($x:pat_param) => {} }"#;
+        let svg = to_diagram(src).unwrap();
+        assert!(svg.contains("fragment_pat_param"));
+    }
+
+    #[test]
     fn fold_nested_options() {
         // Issue 22, folding a ?-repetition might lead to a nested Option
         // which should be unnested

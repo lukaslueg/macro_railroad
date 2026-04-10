@@ -64,6 +64,7 @@ pub enum Fragment {
     Expr,
     Ty,
     Pat,
+    PatParam,
     Stmt,
     Block,
     Item,
@@ -241,6 +242,7 @@ impl Parse for Fragment {
             "expr" => Ok(Fragment::Expr),
             "ty" => Ok(Fragment::Ty),
             "pat" => Ok(Fragment::Pat),
+            "pat_param" => Ok(Fragment::PatParam),
             "stmt" => Ok(Fragment::Stmt),
             "block" => Ok(Fragment::Block),
             "item" => Ok(Fragment::Item),
@@ -281,6 +283,31 @@ mod tests {
     }
 
     #[test]
+    fn parse_pat_param() {
+        let src = r#"macro_rules! classify_number {
+    (inspect $p:pat_param in $e:expr => $body:expr) => { ... };
+    (zero) => { ... };
+    (positive $e:expr, max $max:expr) => { ... };
+    (negative $e:expr, max $max:expr) => { ... };
+    (describe $e:expr) => { ... };
+}"#;
+        parse(src).unwrap();
+    }
+
+    #[test]
+    fn pat_param_fragment() {
+        let src = r#"macro_rules! m { ($x:pat_param) => {} }"#;
+        let parsed = parse(src).unwrap();
+        assert!(matches!(
+            parsed.rules[0].matcher[0],
+            Matcher::Fragment {
+                fragment: Fragment::PatParam,
+                ..
+            }
+        ));
+    }
+
+    #[test]
     fn qmark_repeat_disallows_separator() {
         // Issue 21
         let src = r#"macro_rules! m { ($($tt:tt)-?) => {} }"#;
@@ -306,6 +333,7 @@ $item:item
 $block:block
 $stmt:stmt
 $pat:pat
+$pat_param:pat_param
 $expr:expr
 $ty:ty
 $ident:ident

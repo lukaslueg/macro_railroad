@@ -17,6 +17,10 @@ svg.railroad .fragment_pat > rect {
 fill: hsl(195, 100%, 25%);
 }
 
+svg.railroad .fragment_pat_param > rect {
+fill: hsl(215, 100%, 30%);
+}
+
 svg.railroad .fragment_stmt > rect {
 fill: hsl(205, 100%, 25%);
 }

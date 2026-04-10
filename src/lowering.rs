@@ -829,9 +829,9 @@ mod tests {
         let mut mr = MacroRules {
             name: "Test".to_owned(),
             rules: Matcher::Sequence(vec![
-                Matcher::Optional(Box::new(Matcher::Optional(Box::new(
-                    Matcher::Literal("A".to_owned()),
-                )))),
+                Matcher::Optional(Box::new(Matcher::Optional(Box::new(Matcher::Literal(
+                    "A".to_owned(),
+                ))))),
                 Matcher::Literal("B".to_owned()),
             ]),
         };
@@ -850,9 +850,9 @@ mod tests {
         let mut mr = MacroRules {
             name: "Test".to_owned(),
             rules: Matcher::Sequence(vec![
-                Matcher::Optional(Box::new(Matcher::Optional(Box::new(
-                    Matcher::Literal("A".to_owned()),
-                )))),
+                Matcher::Optional(Box::new(Matcher::Optional(Box::new(Matcher::Literal(
+                    "A".to_owned(),
+                ))))),
                 Matcher::Optional(Box::new(Matcher::Optional(Box::new(Matcher::Optional(
                     Box::new(Matcher::Literal("B".to_owned())),
                 ))))),
