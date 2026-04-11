@@ -158,4 +158,10 @@ mod tests {
         tree.foldcommontails();
         tree.normalize();
     }
+
+    #[test]
+    fn test_fuzztimeout1() {
+        let src = r#"macro_rules! m ( (((((((((()))))))))) => {...});"#;
+        to_diagram(src).unwrap();
+    }
 }
