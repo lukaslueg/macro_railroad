@@ -1049,6 +1049,7 @@ $lifetime:lifetime
 $literal:literal
 $meta:meta
 $pat:pat
+$pat_param:pat_param
 $path:path
 $stmt:stmt
 $tt:tt

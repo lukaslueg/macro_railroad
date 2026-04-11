@@ -69,6 +69,10 @@ svg.railroad .fragment_pat > rect {
 fill: deepskyblue;
 }
 
+svg.railroad .fragment_pat_param > rect {
+fill: steelblue;
+}
+
 svg.railroad .fragment_stmt > rect {
 fill: aqua;
 }
