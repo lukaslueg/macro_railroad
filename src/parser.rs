@@ -1,6 +1,6 @@
 //! Parses a raw `macro_rules!`-string.
 
-use proc_macro2::{Delimiter, Ident, Literal, Punct, TokenStream, TokenTree};
+use proc_macro2::{Delimiter, Ident, Literal, Spacing, TokenStream, TokenTree};
 
 use syn::Lifetime;
 use syn::ext::IdentExt;
@@ -21,7 +21,7 @@ pub struct Rule {
 
 #[derive(Debug)]
 pub enum Matcher {
-    Punct(Punct),
+    Punct(String),
     Ident(Ident),
     Lifetime(Lifetime),
     Literal(Literal),
@@ -52,7 +52,7 @@ pub enum Repetition {
 
 #[derive(Debug)]
 pub enum Separator {
-    Punct(Punct),
+    Punct(String),
     Ident(Ident),
     Literal(Literal),
 }
@@ -184,11 +184,13 @@ impl Parse for Matcher {
             }
         } else if let Some(lifetime) = input.parse()? {
             Ok(Matcher::Lifetime(lifetime))
+        } else if Separator::peek_punct(input)?.is_some() {
+            Ok(Matcher::Punct(Separator::parse_punct(input)?))
         } else {
             match input.parse()? {
                 TokenTree::Ident(ident) => Ok(Matcher::Ident(ident)),
-                TokenTree::Punct(punct) => Ok(Matcher::Punct(punct)),
                 TokenTree::Literal(literal) => Ok(Matcher::Literal(literal)),
+                TokenTree::Punct(_) => unreachable!(),
                 TokenTree::Group(_) => unreachable!(),
             }
         }
@@ -196,25 +198,119 @@ impl Parse for Matcher {
 }
 
 impl Separator {
+    fn is_repetition_operator(token: &str) -> bool {
+        matches!(token, "*" | "+" | "?")
+    }
+
+    fn punct_token_len(run: &str) -> Option<usize> {
+        [3, 2, 1].into_iter().find(|&len| {
+            len <= run.len()
+                && matches!(
+                    &run[..len],
+                    "<<="
+                        | ">>="
+                        | "..."
+                        | "..="
+                        | "<="
+                        | "=="
+                        | "!="
+                        | ">="
+                        | "&&"
+                        | "||"
+                        | "<<"
+                        | ">>"
+                        | "+="
+                        | "-="
+                        | "*="
+                        | "/="
+                        | "%="
+                        | "^="
+                        | "&="
+                        | "|="
+                        | ".."
+                        | "::"
+                        | "->"
+                        | "<-"
+                        | "=>"
+                        | "="
+                        | "<"
+                        | ">"
+                        | "!"
+                        | "~"
+                        | "+"
+                        | "-"
+                        | "*"
+                        | "/"
+                        | "%"
+                        | "^"
+                        | "&"
+                        | "|"
+                        | "@"
+                        | "."
+                        | ","
+                        | ";"
+                        | ":"
+                        | "#"
+                        | "$"
+                        | "?"
+                )
+        })
+    }
+
+    fn peek_punct(input: ParseStream<'_>) -> Result<Option<String>> {
+        if input.is_empty() {
+            return Ok(None);
+        }
+
+        let fork = input.fork();
+        let mut punct = match fork.parse()? {
+            TokenTree::Punct(punct) => punct,
+            _ => return Ok(None),
+        };
+
+        let mut run = punct.as_char().to_string();
+        while punct.spacing() == Spacing::Joint {
+            punct = match fork.parse() {
+                Ok(TokenTree::Punct(next)) => next,
+                Ok(_) | Err(_) => break,
+            };
+            run.push(punct.as_char());
+        }
+
+        Ok(Self::punct_token_len(&run).map(|len| run[..len].to_owned()))
+    }
+
+    fn parse_punct(input: ParseStream<'_>) -> Result<String> {
+        let punct = Self::peek_punct(input)?.ok_or_else(|| input.error("expected punctuation"))?;
+        for _ in 0..punct.len() {
+            match input.parse()? {
+                TokenTree::Punct(_) => {}
+                _ => unreachable!(),
+            }
+        }
+        Ok(punct)
+    }
+
     fn parse_optional(input: ParseStream<'_>) -> Result<Option<Self>> {
-        if input.peek(Token![*]) || input.peek(Token![+]) || input.peek(Token![?]) {
-            Ok(None)
-        } else {
-            input.parse().map(Some)
+        match Self::peek_punct(input)? {
+            Some(punct) if Self::is_repetition_operator(&punct) => Ok(None),
+            _ => input.parse().map(Some),
         }
     }
 }
 
 impl Parse for Separator {
     fn parse(input: ParseStream<'_>) -> Result<Self> {
-        Ok(match input.parse()? {
-            TokenTree::Ident(ident) => Separator::Ident(ident),
-            // FIXME: multi-character punctuation
-            TokenTree::Punct(punct) => Separator::Punct(punct),
-            TokenTree::Literal(literal) => Separator::Literal(literal),
-            TokenTree::Group(group) => {
-                return Err(Error::new(group.span(), "unexpected token"));
-            }
+        Ok(match Self::peek_punct(input)? {
+            Some(_) => Separator::Punct(Self::parse_punct(input)?),
+            None => match input.parse()? {
+                TokenTree::Ident(ident) => Separator::Ident(ident),
+                TokenTree::Literal(literal) => Separator::Literal(literal),
+                TokenTree::Group(group) => {
+                    return Err(Error::new(group.span(), "unexpected token"));
+                }
+                TokenTree::Punct(_) => unreachable!(),
+            },
         })
     }
 }
@@ -316,6 +412,103 @@ mod tests {
     }
 
     #[test]
+    fn issue8_minimal_repro_parses_as_repeat_with_colon_separator() {
+        let src = r#"macro_rules! a {
+    ($($m:ident)::+) => {};
+}"#;
+        let parsed = parse(src).unwrap();
+        assert!(matches!(
+            parsed.rules[0].matcher[0],
+            Matcher::Repeat {
+                separator: Some(Separator::Punct(ref parsed_separator)),
+                repetition: Repetition::AtLeastOnce,
+                ..
+            } if parsed_separator == "::"
+        ));
+    }
+
+    #[test]
+    fn multi_character_repetition_separators() {
+        // Issue 8
+        let fixtures = [
+            ("::", r#"macro_rules! a { ($($m:ident)::+) => {}; }"#),
+            ("=>", r#"macro_rules! a { ($($m:ident)=>+) => {}; }"#),
+            ("+=", r#"macro_rules! a { ($($m:ident)+=+) => {}; }"#),
+            ("*=", r#"macro_rules! a { ($($m:ident)*=+) => {}; }"#),
+            (">>", r#"macro_rules! a { ($($m:ident)>>+) => {}; }"#),
+            (">=", r#"macro_rules! a { ($($m:ident)>=+) => {}; }"#),
+            ("..=", r#"macro_rules! a { ($($m:ident)..=+) => {}; }"#),
+            ("...", r#"macro_rules! a { ($($m:ident)...+) => {}; }"#),
+            ("&&", r#"macro_rules! a { ($($m:ident)&&+) => {}; }"#),
+        ];
+        for (separator, src) in fixtures {
+            let parsed = parse(src).unwrap();
+            assert!(matches!(
+                parsed.rules[0].matcher[0],
+                Matcher::Repeat {
+                    separator: Some(Separator::Punct(ref parsed_separator)),
+                    repetition: Repetition::AtLeastOnce,
+                    ..
+                } if parsed_separator == separator
+            ));
+        }
+    }
+
+    #[test]
+    fn equivalent_macro_punctuation_sequences_parse_equally() {
+        // Issue 4
+        let src = r#"macro_rules! x {
+    (=> >) => {};
+    (=>>) => {};
+}"#;
+        let parsed = parse(src).unwrap();
+        assert!(matches!(
+            parsed.rules[0].matcher.as_slice(),
+            [Matcher::Punct(first), Matcher::Punct(second)] if first == "=>" && second == ">"
+        ));
+        assert!(matches!(
+            parsed.rules[1].matcher.as_slice(),
+            [Matcher::Punct(first), Matcher::Punct(second)] if first == "=>" && second == ">"
+        ));
+    }
+
+    #[test]
+    fn original_issue4_spacing_case_parses_distinctly() {
+        // Issue 4
+        let src = r#"macro_rules! x {
+    (= >) => {};
+    (=>) => {};
+}"#;
+        let parsed = parse(src).unwrap();
+        assert!(matches!(
+            parsed.rules[0].matcher.as_slice(),
+            [Matcher::Punct(first), Matcher::Punct(second)] if first == "=" && second == ">"
+        ));
+        assert!(matches!(
+            parsed.rules[1].matcher.as_slice(),
+            [Matcher::Punct(first)] if first == "=>"
+        ));
+    }
+
+    #[test]
+    fn distinct_macro_punctuation_sequences_parse_distinctly() {
+        // Issue 4
+        let src = r#"macro_rules! x {
+    (= >>) => {};
+    (=>>) => {};
+}"#;
+        let parsed = parse(src).unwrap();
+        assert!(matches!(
+            parsed.rules[0].matcher.as_slice(),
+            [Matcher::Punct(first), Matcher::Punct(second)] if first == "=" && second == ">>"
+        ));
+        assert!(matches!(
+            parsed.rules[1].matcher.as_slice(),
+            [Matcher::Punct(first), Matcher::Punct(second)] if first == "=>" && second == ">"
+        ));
+    }
+
+    #[test]
     fn keywords_as_fragment_names() {
         // Issue 5
         let src = r#"macro_rules! a { ($self:ident) => { ... }; }"#;
@@ -371,6 +564,9 @@ $ left : expr , $ right : expr , $ ( $ arg : tt ) + ) => { ... };
 }"#,
             r#"macro_rules! apply {
     ($i:expr, $fun:expr, $($args:expr),* ) => { ... };
+}"#,
+            r#"macro_rules! a {
+    ($($m:ident)::+) => { ... };
 }"#,
         ][..];
         for src in fixture {

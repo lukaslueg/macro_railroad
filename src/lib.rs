@@ -149,6 +149,109 @@ mod tests {
     }
 
     #[test]
+    fn multi_character_repetition_separators_survive_lowering() {
+        let fixtures = [
+            ("::", r#"macro_rules! a { ($($m:ident)::+) => {}; }"#),
+            ("=>", r#"macro_rules! a { ($($m:ident)=>+) => {}; }"#),
+            ("+=", r#"macro_rules! a { ($($m:ident)+=+) => {}; }"#),
+            ("*=", r#"macro_rules! a { ($($m:ident)*=+) => {}; }"#),
+            (">>", r#"macro_rules! a { ($($m:ident)>>+) => {}; }"#),
+            (">=", r#"macro_rules! a { ($($m:ident)>=+) => {}; }"#),
+            ("..=", r#"macro_rules! a { ($($m:ident)..=+) => {}; }"#),
+            ("...", r#"macro_rules! a { ($($m:ident)...+) => {}; }"#),
+            ("&&", r#"macro_rules! a { ($($m:ident)&&+) => {}; }"#),
+        ];
+
+        for (separator, src) in fixtures {
+            let tree = MacroRules::from(parser::parse(src).unwrap());
+            assert!(tree.any(|matcher| {
+                matches!(
+                    matcher,
+                    Matcher::Repeat {
+                        content,
+                        seperator: Some(parsed_separator),
+                    } if parsed_separator == separator
+                        && matches!(
+                            content.as_ref(),
+                            Matcher::Sequence(content)
+                                if matches!(
+                                    content.as_slice(),
+                                    [Matcher::NonTerminal {
+                                        name,
+                                        fragment: parser::Fragment::Ident,
+                                    }] if name == "m"
+                                )
+                        )
+                )
+            }));
+        }
+    }
+
+    #[test]
+    fn equivalent_macro_punctuation_rules_fold_together() {
+        let src = r#"macro_rules! x {
+    (=> >) => {};
+    (=>>) => {};
+}"#;
+        let mut tree = MacroRules::from(parser::parse(src).unwrap());
+        tree.foldcommontails();
+        tree.normalize();
+        assert_eq!(
+            tree.rules,
+            Matcher::Sequence(vec![
+                Matcher::Literal("=>".to_owned()),
+                Matcher::Literal(">".to_owned()),
+            ])
+        );
+    }
+
+    #[test]
+    fn original_issue4_spacing_case_stays_distinct() {
+        // Issue 4
+        let src = r#"macro_rules! x {
+    (= >) => {};
+    (=>) => {};
+}"#;
+        let mut tree = MacroRules::from(parser::parse(src).unwrap());
+        tree.foldcommontails();
+        tree.normalize();
+        assert!(matches!(
+            tree.rules,
+            Matcher::Choice(ref choices)
+                if choices.len() == 2
+                    && choices.contains(&Matcher::Literal("=>".to_owned()))
+                    && choices.contains(&Matcher::Sequence(vec![
+                        Matcher::Literal("=".to_owned()),
+                        Matcher::Literal(">".to_owned()),
+                    ]))
+        ));
+    }
+
+    #[test]
+    fn distinct_macro_punctuation_rules_stay_distinct() {
+        let src = r#"macro_rules! x {
+    (= >>) => {};
+    (=>>) => {};
+}"#;
+        let mut tree = MacroRules::from(parser::parse(src).unwrap());
+        tree.foldcommontails();
+        tree.normalize();
+        assert_eq!(
+            tree.rules,
+            Matcher::Choice(vec![
+                Matcher::Sequence(vec![
+                    Matcher::Literal("=".to_owned()),
+                    Matcher::Literal(">>".to_owned()),
+                ]),
+                Matcher::Sequence(vec![
+                    Matcher::Literal("=>".to_owned()),
+                    Matcher::Literal(">".to_owned()),
+                ]),
+            ])
+        );
+    }
+
+    #[test]
     fn test_fuzzcrash1() {
         // Issue: When folding common tails, some rules have content entirely within
         // the common prefix/suffix area. The code assumed that prefix_len + suffix_len

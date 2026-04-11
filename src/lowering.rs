@@ -146,7 +146,7 @@ impl From<parser::Rule> for Matcher {
 impl From<parser::Matcher> for Matcher {
     fn from(m: parser::Matcher) -> Matcher {
         match m {
-            parser::Matcher::Punct(p) => Matcher::Literal(p.to_string()),
+            parser::Matcher::Punct(p) => Matcher::Literal(p),
             parser::Matcher::Ident(i) => Matcher::Literal(i.to_string()),
             parser::Matcher::Lifetime(l) => Matcher::Literal(l.to_string()),
             parser::Matcher::Literal(l) => Matcher::Literal(l.to_string()),
@@ -173,7 +173,7 @@ impl From<parser::Matcher> for Matcher {
                 repetition,
             } => {
                 let seperator = separator.map(|s| match s {
-                    parser::Separator::Punct(p) => p.to_string(),
+                    parser::Separator::Punct(p) => p,
                     parser::Separator::Literal(l) => l.to_string(),
                     parser::Separator::Ident(i) => i.to_string(),
                 });
