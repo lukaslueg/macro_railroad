@@ -6,7 +6,7 @@ jobs:
   fmt:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: rustfmt
@@ -15,7 +15,7 @@ jobs:
   clippy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: clippy
@@ -24,7 +24,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: dtolnay/rust-toolchain@stable
       - run: |
           cargo test --no-default-features
@@ -36,7 +36,17 @@ jobs:
   examples:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: dtolnay/rust-toolchain@stable
       - run: cargo run --example src_to_svg
       - run: cargo run --example various
+      - uses: actions/upload-artifact@v7
+        with:
+          name: generated-examples
+          if-no-files-found: error
+          path: |
+            examples/nom4_method.svg
+            examples/stdlib_examples.html
+            examples/nom_examples.html
+            examples/syn_examples.html
+            examples/various_examples.html
