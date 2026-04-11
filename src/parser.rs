@@ -75,6 +75,10 @@ pub enum Fragment {
     Lifetime,
 }
 
+fn unexpected_token(token: TokenTree) -> Error {
+    Error::new(token.span(), "unexpected token")
+}
+
 fn delimited(input: ParseStream<'_>) -> Result<(Delimiter, ParseBuffer<'_>)> {
     let content;
     let delimiter = if input.peek(Paren) {
@@ -190,8 +194,7 @@ impl Parse for Matcher {
             match input.parse()? {
                 TokenTree::Ident(ident) => Ok(Matcher::Ident(ident)),
                 TokenTree::Literal(literal) => Ok(Matcher::Literal(literal)),
-                TokenTree::Punct(_) => unreachable!(),
-                TokenTree::Group(_) => unreachable!(),
+                token => Err(unexpected_token(token)),
             }
         }
     }
@@ -285,7 +288,7 @@ impl Separator {
         for _ in 0..punct.len() {
             match input.parse()? {
                 TokenTree::Punct(_) => {}
-                _ => unreachable!(),
+                token => return Err(unexpected_token(token)),
             }
         }
         Ok(punct)
@@ -309,7 +312,7 @@ impl Parse for Separator {
                 TokenTree::Group(group) => {
                     return Err(Error::new(group.span(), "unexpected token"));
                 }
-                TokenTree::Punct(_) => unreachable!(),
+                token => return Err(unexpected_token(token)),
             },
         })
     }
@@ -513,6 +516,13 @@ mod tests {
         // Issue 5
         let src = r#"macro_rules! a { ($self:ident) => { ... }; }"#;
         parse(src).unwrap();
+    }
+
+    #[test]
+    fn malformed_quote_sequences_return_error() {
+        // Minimized from a fuzzed crash that previously hit `unreachable!()`.
+        let src = r#"macro_rules!c((#'cr")=>();(cr"'b+)=>(););"#;
+        parse(src).expect_err("malformed input should return an error");
     }
 
     #[test]

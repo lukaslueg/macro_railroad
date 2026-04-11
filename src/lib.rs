@@ -267,4 +267,10 @@ mod tests {
         let src = r#"macro_rules! m ( (((((((((()))))))))) => {...});"#;
         to_diagram(src).unwrap();
     }
+
+    #[test]
+    fn malformed_quote_sequences_fail_without_panicking_end_to_end() {
+        let src = r#"macro_rules!c((#'cr")=>();(cr"'b+)=>(););"#;
+        to_diagram(src).expect_err("malformed input should return an error");
+    }
 }
