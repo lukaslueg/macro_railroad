@@ -169,7 +169,7 @@ mod tests {
                     matcher,
                     Matcher::Repeat {
                         content,
-                        seperator: Some(parsed_separator),
+                        separator: Some(parsed_separator),
                     } if parsed_separator == separator
                         && matches!(
                             content.as_ref(),

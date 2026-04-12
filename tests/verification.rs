@@ -2,7 +2,7 @@
 /// generate valid SVG at least according to spec.
 ///
 /// This calls out to the `xmllint` tool from libxml2, which may not be available.
-/// The test is therefor ignored by default; use `cargo test -- --ignored`
+/// The test is therefore ignored by default; use `cargo test -- --ignored`
 use std::sync::OnceLock;
 
 fn init_verifier() -> &'static railroad_verification::Verifier {
@@ -375,7 +375,7 @@ $ left : expr , $ right : expr , $ ( $ arg : tt ) + ) => { ... };
 }"#
     ),
     (
-        verify_nom4_eat_seperator,
+        verify_nom4_eat_separator,
         r#"macro_rules! eat_separator {
     ($i:expr, $arr:expr) => { ... };
 }"#

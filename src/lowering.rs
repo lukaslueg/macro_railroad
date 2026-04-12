@@ -1,4 +1,4 @@
-//! Intermediate representation of a `MacroRules` and it's transformations.
+//! Intermediate representation of a `MacroRules` and its transformations.
 //!
 //! The representation in this module is more coarse than what the parser provides,
 //! yet has still more information than a diagram-node.
@@ -99,7 +99,7 @@ pub enum Matcher {
     Sequence(Vec<Matcher>),
     Repeat {
         content: Box<Matcher>,
-        seperator: Option<String>,
+        separator: Option<String>,
     },
     NonTerminal {
         name: String,
@@ -172,7 +172,7 @@ impl From<parser::Matcher> for Matcher {
                 separator,
                 repetition,
             } => {
-                let seperator = separator.map(|s| match s {
+                let separator = separator.map(|s| match s {
                     parser::Separator::Punct(p) => p,
                     parser::Separator::Literal(l) => l.to_string(),
                     parser::Separator::Ident(i) => i.to_string(),
@@ -182,14 +182,14 @@ impl From<parser::Matcher> for Matcher {
                 ));
                 match repetition {
                     parser::Repetition::AtMostOnce => {
-                        // The ? repetition does not take a seperator, should
+                        // The ? repetition does not take a separator, should
                         // be a parse-error!
-                        debug_assert!(seperator.is_none());
+                        debug_assert!(separator.is_none());
                         Matcher::Optional(content)
                     }
-                    parser::Repetition::AtLeastOnce => Matcher::Repeat { content, seperator },
+                    parser::Repetition::AtLeastOnce => Matcher::Repeat { content, separator },
                     parser::Repetition::Repeated => {
-                        Matcher::Optional(Box::new(Matcher::Repeat { content, seperator }))
+                        Matcher::Optional(Box::new(Matcher::Repeat { content, separator }))
                     }
                 }
             }
@@ -314,13 +314,13 @@ impl Normalizer {
         }
     }
 
-    fn normalize_repeat(content: Box<Matcher>, seperator: Option<String>) -> (bool, Matcher) {
+    fn normalize_repeat(content: Box<Matcher>, separator: Option<String>) -> (bool, Matcher) {
         if let Matcher::Empty = *content
-            && seperator.is_none()
+            && separator.is_none()
         {
             (true, Matcher::Empty)
         } else {
-            (false, Matcher::Repeat { content, seperator })
+            (false, Matcher::Repeat { content, separator })
         }
     }
 
@@ -445,8 +445,8 @@ impl Normalizer {
                     changed |= r.0;
                     r.1
                 }
-                Matcher::Repeat { content, seperator } => {
-                    let r = Self::normalize_repeat(content, seperator);
+                Matcher::Repeat { content, separator } => {
+                    let r = Self::normalize_repeat(content, separator);
                     changed |= r.0;
                     r.1
                 }
@@ -927,7 +927,7 @@ mod tests {
             rules: Matcher::Choice(vec![
                 Matcher::Repeat {
                     content: Box::new(Matcher::Literal("A".to_owned())),
-                    seperator: None,
+                    separator: None,
                 },
                 Matcher::Literal("A".to_owned()),
             ]),
@@ -939,7 +939,7 @@ mod tests {
                 name: "Test".to_owned(),
                 rules: Matcher::Repeat {
                     content: Box::new(Matcher::Literal("A".to_owned())),
-                    seperator: None,
+                    separator: None,
                 },
             }
         );
@@ -951,7 +951,7 @@ mod tests {
             name: "Test".to_owned(),
             rules: Matcher::Repeat {
                 content: Box::new(Matcher::Empty),
-                seperator: None,
+                separator: None,
             },
         };
         mr.normalize();
@@ -1010,7 +1010,7 @@ mod tests {
             ]),
             Matcher::Repeat {
                 content: Box::new(Matcher::Literal("__self".to_owned())),
-                seperator: None,
+                separator: None,
             },
         ];
         let mut mr = MacroRules {
@@ -1052,7 +1052,7 @@ mod tests {
                     name: "Foobar".to_owned(),
                     fragment: parser::Fragment::Ident,
                 }),
-                seperator: None,
+                separator: None,
             },
         ];
         let mut mr = MacroRules {

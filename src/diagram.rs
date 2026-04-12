@@ -222,13 +222,13 @@ fn into_primitive(m: lowering::Matcher) -> Box<dyn railroad::Node> {
             s.into_iter().map(into_primitive).collect(),
         )),
         lowering::Matcher::Literal(s) => Box::new(railroad::Terminal::new(s)),
-        lowering::Matcher::Repeat { content, seperator } => {
-            let seperator: Box<dyn railroad::Node> = match seperator {
+        lowering::Matcher::Repeat { content, separator } => {
+            let separator: Box<dyn railroad::Node> = match separator {
                 Some(s) => Box::new(railroad::Terminal::new(s)),
                 None => Box::new(railroad::Empty),
             };
             let main = into_primitive(*content);
-            Box::new(railroad::Repeat::new(main, seperator))
+            Box::new(railroad::Repeat::new(main, separator))
         }
         lowering::Matcher::NonTerminal { name, fragment } => {
             let mut nonterm = railroad::NonTerminal::new(name);
