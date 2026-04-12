@@ -63,6 +63,15 @@ impl<T: railroad::Node> railroad::Node for Container<T> {
     fn width(&self) -> i64 {
         self.inner.width() + self.padding * 2
     }
+    fn compute_geometry(&self) -> railroad::NodeGeometry {
+        let inner_geo = self.inner.compute_geometry();
+        railroad::NodeGeometry {
+            entry_height: inner_geo.entry_height + self.padding,
+            height: inner_geo.height + self.padding * 2,
+            width: inner_geo.width + self.padding * 2,
+            children: vec![inner_geo],
+        }
+    }
     fn draw(&self, x: i64, y: i64, hdir: railroad::svg::HDir) -> railroad::svg::Element {
         railroad::svg::Element::new("g")
             .add(
@@ -73,6 +82,30 @@ impl<T: railroad::Node> railroad::Node for Container<T> {
                     .set("width", &self.width()),
             )
             .add(self.inner.draw(x + self.padding, y + self.padding, hdir))
+            .set_all(self.attributes.iter())
+            .debug("Container", x, y, self)
+    }
+    fn draw_with_geometry(
+        &self,
+        x: i64,
+        y: i64,
+        hdir: railroad::svg::HDir,
+        geo: &railroad::NodeGeometry,
+    ) -> railroad::svg::Element {
+        railroad::svg::Element::new("g")
+            .add(
+                railroad::svg::Element::new("rect")
+                    .set("x", &x)
+                    .set("y", &y)
+                    .set("height", &geo.height)
+                    .set("width", &geo.width),
+            )
+            .add(self.inner.draw_with_geometry(
+                x + self.padding,
+                y + self.padding,
+                hdir,
+                &geo.children[0],
+            ))
             .set_all(self.attributes.iter())
             .debug("Container", x, y, self)
     }
