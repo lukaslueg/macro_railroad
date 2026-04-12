@@ -1,4 +1,4 @@
-use criterion::{criterion_group, criterion_main, Criterion};
+use criterion::{Criterion, criterion_group, criterion_main};
 
 // Simple: 3 arms, basic fragments
 const VEC: &str = r#"macro_rules! vec {
