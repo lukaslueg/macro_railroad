@@ -17,6 +17,11 @@ proc-macro2 = { version = "1.0", default-features=false }
 [dev-dependencies]
 quote = { version = "1.0", default-features = false }
 railroad_verification = "0.1"
+criterion = { version = "0.8", default-features = false, features = ["cargo_bench_support"] }
+
+[[bench]]
+name = "to_diagram"
+harness = false
 
 [features]
 visual-debug = ["railroad/visual-debug"]
