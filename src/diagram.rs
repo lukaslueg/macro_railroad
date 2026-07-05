@@ -248,9 +248,22 @@ fn into_primitive(m: lowering::Matcher) -> Box<dyn railroad::Node> {
         )),
         lowering::Matcher::Comment(s) => Box::new(railroad::Comment::new(s)),
         lowering::Matcher::Optional(o) => Box::new(railroad::Optional::new(into_primitive(*o))),
-        lowering::Matcher::Choice(s) => Box::new(railroad::Choice::new(
-            s.into_iter().map(into_primitive).collect(),
-        )),
+        lowering::Matcher::Choice(s) => {
+            /// Maximum number of rows per column
+            const MAX_ROWS_PER_COLUMN: usize = 5;
+            /// Maximum number of columns. Above that, we give up and use as many rows as necessary
+            const MAX_COLUMNS: usize = 3;
+            let inp: Vec<_> = s.into_iter().map(into_primitive).collect();
+            let hard_max_columns =
+                std::cmp::min(MAX_COLUMNS, inp.len().div_ceil(MAX_ROWS_PER_COLUMN));
+            let soft_max_rows = inp.len().div_ceil(hard_max_columns);
+            let mut choices_iter = inp.into_iter();
+            let groups = std::iter::from_fn(move || {
+                let group: Vec<_> = choices_iter.by_ref().take(soft_max_rows).collect();
+                (!group.is_empty()).then_some(group)
+            });
+            Box::new(railroad::MultiChoice::new(groups.collect()))
+        }
         lowering::Matcher::Sequence(s) => Box::new(railroad::Sequence::new(
             s.into_iter().map(into_primitive).collect(),
         )),

@@ -562,8 +562,8 @@ impl FoldCommonTails {
         }
 
         tails
-            .into_iter()
-            .filter_map(|(_k, v)| if v.len() == max_size { Some(v) } else { None })
+            .into_values()
+            .filter_map(|v| if v.len() == max_size { Some(v) } else { None })
             .map(|group| {
                 // Figure out the longest prefix common to all
                 let mut lcprefix = &group[0][0..group[0]
