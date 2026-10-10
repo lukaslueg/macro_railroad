@@ -1,5 +1,3 @@
-use macro_railroad;
-use railroad;
 use std::fs;
 use std::io;
 use std::io::Write;
@@ -47,6 +45,7 @@ pre.rust {
 	padding: 10px;
 }"#;
 
+#[allow(clippy::type_complexity)]
 fn to_diagram(
     src: &str,
 ) -> (
@@ -54,7 +53,7 @@ fn to_diagram(
     railroad::Diagram<Box<dyn railroad::Node>>,
     railroad::Diagram<Box<dyn railroad::Node>>,
 ) {
-    let macro_rules = macro_railroad::parser::parse(&src).expect(src);
+    let macro_rules = macro_railroad::parser::parse(src).expect(src);
     let tree = macro_railroad::lowering::MacroRules::from(macro_rules);
 
     let mut optimized_tree = tree.clone();
@@ -96,7 +95,7 @@ pub fn to_example_page(
     let mut names = Vec::with_capacity(examples.len());
     outp.write_all(b"<div class=\"examples\">")?;
     for src in examples {
-        let (name, dia, dia_opt) = to_diagram(&src);
+        let (name, dia, dia_opt) = to_diagram(src);
         println!(" * `{}`", name);
         write!(
             outp,

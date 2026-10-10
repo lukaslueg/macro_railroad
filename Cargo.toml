@@ -23,6 +23,10 @@ criterion = { version = "0.8", default-features = false, features = ["cargo_benc
 name = "to_diagram"
 harness = false
 
+[[bench]]
+name = "quick_error"
+harness = false
+
 [features]
 visual-debug = ["railroad/visual-debug"]
 resvg = ["railroad/resvg"]

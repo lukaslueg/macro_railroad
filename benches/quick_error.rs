@@ -1,17 +1,8 @@
-#![recursion_limit = "512"]
-#![feature(test)]
-
-#[macro_use]
-extern crate quote;
-
-use syn;
-extern crate test;
-
+use criterion::{BatchSize, Criterion, criterion_group, criterion_main};
 use macro_railroad::parser::MacroRules;
-use test::Bencher;
+use quote::quote;
 
-#[bench]
-fn bench(b: &mut Bencher) {
+fn bench_quick_error(c: &mut Criterion) {
     let quick_error = quote! {
         macro_rules! quick_error {
             (   $(#[$meta:meta])*
@@ -274,5 +265,15 @@ fn bench(b: &mut Bencher) {
             (IDENT $ident:ident) => { ... };
         }
     };
-    b.iter(|| syn::parse2::<MacroRules>(quick_error.clone()).unwrap());
+    c.bench_function("parse_quick_error", |b| {
+        // Prepare fresh tokens outside the timed parsing routine.
+        b.iter_batched(
+            || quick_error.clone(),
+            |tokens| syn::parse2::<MacroRules>(tokens).unwrap(),
+            BatchSize::LargeInput,
+        );
+    });
 }
+
+criterion_group!(benches, bench_quick_error);
+criterion_main!(benches);

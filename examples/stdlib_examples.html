@@ -16,6 +16,13 @@ stroke: black;
 fill: none;
 }
 
+svg.railroad .continuation circle,
+svg.railroad .continuation-start circle,
+svg.railroad .continuation-end circle {
+fill: black;
+stroke: none;
+}
+
 svg.railroad .debug {
 stroke-width: 1px;
 stroke: red;
@@ -34,70 +41,84 @@ svg.railroad text.comment {
 font: italic 12px monospace;
 }
 
-svg.railroad rect {
+svg.railroad rect,
+svg.railroad .annotation > path.annotation-marker {
 stroke-width: 3px;
 stroke: black;
 fill:hsl(-290, 70%, 90%);
 }
 
-svg.railroad g.labeledbox > rect {
+svg.railroad g.labeledbox > rect,
+svg.railroad .annotation > path.annotation-connector {
 stroke-width: 1px;
 stroke: grey;
 stroke-dasharray: 5px;
-fill:rgba(90, 90, 150, .1);
+fill: rgb(90, 90, 150);
+fill-opacity: .1;
 }
-svg.railroad .fragment_ty > rect {
+
+svg.railroad .annotation > path.annotation-connector {
+fill: none;
+}
+
+/* Annotation markers use wavy arrows distinct from rail traversal arrows. */
+
+svg.railroad .annotation > path.annotation-direction {
+stroke-width: 2px;
+stroke: black;
+}
+svg.railroad .fragment_ty > .nonterminal > rect {
 fill: red;
 }
-svg.railroad .fragment_ident > rect {
+svg.railroad .fragment_ident > .nonterminal > rect {
 fill: orange;
 }
 
-svg.railroad .fragment_path > rect {
+svg.railroad .fragment_path > .nonterminal > rect {
 fill: green;
 }
 
-svg.railroad .fragment_expr > rect {
+svg.railroad .fragment_expr > .nonterminal > rect {
 fill: yellow;
 }
 
-svg.railroad .fragment_pat > rect {
+svg.railroad .fragment_pat > .nonterminal > rect {
 fill: deepskyblue;
 }
 
-svg.railroad .fragment_pat_param > rect {
+svg.railroad .fragment_pat_param > .nonterminal > rect {
 fill: steelblue;
 }
 
-svg.railroad .fragment_stmt > rect {
+svg.railroad .fragment_stmt > .nonterminal > rect {
 fill: aqua;
 }
 
-svg.railroad .fragment_block > rect {
+svg.railroad .fragment_block > .nonterminal > rect {
 fill: aquamarine;
 }
 
-svg.railroad .fragment_item > rect {
+svg.railroad .fragment_item > .nonterminal > rect {
 fill: thistle;
 }
 
-svg.railroad .fragment_meta > rect {
+svg.railroad .fragment_meta > .nonterminal > rect {
 fill: violet;
 }
 
-svg.railroad .fragment_tt > rect {
+svg.railroad .fragment_tt > .nonterminal > rect {
 fill: turquoise;
 }
 
-svg.railroad .fragment_vis > rect {
+svg.railroad .fragment_vis > .nonterminal > rect {
 fill: gold;
 }
 
-svg.railroad .fragment_literal > rect {
+svg.railroad .fragment_literal > .nonterminal > rect {
 fill: salmon;
 }
 
-svg.railroad .fragment_lifetime > rect {
+svg.railroad .fragment_lifetime > .nonterminal > rect {
 fill: teal;
 }
 
@@ -162,201 +183,243 @@ pre.rust {
     ( $ elem : expr ; $ n : expr ) =&gt; { ... };
     ( $ ( $ x : expr ) , * ) =&gt; { ... };
     ( $ ( $ x : expr , ) * ) =&gt; { ... };
-}</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 255" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<rect class="railroad_canvas" height="100%" width="100%"/>
+}</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="railroad" viewBox="0 0 343 283">
+<rect width="100%" height="100%" class="railroad_canvas"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
-<g class="choice">
-<path d=" M 35 21 h 24 m 128 0 h 34"/>
+<g class="multichoice">
+<path d=" M 35 21 h 24"/>
+<path d=" M 35 21 a 12 12 0 0 1 12 12"/>
+<path d=" M 47 33 v 30"/>
+<path d=" M 47 63 v 91 m 0 -42 l -5 -5 m 10 0 l -5 5 m 0 42"/>
 <g class="sequence">
-<g class="nonterminal fragment_expr">
-<rect height="22" width="52" x="59" y="10"/>
+<g class="fragment_expr">
+<g class="nonterminal">
+<rect x="59" y="10" height="22" width="52"/>
 <text x="85" y="26">
 elem</text>
 </g>
+</g>
 <g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="121" y="10"/>
+<rect x="121" y="10" height="22" width="28" rx="10" ry="10"/>
 <text x="135" y="26">
 ;</text>
 </g>
-<g class="nonterminal fragment_expr">
-<rect height="22" width="28" x="159" y="10"/>
+<g class="fragment_expr">
+<g class="nonterminal">
+<rect x="159" y="10" height="22" width="28"/>
 <text x="173" y="26">
 n</text>
+</g>
 </g>
 <path d=" M 111 21 h 10"/>
 <path d=" M 149 21 h 10"/>
 </g>
-<path d=" M 35 21 a 12 12 0 0 1 12 12 v 9 m 162 0 v -9 a 12 12 0 0 1 12 -12"/>
-<path d=" M 47 54 v 65 m 0 -29 l -5 -5 m 10 0 l -5 5 m 0 29 m 162 0 v -65 m 0 35 l -5 5 m 10 0 l -5 -5 m 0 -35"/>
-<path d=" M 47 42 v 12 a 12 12 0 0 0 12 12 m 100 0 h 38 a 12 12 0 0 0 12 -12 v -12"/>
+<path d=" M 187 21 h 44"/>
+<path d=" M 47 63 a 12 12 0 0 0 12 12 h 0"/>
 <g class="sequence">
 <g class="optional">
-<path d=" M 59 66 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 52 m -23 0 l -5 -5 m 0 10 l 5 -5 m 23 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
+<path d=" M 59 75 h 24 m -24 0 a 12 12 0 0 0 12 -12 v -4 a 12 12 0 0 1 12 -12 h 62 m -28 0 l -5 -5 m 0 10 l 5 -5 m 28 0 a 12 12 0 0 1 12 12 v 4 a 12 12 0 0 0 12 12 h -24"/>
 <g class="repeat">
-<path d=" M 83 66 h 12 m 28 0 h 12 m -12 0 a 12 12 0 0 1 12 12 v 8 a 12 12 0 0 1 -12 12 m -28 0 h 0 a 12 12 0 0 1 -12 -12 v -8 a 12 12 0 0 1 12 -12"/>
+<path d=" M 83 75 h 5 h 12 m 28 0 h 12 h 5 m -17 0 a 12 12 0 0 1 12 12 v 8 a 12 12 0 0 1 -12 12 m -28 0 h 0 a 12 12 0 0 1 -12 -12 v -8 a 12 12 0 0 1 12 -12"/>
 <g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="95" y="87"/>
-<text x="109" y="103">
+<rect x="100" y="96" height="22" width="28" rx="10" ry="10"/>
+<text x="114" y="112">
 ,</text>
 </g>
 <g class="sequence">
-<g class="nonterminal fragment_expr">
-<rect height="22" width="28" x="95" y="55"/>
-<text x="109" y="71">
+<g class="fragment_expr">
+<g class="nonterminal">
+<rect x="100" y="64" height="22" width="28"/>
+<text x="114" y="80">
 x</text>
 </g>
 </g>
 </g>
 </g>
 </g>
-<path d=" M 47 119 v 12 a 12 12 0 0 0 12 12 m 138 0 h 0 a 12 12 0 0 0 12 -12 v -12"/>
+</g>
+<path d=" M 169 75 h 38 a 12 12 0 0 0 12 -12"/>
+<path d=" M 47 154 a 12 12 0 0 0 12 12 h 0"/>
 <g class="sequence">
 <g class="optional">
-<path d=" M 59 143 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 90 m -42 0 l -5 -5 m 0 10 l 5 -5 m 42 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
+<path d=" M 59 166 h 24 m -24 0 a 12 12 0 0 0 12 -12 v -4 a 12 12 0 0 1 12 -12 h 100 m -47 0 l -5 -5 m 0 10 l 5 -5 m 47 0 a 12 12 0 0 1 12 12 v 4 a 12 12 0 0 0 12 12 h -24"/>
 <g class="repeat">
-<path d=" M 83 143 h 12 m 66 0 h 12 m -12 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 1 -12 12 m 0 0 h -66 m 36 0 l 5 -5 m 0 10 l -5 -5 m -36 0 a 12 12 0 0 1 -12 -12 v 0 a 12 12 0 0 1 12 -12"/>
-<g/>
+<path d=" M 83 166 h 5 h 12 m 66 0 h 12 h 5 m -17 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 1 -12 12 m 0 0 h -66 m 36 0 l 5 -5 m 0 10 l -5 -5 m -36 0 a 12 12 0 0 1 -12 -12 v 0 a 12 12 0 0 1 12 -12"/>
+<g>
+</g>
 <g class="sequence">
-<g class="nonterminal fragment_expr">
-<rect height="22" width="28" x="95" y="132"/>
-<text x="109" y="148">
+<g class="fragment_expr">
+<g class="nonterminal">
+<rect x="100" y="155" height="22" width="28"/>
+<text x="114" y="171">
 x</text>
 </g>
+</g>
 <g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="133" y="132"/>
-<text x="147" y="148">
+<rect x="138" y="155" height="22" width="28" rx="10" ry="10"/>
+<text x="152" y="171">
 ,</text>
 </g>
-<path d=" M 123 143 h 10"/>
+<path d=" M 128 166 h 10"/>
 </g>
 </g>
 </g>
 </g>
+<path d=" M 207 166 h 0 a 12 12 0 0 0 12 -12"/>
+<path d=" M 219 154 v -91 m 0 48 l -5 5 m 10 0 l -5 -5 m 0 -48"/>
+<path d=" M 219 63 v -30 a 12 12 0 0 1 12 -12"/>
 </g>
-<path d=" M 231 21 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
+<path d=" M 241 21 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
 <path d=" M 25 21 h 10"/>
-<path d=" M 221 21 h 10"/>
+<path d=" M 231 21 h 10"/>
 </g>
 <g class=" legend">
-<rect height="66" width="323" x="10" y="179"/>
+<rect height="66" width="323" x="10" y="207"/>
 <g class="verticalgrid">
-<text class="comment" x="171" y="200">
+<text class="comment" x="171" y="228">
 Non-terminal patterns used by this macro:</text>
 <g class="horizontalgrid">
-<g class="nonterminal fragment_expr">
-<rect height="22" width="52" x="16" y="217"/>
-<text x="42" y="233">
+<g class="fragment_expr">
+<g class="nonterminal">
+<rect height="22" width="52" x="16" y="245"/>
+<text x="42" y="261">
 elem</text>
 </g>
-<g class="nonterminal fragment_expr">
-<rect height="22" width="28" x="80" y="217"/>
-<text x="94" y="233">
+</g>
+<g class="fragment_expr">
+<g class="nonterminal">
+<rect height="22" width="28" x="80" y="245"/>
+<text x="94" y="261">
 n</text>
 </g>
-<g class="nonterminal fragment_expr">
-<rect height="22" width="28" x="120" y="217"/>
-<text x="134" y="233">
+</g>
+<g class="fragment_expr">
+<g class="nonterminal">
+<rect height="22" width="28" x="120" y="245"/>
+<text x="134" y="261">
 x</text>
 </g>
-<text class="comment" x="221" y="232">
+</g>
+<text class="comment" x="221" y="260">
 are expressions.</text>
 </g>
 </g>
 </g>
 </g>
 </svg>
-</div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 244" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<rect class="railroad_canvas" height="100%" width="100%"/>
+</div><div style="width: 343; height: auto" class="dia optimized"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="railroad" viewBox="0 0 343 267">
+<rect width="100%" height="100%" class="railroad_canvas"/>
 <g class="verticalgrid">
 <g class="sequence">
-<path d=" M 10 34 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
+<path d=" M 10 39 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
 <g class="optional">
-<path d=" M 35 34 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 176 m -85 0 l -5 -5 m 0 10 l 5 -5 m 85 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
-<g class="choice">
-<path d=" M 59 34 h 24 m 128 0 h 24"/>
+<path d=" M 35 39 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 176 m -85 0 l -5 -5 m 0 10 l 5 -5 m 85 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
+<g class="multichoice">
+<path d=" M 59 39 h 24"/>
+<path d=" M 59 39 a 12 12 0 0 1 12 12"/>
+<path d=" M 71 51 v 13"/>
+<path d=" M 71 64 v 74 m 0 -34 l -5 -5 m 10 0 l -5 5 m 0 34"/>
 <g class="sequence">
-<g class="nonterminal fragment_expr">
-<rect height="22" width="52" x="83" y="23"/>
-<text x="109" y="39">
+<g class="fragment_expr">
+<g class="nonterminal">
+<rect x="83" y="28" height="22" width="52"/>
+<text x="109" y="44">
 elem</text>
 </g>
+</g>
 <g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="145" y="23"/>
-<text x="159" y="39">
+<rect x="145" y="28" height="22" width="28" rx="10" ry="10"/>
+<text x="159" y="44">
 ;</text>
 </g>
-<g class="nonterminal fragment_expr">
-<rect height="22" width="28" x="183" y="23"/>
-<text x="197" y="39">
+<g class="fragment_expr">
+<g class="nonterminal">
+<rect x="183" y="28" height="22" width="28"/>
+<text x="197" y="44">
 n</text>
 </g>
-<path d=" M 135 34 h 10"/>
-<path d=" M 173 34 h 10"/>
 </g>
-<path d=" M 59 34 a 12 12 0 0 1 12 12 v 9 m 152 0 v -9 a 12 12 0 0 1 12 -12"/>
-<path d=" M 71 55 v 65 m 0 -29 l -5 -5 m 10 0 l -5 5 m 0 29 m 152 0 v -65 m 0 35 l -5 5 m 10 0 l -5 -5 m 0 -35"/>
-<path d=" M 71 55 v 0 a 12 12 0 0 0 12 12 m 52 0 h 76 m -35 0 l -5 -5 m 0 10 l 5 -5 m 35 0 a 12 12 0 0 0 12 -12 v 0"/>
+<path d=" M 135 39 h 10"/>
+<path d=" M 173 39 h 10"/>
+</g>
+<path d=" M 211 39 h 24"/>
+<path d=" M 71 64 a 12 12 0 0 0 12 12 h 0"/>
 <g class="repeat">
-<path d=" M 83 67 h 12 m 28 0 h 12 m -12 0 a 12 12 0 0 1 12 12 v 8 a 12 12 0 0 1 -12 12 m -28 0 h 0 a 12 12 0 0 1 -12 -12 v -8 a 12 12 0 0 1 12 -12"/>
+<path d=" M 83 76 h 5 h 12 m 28 0 h 12 h 5 m -17 0 a 12 12 0 0 1 12 12 v 8 a 12 12 0 0 1 -12 12 m -28 0 h 0 a 12 12 0 0 1 -12 -12 v -8 a 12 12 0 0 1 12 -12"/>
 <g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="95" y="88"/>
-<text x="109" y="104">
+<rect x="100" y="97" height="22" width="28" rx="10" ry="10"/>
+<text x="114" y="113">
 ,</text>
 </g>
-<g class="nonterminal fragment_expr">
-<rect height="22" width="28" x="95" y="56"/>
-<text x="109" y="72">
+<g class="fragment_expr">
+<g class="nonterminal">
+<rect x="100" y="65" height="22" width="28"/>
+<text x="114" y="81">
 x</text>
 </g>
 </g>
-<path d=" M 71 120 v 0 a 12 12 0 0 0 12 12 m 90 0 h 38 a 12 12 0 0 0 12 -12 v 0"/>
+</g>
+<path d=" M 145 76 h 66 m -30 0 l -5 -5 m 0 10 l 5 -5 m 30 0 a 12 12 0 0 0 12 -12"/>
+<path d=" M 71 138 a 12 12 0 0 0 12 12 h 0"/>
 <g class="repeat">
-<path d=" M 83 132 h 12 m 66 0 h 12 m -12 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 1 -12 12 m 0 0 h -66 m 36 0 l 5 -5 m 0 10 l -5 -5 m -36 0 a 12 12 0 0 1 -12 -12 v 0 a 12 12 0 0 1 12 -12"/>
-<g/>
+<path d=" M 83 150 h 5 h 12 m 66 0 h 12 h 5 m -17 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 1 -12 12 m 0 0 h -66 m 36 0 l 5 -5 m 0 10 l -5 -5 m -36 0 a 12 12 0 0 1 -12 -12 v 0 a 12 12 0 0 1 12 -12"/>
+<g>
+</g>
 <g class="sequence">
-<g class="nonterminal fragment_expr">
-<rect height="22" width="28" x="95" y="121"/>
-<text x="109" y="137">
+<g class="fragment_expr">
+<g class="nonterminal">
+<rect x="100" y="139" height="22" width="28"/>
+<text x="114" y="155">
 x</text>
 </g>
+</g>
 <g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="133" y="121"/>
-<text x="147" y="137">
+<rect x="138" y="139" height="22" width="28" rx="10" ry="10"/>
+<text x="152" y="155">
 ,</text>
 </g>
-<path d=" M 123 132 h 10"/>
+<path d=" M 128 150 h 10"/>
 </g>
 </g>
+<path d=" M 183 150 h 28 a 12 12 0 0 0 12 -12"/>
+<path d=" M 223 138 v -74 m 0 40 l -5 5 m 10 0 l -5 -5 m 0 -40"/>
+<path d=" M 223 64 v -13 a 12 12 0 0 1 12 -12"/>
 </g>
 </g>
-<path d=" M 269 34 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
-<path d=" M 25 34 h 10"/>
-<path d=" M 259 34 h 10"/>
+<path d=" M 269 39 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
+<path d=" M 25 39 h 10"/>
+<path d=" M 259 39 h 10"/>
 </g>
 <g class=" legend">
-<rect height="66" width="323" x="10" y="168"/>
+<rect height="66" width="323" x="10" y="191"/>
 <g class="verticalgrid">
-<text class="comment" x="171" y="189">
+<text class="comment" x="171" y="212">
 Non-terminal patterns used by this macro:</text>
 <g class="horizontalgrid">
-<g class="nonterminal fragment_expr">
-<rect height="22" width="52" x="16" y="206"/>
-<text x="42" y="222">
+<g class="fragment_expr">
+<g class="nonterminal">
+<rect height="22" width="52" x="16" y="229"/>
+<text x="42" y="245">
 elem</text>
 </g>
-<g class="nonterminal fragment_expr">
-<rect height="22" width="28" x="80" y="206"/>
-<text x="94" y="222">
+</g>
+<g class="fragment_expr">
+<g class="nonterminal">
+<rect height="22" width="28" x="80" y="229"/>
+<text x="94" y="245">
 n</text>
 </g>
-<g class="nonterminal fragment_expr">
-<rect height="22" width="28" x="120" y="206"/>
-<text x="134" y="222">
+</g>
+<g class="fragment_expr">
+<g class="nonterminal">
+<rect height="22" width="28" x="120" y="229"/>
+<text x="134" y="245">
 x</text>
 </g>
-<text class="comment" x="221" y="221">
+</g>
+<text class="comment" x="221" y="244">
 are expressions.</text>
 </g>
 </g>
@@ -367,149 +430,176 @@ are expressions.</text>
     () =&gt; { ... };
     ($fmt:expr) =&gt; { ... };
     ($fmt:expr, $($arg:tt)*) =&gt; { ... };
-}</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 230" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<rect class="railroad_canvas" height="100%" width="100%"/>
+}</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="railroad" viewBox="0 0 343 244">
+<rect width="100%" height="100%" class="railroad_canvas"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 15 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
-<g class="choice">
-<path d=" M 35 15 h 24 m 0 0 h 232 m -113 0 l -5 -5 m 0 10 l 5 -5 m 113 0"/>
-<g class="sequence"/>
-<path d=" M 35 15 a 12 12 0 0 1 12 12 v 0 m 232 0 v 0 a 12 12 0 0 1 12 -12"/>
-<path d=" M 47 27 v 33 m 232 0 v -33"/>
-<path d=" M 47 27 v 0 a 12 12 0 0 0 12 12 m 44 0 h 164 m -79 0 l -5 -5 m 0 10 l 5 -5 m 79 0 a 12 12 0 0 0 12 -12 v 0"/>
+<g class="multichoice">
+<path d=" M 35 15 h 24"/>
+<path d=" M 35 15 a 12 12 0 0 1 12 12"/>
+<path d=" M 47 27 v 0"/>
+<path d=" M 47 27 v 54 m 0 -24 l -5 -5 m 10 0 l -5 5 m 0 24"/>
 <g class="sequence">
-<g class="nonterminal fragment_expr">
-<rect height="22" width="44" x="59" y="28"/>
+</g>
+<path d=" M 59 15 l 242 0"/>
+<path d=" M 47 27 a 12 12 0 0 0 12 12 h 0"/>
+<g class="sequence">
+<g class="fragment_expr">
+<g class="nonterminal">
+<rect x="59" y="28" height="22" width="44"/>
 <text x="81" y="44">
 fmt</text>
 </g>
 </g>
-<path d=" M 47 60 v 12 a 12 12 0 0 0 12 12 m 208 0 h 0 a 12 12 0 0 0 12 -12 v -12"/>
+</g>
+<path d=" M 103 39 h 174 m -84 0 l -5 -5 m 0 10 l 5 -5 m 84 0 a 12 12 0 0 0 12 -12"/>
+<path d=" M 47 81 a 12 12 0 0 0 12 12 h 0"/>
 <g class="sequence">
-<g class="nonterminal fragment_expr">
-<rect height="22" width="44" x="59" y="73"/>
-<text x="81" y="89">
+<g class="fragment_expr">
+<g class="nonterminal">
+<rect x="59" y="82" height="22" width="44"/>
+<text x="81" y="98">
 fmt</text>
 </g>
+</g>
 <g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="113" y="73"/>
-<text x="127" y="89">
+<rect x="113" y="82" height="22" width="28" rx="10" ry="10"/>
+<text x="127" y="98">
 ,</text>
 </g>
 <g class="optional">
-<path d=" M 151 84 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 68 m -31 0 l -5 -5 m 0 10 l 5 -5 m 31 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
+<path d=" M 151 93 h 24 m -24 0 a 12 12 0 0 0 12 -12 v -4 a 12 12 0 0 1 12 -12 h 78 m -36 0 l -5 -5 m 0 10 l 5 -5 m 36 0 a 12 12 0 0 1 12 12 v 4 a 12 12 0 0 0 12 12 h -24"/>
 <g class="repeat">
-<path d=" M 175 84 h 12 m 44 0 h 12 m -12 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 1 -12 12 m 0 0 h -44 a 12 12 0 0 1 -12 -12 v 0 a 12 12 0 0 1 12 -12"/>
-<g/>
+<path d=" M 175 93 h 5 h 12 m 44 0 h 12 h 5 m -17 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 1 -12 12 m 0 0 h -44 a 12 12 0 0 1 -12 -12 v 0 a 12 12 0 0 1 12 -12"/>
+<g>
+</g>
 <g class="sequence">
-<g class="nonterminal fragment_tt">
-<rect height="22" width="44" x="187" y="73"/>
-<text x="209" y="89">
+<g class="fragment_tt">
+<g class="nonterminal">
+<rect x="192" y="82" height="22" width="44"/>
+<text x="214" y="98">
 arg</text>
 </g>
 </g>
 </g>
 </g>
-<path d=" M 103 84 h 10"/>
-<path d=" M 141 84 h 10"/>
 </g>
+<path d=" M 103 93 h 10"/>
+<path d=" M 141 93 h 10"/>
 </g>
-<path d=" M 301 15 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
+<path d=" M 277 93 h 0 a 12 12 0 0 0 12 -12"/>
+<path d=" M 289 81 v -54 m 0 30 l -5 5 m 10 0 l -5 -5 m 0 -30"/>
+<path d=" M 289 27 v 0 a 12 12 0 0 1 12 -12"/>
+</g>
+<path d=" M 311 15 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
 <path d=" M 25 15 h 10"/>
-<path d=" M 291 15 h 10"/>
+<path d=" M 301 15 h 10"/>
 </g>
 <g class=" legend">
-<rect height="100" width="323" x="10" y="120"/>
+<rect height="100" width="323" x="10" y="134"/>
 <g class="verticalgrid">
-<text class="comment" x="171" y="141">
+<text class="comment" x="171" y="155">
 Non-terminal patterns used by this macro:</text>
 <g class="horizontalgrid">
-<g class="nonterminal fragment_expr">
-<rect height="22" width="44" x="16" y="158"/>
-<text x="38" y="174">
+<g class="fragment_expr">
+<g class="nonterminal">
+<rect height="22" width="44" x="16" y="172"/>
+<text x="38" y="188">
 fmt</text>
 </g>
-<text class="comment" x="136" y="173">
+</g>
+<text class="comment" x="136" y="187">
 is an expression.</text>
 </g>
 <g class="horizontalgrid">
-<g class="nonterminal fragment_tt">
-<rect height="22" width="44" x="16" y="192"/>
-<text x="38" y="208">
+<g class="fragment_tt">
+<g class="nonterminal">
+<rect height="22" width="44" x="16" y="206"/>
+<text x="38" y="222">
 arg</text>
 </g>
-<text class="comment" x="133" y="207">
+</g>
+<text class="comment" x="133" y="221">
 is a token tree.</text>
 </g>
 </g>
 </g>
 </g>
 </svg>
-</div><div style="width: 374; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 374 204" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<rect class="railroad_canvas" height="100%" width="100%"/>
+</div><div style="width: 384; height: auto" class="dia optimized"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="railroad" viewBox="0 0 384 228">
+<rect width="100%" height="100%" class="railroad_canvas"/>
 <g class="verticalgrid">
 <g class="sequence">
-<path d=" M 10 58 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
+<path d=" M 10 77 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
 <g class="optional">
-<path d=" M 35 58 h 24 m -24 0 a 12 12 0 0 0 12 -12 v -24 a 12 12 0 0 1 12 -12 h 256 m -125 0 l -5 -5 m 0 10 l 5 -5 m 125 0 a 12 12 0 0 1 12 12 v 24 a 12 12 0 0 0 12 12 h -24"/>
+<path d=" M 35 77 h 24 m -24 0 a 12 12 0 0 0 12 -12 v -38 a 12 12 0 0 1 12 -12 h 266 m -130 0 l -5 -5 m 0 10 l 5 -5 m 130 0 a 12 12 0 0 1 12 12 v 38 a 12 12 0 0 0 12 12 h -24"/>
 <g class="sequence">
-<g class="nonterminal fragment_expr">
-<rect height="22" width="44" x="59" y="47"/>
-<text x="81" y="63">
+<g class="fragment_expr">
+<g class="nonterminal">
+<rect x="59" y="66" height="22" width="44"/>
+<text x="81" y="82">
 fmt</text>
 </g>
+</g>
 <g class="optional">
-<path d=" M 113 58 h 24 m -24 0 a 12 12 0 0 0 12 -12 v -12 a 12 12 0 0 1 12 -12 h 154 m -74 0 l -5 -5 m 0 10 l 5 -5 m 74 0 a 12 12 0 0 1 12 12 v 12 a 12 12 0 0 0 12 12 h -24"/>
+<path d=" M 113 77 h 24 m -24 0 a 12 12 0 0 0 12 -12 v -21 a 12 12 0 0 1 12 -12 h 164 m -79 0 l -5 -5 m 0 10 l 5 -5 m 79 0 a 12 12 0 0 1 12 12 v 21 a 12 12 0 0 0 12 12 h -24"/>
 <g class="sequence">
 <g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="137" y="47"/>
-<text x="151" y="63">
+<rect x="137" y="66" height="22" width="28" rx="10" ry="10"/>
+<text x="151" y="82">
 ,</text>
 </g>
 <g class="optional">
-<path d=" M 175 58 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 68 m -31 0 l -5 -5 m 0 10 l 5 -5 m 31 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
+<path d=" M 175 77 h 24 m -24 0 a 12 12 0 0 0 12 -12 v -4 a 12 12 0 0 1 12 -12 h 78 m -36 0 l -5 -5 m 0 10 l 5 -5 m 36 0 a 12 12 0 0 1 12 12 v 4 a 12 12 0 0 0 12 12 h -24"/>
 <g class="repeat">
-<path d=" M 199 58 h 12 m 44 0 h 12 m -12 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 1 -12 12 m 0 0 h -44 a 12 12 0 0 1 -12 -12 v 0 a 12 12 0 0 1 12 -12"/>
-<g/>
-<g class="nonterminal fragment_tt">
-<rect height="22" width="44" x="211" y="47"/>
-<text x="233" y="63">
+<path d=" M 199 77 h 5 h 12 m 44 0 h 12 h 5 m -17 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 1 -12 12 m 0 0 h -44 a 12 12 0 0 1 -12 -12 v 0 a 12 12 0 0 1 12 -12"/>
+<g>
+</g>
+<g class="fragment_tt">
+<g class="nonterminal">
+<rect x="216" y="66" height="22" width="44"/>
+<text x="238" y="82">
 arg</text>
 </g>
 </g>
 </g>
-<path d=" M 165 58 h 10"/>
+</g>
+<path d=" M 165 77 h 10"/>
 </g>
 </g>
-<path d=" M 103 58 h 10"/>
+<path d=" M 103 77 h 10"/>
 </g>
 </g>
-<path d=" M 349 58 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
-<path d=" M 25 58 h 10"/>
-<path d=" M 339 58 h 10"/>
+<path d=" M 359 77 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
+<path d=" M 25 77 h 10"/>
+<path d=" M 349 77 h 10"/>
 </g>
 <g class=" legend">
-<rect height="100" width="323" x="10" y="94"/>
+<rect height="100" width="323" x="10" y="118"/>
 <g class="verticalgrid">
-<text class="comment" x="171" y="115">
+<text class="comment" x="171" y="139">
 Non-terminal patterns used by this macro:</text>
 <g class="horizontalgrid">
-<g class="nonterminal fragment_expr">
-<rect height="22" width="44" x="16" y="132"/>
-<text x="38" y="148">
+<g class="fragment_expr">
+<g class="nonterminal">
+<rect height="22" width="44" x="16" y="156"/>
+<text x="38" y="172">
 fmt</text>
 </g>
-<text class="comment" x="136" y="147">
+</g>
+<text class="comment" x="136" y="171">
 is an expression.</text>
 </g>
 <g class="horizontalgrid">
-<g class="nonterminal fragment_tt">
-<rect height="22" width="44" x="16" y="166"/>
-<text x="38" y="182">
+<g class="fragment_tt">
+<g class="nonterminal">
+<rect height="22" width="44" x="16" y="190"/>
+<text x="38" y="206">
 arg</text>
 </g>
-<text class="comment" x="133" y="181">
+</g>
+<text class="comment" x="133" y="205">
 is a token tree.</text>
 </g>
 </g>
@@ -521,53 +611,63 @@ is a token tree.</text>
     ( $ left : expr , $ right : expr , ) =&gt; { ... };
     (
 $ left : expr , $ right : expr , $ ( $ arg : tt ) + ) =&gt; { ... };
-}</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 394; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 394 233" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<rect class="railroad_canvas" height="100%" width="100%"/>
+}</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 404; height:auto" class="dia unoptimized"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="railroad" viewBox="0 0 404 242">
+<rect width="100%" height="100%" class="railroad_canvas"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 21 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
-<g class="choice">
-<path d=" M 35 21 h 24 m 160 0 h 140 m -67 0 l -5 -5 m 0 10 l 5 -5 m 67 0"/>
+<g class="multichoice">
+<path d=" M 35 21 h 24"/>
+<path d=" M 35 21 a 12 12 0 0 1 12 12"/>
+<path d=" M 47 33 v 9"/>
+<path d=" M 47 42 v 37"/>
 <g class="sequence">
-<g class="nonterminal fragment_expr">
-<rect height="22" width="52" x="59" y="10"/>
+<g class="fragment_expr">
+<g class="nonterminal">
+<rect x="59" y="10" height="22" width="52"/>
 <text x="85" y="26">
 left</text>
 </g>
+</g>
 <g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="121" y="10"/>
+<rect x="121" y="10" height="22" width="28" rx="10" ry="10"/>
 <text x="135" y="26">
 ,</text>
 </g>
-<g class="nonterminal fragment_expr">
-<rect height="22" width="60" x="159" y="10"/>
+<g class="fragment_expr">
+<g class="nonterminal">
+<rect x="159" y="10" height="22" width="60"/>
 <text x="189" y="26">
 right</text>
+</g>
 </g>
 <path d=" M 111 21 h 10"/>
 <path d=" M 149 21 h 10"/>
 </g>
-<path d=" M 35 21 a 12 12 0 0 1 12 12 v 9 m 300 0 v -9 a 12 12 0 0 1 12 -12"/>
-<path d=" M 47 42 v 33 m 300 0 v -33"/>
-<path d=" M 47 42 v 0 a 12 12 0 0 0 12 12 m 198 0 h 78 m -36 0 l -5 -5 m 0 10 l 5 -5 m 36 0 a 12 12 0 0 0 12 -12 v 0"/>
+<path d=" M 219 21 h 150 m -72 0 l -5 -5 m 0 10 l 5 -5 m 72 0"/>
+<path d=" M 47 42 a 12 12 0 0 0 12 12 h 0"/>
 <g class="sequence">
-<g class="nonterminal fragment_expr">
-<rect height="22" width="52" x="59" y="43"/>
+<g class="fragment_expr">
+<g class="nonterminal">
+<rect x="59" y="43" height="22" width="52"/>
 <text x="85" y="59">
 left</text>
 </g>
+</g>
 <g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="121" y="43"/>
+<rect x="121" y="43" height="22" width="28" rx="10" ry="10"/>
 <text x="135" y="59">
 ,</text>
 </g>
-<g class="nonterminal fragment_expr">
-<rect height="22" width="60" x="159" y="43"/>
+<g class="fragment_expr">
+<g class="nonterminal">
+<rect x="159" y="43" height="22" width="60"/>
 <text x="189" y="59">
 right</text>
 </g>
+</g>
 <g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="229" y="43"/>
+<rect x="229" y="43" height="22" width="28" rx="10" ry="10"/>
 <text x="243" y="59">
 ,</text>
 </g>
@@ -575,159 +675,189 @@ right</text>
 <path d=" M 149 54 h 10"/>
 <path d=" M 219 54 h 10"/>
 </g>
-<path d=" M 47 75 v 0 a 12 12 0 0 0 12 12 m 276 0 h 0 a 12 12 0 0 0 12 -12 v 0"/>
+<path d=" M 257 54 h 88 m -41 0 l -5 -5 m 0 10 l 5 -5 m 41 0 a 12 12 0 0 0 12 -12"/>
+<path d=" M 47 79 a 12 12 0 0 0 12 12 h 0"/>
 <g class="sequence">
-<g class="nonterminal fragment_expr">
-<rect height="22" width="52" x="59" y="76"/>
-<text x="85" y="92">
+<g class="fragment_expr">
+<g class="nonterminal">
+<rect x="59" y="80" height="22" width="52"/>
+<text x="85" y="96">
 left</text>
 </g>
+</g>
 <g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="121" y="76"/>
-<text x="135" y="92">
+<rect x="121" y="80" height="22" width="28" rx="10" ry="10"/>
+<text x="135" y="96">
 ,</text>
 </g>
-<g class="nonterminal fragment_expr">
-<rect height="22" width="60" x="159" y="76"/>
-<text x="189" y="92">
+<g class="fragment_expr">
+<g class="nonterminal">
+<rect x="159" y="80" height="22" width="60"/>
+<text x="189" y="96">
 right</text>
 </g>
+</g>
 <g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="229" y="76"/>
-<text x="243" y="92">
+<rect x="229" y="80" height="22" width="28" rx="10" ry="10"/>
+<text x="243" y="96">
 ,</text>
 </g>
 <g class="repeat">
-<path d=" M 267 87 h 12 m 44 0 h 12 m -12 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 1 -12 12 m 0 0 h -44 a 12 12 0 0 1 -12 -12 v 0 a 12 12 0 0 1 12 -12"/>
-<g/>
+<path d=" M 267 91 h 5 h 12 m 44 0 h 12 h 5 m -17 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 1 -12 12 m 0 0 h -44 a 12 12 0 0 1 -12 -12 v 0 a 12 12 0 0 1 12 -12"/>
+<g>
+</g>
 <g class="sequence">
-<g class="nonterminal fragment_tt">
-<rect height="22" width="44" x="279" y="76"/>
-<text x="301" y="92">
+<g class="fragment_tt">
+<g class="nonterminal">
+<rect x="284" y="80" height="22" width="44"/>
+<text x="306" y="96">
 arg</text>
 </g>
 </g>
 </g>
-<path d=" M 111 87 h 10"/>
-<path d=" M 149 87 h 10"/>
-<path d=" M 219 87 h 10"/>
-<path d=" M 257 87 h 10"/>
 </g>
+<path d=" M 111 91 h 10"/>
+<path d=" M 149 91 h 10"/>
+<path d=" M 219 91 h 10"/>
+<path d=" M 257 91 h 10"/>
 </g>
-<path d=" M 369 21 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
+<path d=" M 345 91 h 0 a 12 12 0 0 0 12 -12"/>
+<path d=" M 357 79 v -37"/>
+<path d=" M 357 42 v -9 a 12 12 0 0 1 12 -12"/>
+</g>
+<path d=" M 379 21 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
 <path d=" M 25 21 h 10"/>
-<path d=" M 359 21 h 10"/>
+<path d=" M 369 21 h 10"/>
 </g>
 <g class=" legend">
-<rect height="100" width="323" x="10" y="123"/>
+<rect height="100" width="323" x="10" y="132"/>
 <g class="verticalgrid">
-<text class="comment" x="171" y="144">
+<text class="comment" x="171" y="153">
 Non-terminal patterns used by this macro:</text>
 <g class="horizontalgrid">
-<g class="nonterminal fragment_expr">
-<rect height="22" width="52" x="16" y="161"/>
-<text x="42" y="177">
+<g class="fragment_expr">
+<g class="nonterminal">
+<rect height="22" width="52" x="16" y="170"/>
+<text x="42" y="186">
 left</text>
 </g>
-<g class="nonterminal fragment_expr">
-<rect height="22" width="60" x="80" y="161"/>
-<text x="110" y="177">
+</g>
+<g class="fragment_expr">
+<g class="nonterminal">
+<rect height="22" width="60" x="80" y="170"/>
+<text x="110" y="186">
 right</text>
 </g>
-<text class="comment" x="213" y="176">
+</g>
+<text class="comment" x="213" y="185">
 are expressions.</text>
 </g>
 <g class="horizontalgrid">
-<g class="nonterminal fragment_tt">
-<rect height="22" width="44" x="16" y="195"/>
-<text x="38" y="211">
+<g class="fragment_tt">
+<g class="nonterminal">
+<rect height="22" width="44" x="16" y="204"/>
+<text x="38" y="220">
 arg</text>
 </g>
-<text class="comment" x="133" y="210">
+</g>
+<text class="comment" x="133" y="219">
 is a token tree.</text>
 </g>
 </g>
 </g>
 </g>
 </svg>
-</div><div style="width: 442; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 442 192" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<rect class="railroad_canvas" height="100%" width="100%"/>
+</div><div style="width: 452; height: auto" class="dia optimized"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="railroad" viewBox="0 0 452 211">
+<rect width="100%" height="100%" class="railroad_canvas"/>
 <g class="verticalgrid">
 <g class="sequence">
-<path d=" M 10 46 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
+<path d=" M 10 60 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
 <g class="sequence">
-<g class="nonterminal fragment_expr">
-<rect height="22" width="52" x="35" y="35"/>
-<text x="61" y="51">
+<g class="fragment_expr">
+<g class="nonterminal">
+<rect x="35" y="49" height="22" width="52"/>
+<text x="61" y="65">
 left</text>
 </g>
+</g>
 <g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="97" y="35"/>
-<text x="111" y="51">
+<rect x="97" y="49" height="22" width="28" rx="10" ry="10"/>
+<text x="111" y="65">
 ,</text>
 </g>
-<g class="nonterminal fragment_expr">
-<rect height="22" width="60" x="135" y="35"/>
-<text x="165" y="51">
+<g class="fragment_expr">
+<g class="nonterminal">
+<rect x="135" y="49" height="22" width="60"/>
+<text x="165" y="65">
 right</text>
 </g>
+</g>
 <g class="optional">
-<path d=" M 205 46 h 24 m -24 0 a 12 12 0 0 0 12 -12 v -12 a 12 12 0 0 1 12 -12 h 154 m -74 0 l -5 -5 m 0 10 l 5 -5 m 74 0 a 12 12 0 0 1 12 12 v 12 a 12 12 0 0 0 12 12 h -24"/>
+<path d=" M 205 60 h 24 m -24 0 a 12 12 0 0 0 12 -12 v -21 a 12 12 0 0 1 12 -12 h 164 m -79 0 l -5 -5 m 0 10 l 5 -5 m 79 0 a 12 12 0 0 1 12 12 v 21 a 12 12 0 0 0 12 12 h -24"/>
 <g class="sequence">
 <g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="229" y="35"/>
-<text x="243" y="51">
+<rect x="229" y="49" height="22" width="28" rx="10" ry="10"/>
+<text x="243" y="65">
 ,</text>
 </g>
 <g class="optional">
-<path d=" M 267 46 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 68 m -31 0 l -5 -5 m 0 10 l 5 -5 m 31 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
+<path d=" M 267 60 h 24 m -24 0 a 12 12 0 0 0 12 -12 v -4 a 12 12 0 0 1 12 -12 h 78 m -36 0 l -5 -5 m 0 10 l 5 -5 m 36 0 a 12 12 0 0 1 12 12 v 4 a 12 12 0 0 0 12 12 h -24"/>
 <g class="repeat">
-<path d=" M 291 46 h 12 m 44 0 h 12 m -12 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 1 -12 12 m 0 0 h -44 a 12 12 0 0 1 -12 -12 v 0 a 12 12 0 0 1 12 -12"/>
-<g/>
-<g class="nonterminal fragment_tt">
-<rect height="22" width="44" x="303" y="35"/>
-<text x="325" y="51">
+<path d=" M 291 60 h 5 h 12 m 44 0 h 12 h 5 m -17 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 1 -12 12 m 0 0 h -44 a 12 12 0 0 1 -12 -12 v 0 a 12 12 0 0 1 12 -12"/>
+<g>
+</g>
+<g class="fragment_tt">
+<g class="nonterminal">
+<rect x="308" y="49" height="22" width="44"/>
+<text x="330" y="65">
 arg</text>
 </g>
 </g>
 </g>
-<path d=" M 257 46 h 10"/>
+</g>
+<path d=" M 257 60 h 10"/>
 </g>
 </g>
-<path d=" M 87 46 h 10"/>
-<path d=" M 125 46 h 10"/>
-<path d=" M 195 46 h 10"/>
+<path d=" M 87 60 h 10"/>
+<path d=" M 125 60 h 10"/>
+<path d=" M 195 60 h 10"/>
 </g>
-<path d=" M 417 46 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
-<path d=" M 25 46 h 10"/>
-<path d=" M 407 46 h 10"/>
+<path d=" M 427 60 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
+<path d=" M 25 60 h 10"/>
+<path d=" M 417 60 h 10"/>
 </g>
 <g class=" legend">
-<rect height="100" width="323" x="10" y="82"/>
+<rect height="100" width="323" x="10" y="101"/>
 <g class="verticalgrid">
-<text class="comment" x="171" y="103">
+<text class="comment" x="171" y="122">
 Non-terminal patterns used by this macro:</text>
 <g class="horizontalgrid">
-<g class="nonterminal fragment_expr">
-<rect height="22" width="52" x="16" y="120"/>
-<text x="42" y="136">
+<g class="fragment_expr">
+<g class="nonterminal">
+<rect height="22" width="52" x="16" y="139"/>
+<text x="42" y="155">
 left</text>
 </g>
-<g class="nonterminal fragment_expr">
-<rect height="22" width="60" x="80" y="120"/>
-<text x="110" y="136">
+</g>
+<g class="fragment_expr">
+<g class="nonterminal">
+<rect height="22" width="60" x="80" y="139"/>
+<text x="110" y="155">
 right</text>
 </g>
-<text class="comment" x="213" y="135">
+</g>
+<text class="comment" x="213" y="154">
 are expressions.</text>
 </g>
 <g class="horizontalgrid">
-<g class="nonterminal fragment_tt">
-<rect height="22" width="44" x="16" y="154"/>
-<text x="38" y="170">
+<g class="fragment_tt">
+<g class="nonterminal">
+<rect height="22" width="44" x="16" y="173"/>
+<text x="38" y="189">
 arg</text>
 </g>
-<text class="comment" x="133" y="169">
+</g>
+<text class="comment" x="133" y="188">
 is a token tree.</text>
 </g>
 </g>
@@ -739,184 +869,225 @@ is a token tree.</text>
     ($msg:expr) =&gt; { ... };
     ($msg:expr,) =&gt; { ... };
     ($fmt:expr, $($arg:tt)+) =&gt; { ... };
-}</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg class="railroad" viewBox="0 0 343 251" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<rect class="railroad_canvas" height="100%" width="100%"/>
+}</pre><br><input class="opt_ckbox" type="checkbox" checked><label>Optimized layout</label><div style="width: 343; height:auto" class="dia unoptimized"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="railroad" viewBox="0 0 343 260">
+<rect width="100%" height="100%" class="railroad_canvas"/>
 <g class="verticalgrid">
 <g class="sequence">
 <path d=" M 10 15 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
-<g class="choice">
-<path d=" M 35 15 h 24 m 0 0 h 184 m -89 0 l -5 -5 m 0 10 l 5 -5 m 89 0"/>
-<g class="sequence"/>
-<path d=" M 35 15 a 12 12 0 0 1 12 12 v 0 m 184 0 v 0 a 12 12 0 0 1 12 -12"/>
-<path d=" M 47 27 v 33 m 184 0 v -33"/>
-<path d=" M 47 60 v 33 m 184 0 v -33"/>
-<path d=" M 47 27 v 0 a 12 12 0 0 0 12 12 m 44 0 h 116 m -55 0 l -5 -5 m 0 10 l 5 -5 m 55 0 a 12 12 0 0 0 12 -12 v 0"/>
+<g class="multichoice">
+<path d=" M 35 15 h 24"/>
+<path d=" M 35 15 a 12 12 0 0 1 12 12"/>
+<path d=" M 47 27 v 0"/>
+<path d=" M 47 27 v 33"/>
+<path d=" M 47 60 v 37"/>
 <g class="sequence">
-<g class="nonterminal fragment_expr">
-<rect height="22" width="44" x="59" y="28"/>
+</g>
+<path d=" M 59 15 l 194 0"/>
+<path d=" M 47 27 a 12 12 0 0 0 12 12 h 0"/>
+<g class="sequence">
+<g class="fragment_expr">
+<g class="nonterminal">
+<rect x="59" y="28" height="22" width="44"/>
 <text x="81" y="44">
 msg</text>
 </g>
 </g>
-<path d=" M 47 60 v 0 a 12 12 0 0 0 12 12 m 82 0 h 78 m -36 0 l -5 -5 m 0 10 l 5 -5 m 36 0 a 12 12 0 0 0 12 -12 v 0"/>
+</g>
+<path d=" M 103 39 h 126 m -60 0 l -5 -5 m 0 10 l 5 -5 m 60 0 a 12 12 0 0 0 12 -12"/>
+<path d=" M 47 60 a 12 12 0 0 0 12 12 h 0"/>
 <g class="sequence">
-<g class="nonterminal fragment_expr">
-<rect height="22" width="44" x="59" y="61"/>
+<g class="fragment_expr">
+<g class="nonterminal">
+<rect x="59" y="61" height="22" width="44"/>
 <text x="81" y="77">
 msg</text>
 </g>
+</g>
 <g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="113" y="61"/>
+<rect x="113" y="61" height="22" width="28" rx="10" ry="10"/>
 <text x="127" y="77">
 ,</text>
 </g>
 <path d=" M 103 72 h 10"/>
 </g>
-<path d=" M 47 93 v 0 a 12 12 0 0 0 12 12 m 160 0 h 0 a 12 12 0 0 0 12 -12 v 0"/>
+<path d=" M 141 72 h 88 m -41 0 l -5 -5 m 0 10 l 5 -5 m 41 0 a 12 12 0 0 0 12 -12"/>
+<path d=" M 47 97 a 12 12 0 0 0 12 12 h 0"/>
 <g class="sequence">
-<g class="nonterminal fragment_expr">
-<rect height="22" width="44" x="59" y="94"/>
-<text x="81" y="110">
+<g class="fragment_expr">
+<g class="nonterminal">
+<rect x="59" y="98" height="22" width="44"/>
+<text x="81" y="114">
 fmt</text>
 </g>
+</g>
 <g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="113" y="94"/>
-<text x="127" y="110">
+<rect x="113" y="98" height="22" width="28" rx="10" ry="10"/>
+<text x="127" y="114">
 ,</text>
 </g>
 <g class="repeat">
-<path d=" M 151 105 h 12 m 44 0 h 12 m -12 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 1 -12 12 m 0 0 h -44 a 12 12 0 0 1 -12 -12 v 0 a 12 12 0 0 1 12 -12"/>
-<g/>
+<path d=" M 151 109 h 5 h 12 m 44 0 h 12 h 5 m -17 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 1 -12 12 m 0 0 h -44 a 12 12 0 0 1 -12 -12 v 0 a 12 12 0 0 1 12 -12"/>
+<g>
+</g>
 <g class="sequence">
-<g class="nonterminal fragment_tt">
-<rect height="22" width="44" x="163" y="94"/>
-<text x="185" y="110">
+<g class="fragment_tt">
+<g class="nonterminal">
+<rect x="168" y="98" height="22" width="44"/>
+<text x="190" y="114">
 arg</text>
 </g>
 </g>
 </g>
-<path d=" M 103 105 h 10"/>
-<path d=" M 141 105 h 10"/>
 </g>
+<path d=" M 103 109 h 10"/>
+<path d=" M 141 109 h 10"/>
 </g>
-<path d=" M 253 15 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
+<path d=" M 229 109 h 0 a 12 12 0 0 0 12 -12"/>
+<path d=" M 241 97 v -37"/>
+<path d=" M 241 60 v -33"/>
+<path d=" M 241 27 v 0 a 12 12 0 0 1 12 -12"/>
+</g>
+<path d=" M 263 15 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
 <path d=" M 25 15 h 10"/>
-<path d=" M 243 15 h 10"/>
+<path d=" M 253 15 h 10"/>
 </g>
 <g class=" legend">
-<rect height="100" width="323" x="10" y="141"/>
+<rect height="100" width="323" x="10" y="150"/>
 <g class="verticalgrid">
-<text class="comment" x="171" y="162">
+<text class="comment" x="171" y="171">
 Non-terminal patterns used by this macro:</text>
 <g class="horizontalgrid">
-<g class="nonterminal fragment_expr">
-<rect height="22" width="44" x="16" y="179"/>
-<text x="38" y="195">
+<g class="fragment_expr">
+<g class="nonterminal">
+<rect height="22" width="44" x="16" y="188"/>
+<text x="38" y="204">
 fmt</text>
 </g>
-<g class="nonterminal fragment_expr">
-<rect height="22" width="44" x="72" y="179"/>
-<text x="94" y="195">
+</g>
+<g class="fragment_expr">
+<g class="nonterminal">
+<rect height="22" width="44" x="72" y="188"/>
+<text x="94" y="204">
 msg</text>
 </g>
-<text class="comment" x="189" y="194">
+</g>
+<text class="comment" x="189" y="203">
 are expressions.</text>
 </g>
 <g class="horizontalgrid">
-<g class="nonterminal fragment_tt">
-<rect height="22" width="44" x="16" y="213"/>
-<text x="38" y="229">
+<g class="fragment_tt">
+<g class="nonterminal">
+<rect height="22" width="44" x="16" y="222"/>
+<text x="38" y="238">
 arg</text>
 </g>
-<text class="comment" x="133" y="228">
+</g>
+<text class="comment" x="133" y="237">
 is a token tree.</text>
 </g>
 </g>
 </g>
 </g>
 </svg>
-</div><div style="width: 343; height: auto" class="dia optimized"><svg class="railroad" viewBox="0 0 343 225" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-<rect class="railroad_canvas" height="100%" width="100%"/>
+</div><div style="width: 343; height: auto" class="dia optimized"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="railroad" viewBox="0 0 343 244">
+<rect width="100%" height="100%" class="railroad_canvas"/>
 <g class="verticalgrid">
 <g class="sequence">
-<path d=" M 10 34 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
+<path d=" M 10 43 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5 m 10 0 h 5"/>
 <g class="optional">
-<path d=" M 35 34 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 208 m -101 0 l -5 -5 m 0 10 l 5 -5 m 101 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
-<g class="choice">
-<path d=" M 59 34 h 24 m 160 0 h 24"/>
+<path d=" M 35 43 h 24 m -24 0 a 12 12 0 0 0 12 -12 v -4 a 12 12 0 0 1 12 -12 h 218 m -106 0 l -5 -5 m 0 10 l 5 -5 m 106 0 a 12 12 0 0 1 12 12 v 4 a 12 12 0 0 0 12 12 h -24"/>
+<g class="multichoice">
+<path d=" M 59 43 h 24"/>
+<path d=" M 59 43 a 12 12 0 0 1 12 12"/>
+<path d=" M 71 55 v 44"/>
 <g class="sequence">
-<g class="nonterminal fragment_expr">
-<rect height="22" width="44" x="83" y="23"/>
-<text x="105" y="39">
+<g class="fragment_expr">
+<g class="nonterminal">
+<rect x="83" y="32" height="22" width="44"/>
+<text x="105" y="48">
 fmt</text>
 </g>
+</g>
 <g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="137" y="23"/>
-<text x="151" y="39">
+<rect x="137" y="32" height="22" width="28" rx="10" ry="10"/>
+<text x="151" y="48">
 ,</text>
 </g>
 <g class="repeat">
-<path d=" M 175 34 h 12 m 44 0 h 12 m -12 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 1 -12 12 m 0 0 h -44 a 12 12 0 0 1 -12 -12 v 0 a 12 12 0 0 1 12 -12"/>
-<g/>
-<g class="nonterminal fragment_tt">
-<rect height="22" width="44" x="187" y="23"/>
-<text x="209" y="39">
+<path d=" M 175 43 h 5 h 12 m 44 0 h 12 h 5 m -17 0 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 1 -12 12 m 0 0 h -44 a 12 12 0 0 1 -12 -12 v 0 a 12 12 0 0 1 12 -12"/>
+<g>
+</g>
+<g class="fragment_tt">
+<g class="nonterminal">
+<rect x="192" y="32" height="22" width="44"/>
+<text x="214" y="48">
 arg</text>
 </g>
 </g>
-<path d=" M 127 34 h 10"/>
-<path d=" M 165 34 h 10"/>
 </g>
-<path d=" M 59 34 a 12 12 0 0 1 12 12 v 22 m 184 0 v -22 a 12 12 0 0 1 12 -12"/>
-<path d=" M 71 68 v 12 a 12 12 0 0 0 12 12 m 130 0 h 30 a 12 12 0 0 0 12 -12 v -12"/>
+<path d=" M 127 43 h 10"/>
+<path d=" M 165 43 h 10"/>
+</g>
+<path d=" M 253 43 h 24"/>
+<path d=" M 71 99 a 12 12 0 0 0 12 12 h 0"/>
 <g class="sequence">
-<g class="nonterminal fragment_expr">
-<rect height="22" width="44" x="83" y="81"/>
-<text x="105" y="97">
+<g class="fragment_expr">
+<g class="nonterminal">
+<rect x="83" y="100" height="22" width="44"/>
+<text x="105" y="116">
 msg</text>
 </g>
+</g>
 <g class="optional">
-<path d=" M 137 92 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 28 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
+<path d=" M 137 111 h 24 m -24 0 a 12 12 0 0 0 12 -12 v 0 a 12 12 0 0 1 12 -12 h 28 a 12 12 0 0 1 12 12 v 0 a 12 12 0 0 0 12 12 h -24"/>
 <g class="terminal">
-<rect height="22" rx="10" ry="10" width="28" x="161" y="81"/>
-<text x="175" y="97">
+<rect x="161" y="100" height="22" width="28" rx="10" ry="10"/>
+<text x="175" y="116">
 ,</text>
 </g>
 </g>
-<path d=" M 127 92 h 10"/>
+<path d=" M 127 111 h 10"/>
+</g>
+<path d=" M 213 111 h 40 a 12 12 0 0 0 12 -12"/>
+<path d=" M 265 99 v -44 a 12 12 0 0 1 12 -12"/>
 </g>
 </g>
-</g>
-<path d=" M 301 34 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
-<path d=" M 25 34 h 10"/>
-<path d=" M 291 34 h 10"/>
+<path d=" M 311 43 h 5 a 5 5 0 0 1 5 -5 a 5 5 0 0 1 5 5 a 5 5 0 0 1 -5 5 a 5 5 0 0 1 -5 -5"/>
+<path d=" M 25 43 h 10"/>
+<path d=" M 301 43 h 10"/>
 </g>
 <g class=" legend">
-<rect height="100" width="323" x="10" y="115"/>
+<rect height="100" width="323" x="10" y="134"/>
 <g class="verticalgrid">
-<text class="comment" x="171" y="136">
+<text class="comment" x="171" y="155">
 Non-terminal patterns used by this macro:</text>
 <g class="horizontalgrid">
-<g class="nonterminal fragment_expr">
-<rect height="22" width="44" x="16" y="153"/>
-<text x="38" y="169">
+<g class="fragment_expr">
+<g class="nonterminal">
+<rect height="22" width="44" x="16" y="172"/>
+<text x="38" y="188">
 fmt</text>
 </g>
-<g class="nonterminal fragment_expr">
-<rect height="22" width="44" x="72" y="153"/>
-<text x="94" y="169">
+</g>
+<g class="fragment_expr">
+<g class="nonterminal">
+<rect height="22" width="44" x="72" y="172"/>
+<text x="94" y="188">
 msg</text>
 </g>
-<text class="comment" x="189" y="168">
+</g>
+<text class="comment" x="189" y="187">
 are expressions.</text>
 </g>
 <g class="horizontalgrid">
-<g class="nonterminal fragment_tt">
-<rect height="22" width="44" x="16" y="187"/>
-<text x="38" y="203">
+<g class="fragment_tt">
+<g class="nonterminal">
+<rect height="22" width="44" x="16" y="206"/>
+<text x="38" y="222">
 arg</text>
 </g>
-<text class="comment" x="133" y="202">
+</g>
+<text class="comment" x="133" y="221">
 is a token tree.</text>
 </g>
 </g>

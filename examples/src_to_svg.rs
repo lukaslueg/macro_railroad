@@ -28,7 +28,7 @@ fn main() -> Result<(), io::Error> {
 }"#;
 
     // Parse the source
-    let macro_rules = macro_railroad::parser::parse(&src).unwrap();
+    let macro_rules = macro_railroad::parser::parse(src).unwrap();
 
     // Convert to intermediate representation
     let mut tree = macro_railroad::lowering::MacroRules::from(macro_rules);
@@ -45,7 +45,7 @@ fn main() -> Result<(), io::Error> {
 
     // Write the SVG
     let fname = "examples/nom4_method.svg";
-    let mut outp = fs::File::create(&fname)?;
+    let mut outp = fs::File::create(fname)?;
     dia.write(&mut outp)?;
 
     println!("Written to `{}`", fname);
