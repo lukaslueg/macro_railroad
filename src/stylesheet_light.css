@@ -1,55 +1,55 @@
-svg.railroad .fragment_ty > rect {
+svg.railroad .fragment_ty > .nonterminal > rect {
 fill: red;
 }
-svg.railroad .fragment_ident > rect {
+svg.railroad .fragment_ident > .nonterminal > rect {
 fill: orange;
 }
 
-svg.railroad .fragment_path > rect {
+svg.railroad .fragment_path > .nonterminal > rect {
 fill: green;
 }
 
-svg.railroad .fragment_expr > rect {
+svg.railroad .fragment_expr > .nonterminal > rect {
 fill: yellow;
 }
 
-svg.railroad .fragment_pat > rect {
+svg.railroad .fragment_pat > .nonterminal > rect {
 fill: deepskyblue;
 }
 
-svg.railroad .fragment_pat_param > rect {
+svg.railroad .fragment_pat_param > .nonterminal > rect {
 fill: steelblue;
 }
 
-svg.railroad .fragment_stmt > rect {
+svg.railroad .fragment_stmt > .nonterminal > rect {
 fill: aqua;
 }
 
-svg.railroad .fragment_block > rect {
+svg.railroad .fragment_block > .nonterminal > rect {
 fill: aquamarine;
 }
 
-svg.railroad .fragment_item > rect {
+svg.railroad .fragment_item > .nonterminal > rect {
 fill: thistle;
 }
 
-svg.railroad .fragment_meta > rect {
+svg.railroad .fragment_meta > .nonterminal > rect {
 fill: violet;
 }
 
-svg.railroad .fragment_tt > rect {
+svg.railroad .fragment_tt > .nonterminal > rect {
 fill: turquoise;
 }
 
-svg.railroad .fragment_vis > rect {
+svg.railroad .fragment_vis > .nonterminal > rect {
 fill: gold;
 }
 
-svg.railroad .fragment_literal > rect {
+svg.railroad .fragment_literal > .nonterminal > rect {
 fill: salmon;
 }
 
-svg.railroad .fragment_lifetime > rect {
+svg.railroad .fragment_lifetime > .nonterminal > rect {
 fill: teal;
 }
 

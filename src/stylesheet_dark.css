@@ -1,55 +1,55 @@
-svg.railroad .fragment_ty > rect {
+svg.railroad .fragment_ty > .nonterminal > rect {
 fill: hsl(0, 100%, 30%);
 }
-svg.railroad .fragment_ident > rect {
+svg.railroad .fragment_ident > .nonterminal > rect {
 fill: hsl(39, 100%, 30%);
 }
 
-svg.railroad .fragment_path > rect {
+svg.railroad .fragment_path > .nonterminal > rect {
 fill: hsl(120, 100%, 25%);
 }
 
-svg.railroad .fragment_expr > rect {
+svg.railroad .fragment_expr > .nonterminal > rect {
 fill: hsl(60, 100%, 25%);
 }
 
-svg.railroad .fragment_pat > rect {
+svg.railroad .fragment_pat > .nonterminal > rect {
 fill: hsl(195, 100%, 25%);
 }
 
-svg.railroad .fragment_pat_param > rect {
+svg.railroad .fragment_pat_param > .nonterminal > rect {
 fill: hsl(215, 100%, 30%);
 }
 
-svg.railroad .fragment_stmt > rect {
+svg.railroad .fragment_stmt > .nonterminal > rect {
 fill: hsl(205, 100%, 25%);
 }
 
-svg.railroad .fragment_block > rect {
+svg.railroad .fragment_block > .nonterminal > rect {
 fill: hsl(164, 100%, 25%);
 }
 
-svg.railroad .fragment_item > rect {
+svg.railroad .fragment_item > .nonterminal > rect {
 fill: hsl(300, 24%, 25%);
 }
 
-svg.railroad .fragment_meta > rect {
+svg.railroad .fragment_meta > .nonterminal > rect {
 fill: hsl(300, 76%, 30%);
 }
 
-svg.railroad .fragment_tt > rect {
+svg.railroad .fragment_tt > .nonterminal > rect {
 fill: hsl(174, 72%, 30%);
 }
 
-svg.railroad .fragment_vis > rect {
+svg.railroad .fragment_vis > .nonterminal > rect {
 fill: hsl(33, 100%, 25%);
 }
 
-svg.railroad .fragment_literal > rect {
+svg.railroad .fragment_literal > .nonterminal > rect {
 fill: hsl(20, 93%, 30%);
 }
 
-svg.railroad .fragment_lifetime > rect {
+svg.railroad .fragment_lifetime > .nonterminal > rect {
 fill: teal;
 }
 

@@ -111,6 +111,64 @@ impl<T: railroad::Node> railroad::Node for Container<T> {
     }
 }
 
+/// Keep fragment styling on a separate group because `NonTerminal` owns its class.
+#[derive(Debug)]
+struct FragmentNonTerminal {
+    inner: railroad::NonTerminal,
+    class: &'static str,
+}
+
+impl railroad::Node for FragmentNonTerminal {
+    fn entry_height(&self) -> i64 {
+        self.inner.entry_height()
+    }
+
+    fn height(&self) -> i64 {
+        self.inner.height()
+    }
+
+    fn width(&self) -> i64 {
+        self.inner.width()
+    }
+
+    fn compute_geometry(&self) -> railroad::NodeGeometry {
+        self.inner.compute_geometry()
+    }
+
+    fn draw(&self, x: i64, y: i64, hdir: railroad::svg::HDir) -> railroad::svg::Element {
+        railroad::svg::Element::new("g")
+            .set("class", self.class)
+            .add(self.inner.draw(x, y, hdir))
+    }
+
+    fn draw_with_geometry(
+        &self,
+        x: i64,
+        y: i64,
+        hdir: railroad::svg::HDir,
+        geo: &railroad::NodeGeometry,
+    ) -> railroad::svg::Element {
+        railroad::svg::Element::new("g")
+            .set("class", self.class)
+            .add(self.inner.draw_with_geometry(x, y, hdir, geo))
+    }
+
+    fn render_with_geometry(
+        &self,
+        out: &mut railroad::svg::Renderer<'_>,
+        x: i64,
+        y: i64,
+        hdir: railroad::svg::HDir,
+        geo: &railroad::NodeGeometry,
+    ) -> std::fmt::Result {
+        let mut group = out.start_element("g")?;
+        group.attr("class", self.class)?;
+        group.finish()?;
+        self.inner.render_with_geometry(out, x, y, hdir, geo)?;
+        out.end_element("g")
+    }
+}
+
 /// Given a `MacroRules`, generate the legend containing all non-terminal symbols
 ///
 /// Returns `None` if there are no non-terminal symbols at all.
@@ -219,20 +277,20 @@ pub fn add_default_css<T: railroad::Node>(
 
 fn fragment_to_class(f: &parser::Fragment) -> &'static str {
     match f {
-        parser::Fragment::Ty => " fragment_ty",
-        parser::Fragment::Ident => " fragment_ident",
-        parser::Fragment::Path => " fragment_path",
-        parser::Fragment::Expr => " fragment_expr",
-        parser::Fragment::Pat => " fragment_pat",
-        parser::Fragment::PatParam => " fragment_pat_param",
-        parser::Fragment::Stmt => " fragment_stmt",
-        parser::Fragment::Block => " fragment_block",
-        parser::Fragment::Item => " fragment_item",
-        parser::Fragment::Meta => " fragment_meta",
-        parser::Fragment::Tt => " fragment_tt",
-        parser::Fragment::Vis => " fragment_vis",
-        parser::Fragment::Literal => " fragment_literal",
-        parser::Fragment::Lifetime => " fragment_lifetime",
+        parser::Fragment::Ty => "fragment_ty",
+        parser::Fragment::Ident => "fragment_ident",
+        parser::Fragment::Path => "fragment_path",
+        parser::Fragment::Expr => "fragment_expr",
+        parser::Fragment::Pat => "fragment_pat",
+        parser::Fragment::PatParam => "fragment_pat_param",
+        parser::Fragment::Stmt => "fragment_stmt",
+        parser::Fragment::Block => "fragment_block",
+        parser::Fragment::Item => "fragment_item",
+        parser::Fragment::Meta => "fragment_meta",
+        parser::Fragment::Tt => "fragment_tt",
+        parser::Fragment::Vis => "fragment_vis",
+        parser::Fragment::Literal => "fragment_literal",
+        parser::Fragment::Lifetime => "fragment_lifetime",
     }
 }
 
@@ -276,13 +334,9 @@ fn into_primitive(m: lowering::Matcher) -> Box<dyn railroad::Node> {
             let main = into_primitive(*content);
             Box::new(railroad::Repeat::new(main, separator))
         }
-        lowering::Matcher::NonTerminal { name, fragment } => {
-            let mut nonterm = railroad::NonTerminal::new(name);
-            nonterm
-                .attr("class".to_owned())
-                .or_default()
-                .push_str(fragment_to_class(&fragment));
-            Box::new(nonterm)
-        }
+        lowering::Matcher::NonTerminal { name, fragment } => Box::new(FragmentNonTerminal {
+            inner: railroad::NonTerminal::new(name),
+            class: fragment_to_class(&fragment),
+        }),
     }
 }
