@@ -1,6 +1,6 @@
 [package]
 name = "macro_railroad"
-version = "0.1.9"
+version = "0.2.0"
 authors = ["Lukas Lueg <lukas.lueg@gmail.com>"]
 edition = "2024"
 license = "MIT"
@@ -10,7 +10,7 @@ readme = "README.md"
 exclude = ["examples/*.jpeg", "examples/*.jpg", "examples/*.svg", "examples/*.html"]
 
 [dependencies]
-syn = { version = "2.0", features = ["full", "parsing", "extra-traits"], default-features=false }
+syn = { version = "3.0", features = ["full", "parsing", "extra-traits"], default-features=false }
 railroad = { version = "0.3.7", default-features=false }
 proc-macro2 = { version = "1.0", default-features=false }
 
